@@ -23,7 +23,7 @@ public class Person {
 	private static final String COLUMN_NAME_GENDER = "gender";
 	public static final String PERSON_TABLE_NAME = "persons";
 
-	@DatabaseField(generatedId = true)
+	@DatabaseField(generatedId = true,columnName=_ID)
 	private int id;
 
 	@DatabaseField(canBeNull = false, columnName = Person.COLUMN_NAME_NAME)

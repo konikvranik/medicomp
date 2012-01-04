@@ -1,6 +1,6 @@
 package net.suteren.medicomp.ui;
 
-import static net.suteren.medicomp.MediCompActivity.LOG_TAG;
+import static net.suteren.medicomp.PersonListActivity.LOG_TAG;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -21,18 +21,24 @@ import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
 
-public class PersonAdapter implements ListAdapter {
+public class PersonListAdapter implements ListAdapter {
 
 	SQLiteDatabase database = null;
 	private Dao<Person, Integer> personDao;
 	private Context context;
 
-	public PersonAdapter(Context context) throws SQLException {
+	LayoutInflater layoutInflater;
+
+	public PersonListAdapter(Context context) throws SQLException {
 		this.context = context;
 		MediCompDatabaseFactory dbf = MediCompDatabaseFactory
 				.getInstance(context);
 
 		personDao = dbf.createDao(Person.class);
+	
+		layoutInflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
 	}
 
 	@Override
@@ -80,9 +86,8 @@ public class PersonAdapter implements ListAdapter {
 		if (convertView == null) {
 			// convertView = View.inflate(context, R.layout.person_list_row,
 			// parent);
-			LayoutInflater vi = (LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = vi.inflate(R.layout.person_list_row, parent, false);
+
+			convertView = layoutInflater.inflate(R.layout.person_list_row, parent, false);
 		}
 		Person person = getItem(position);
 		if (person != null) {

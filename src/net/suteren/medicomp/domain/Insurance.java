@@ -13,4 +13,21 @@ public class Insurance {
 	@DatabaseField(canBeNull = false, foreign = true)
 	private Person person;
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+
+	
 }

@@ -22,6 +22,10 @@ public class MediCompDatabaseFactory {
 		this.context = context;
 	}
 
+	public static void init(Context context) {
+		getInstance(context);
+	}
+
 	public static MediCompDatabaseFactory getInstance(Context context) {
 		if (mineInstance == null)
 			mineInstance = new MediCompDatabaseFactory(context);
@@ -52,6 +56,13 @@ public class MediCompDatabaseFactory {
 
 	Context getContext() {
 		return context;
+	}
+
+	public static MediCompDatabaseFactory getInstance() {
+		if (mineInstance == null)
+			throw new IllegalAccessError("Database not initialized yet!");
+		return mineInstance;
+
 	}
 
 }
