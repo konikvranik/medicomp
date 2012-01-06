@@ -7,18 +7,22 @@
 	<uses-sdk android:minSdkVersion="4" />
 
 	<application
-		android:icon="@drawable/ic_launcher"
+		android:icon="@drawable/medicomp"
 		android:label="@string/app_name" >
 		<activity
 			android:name=".PersonListActivity"
-			android:label="@string/app_name" android:launchMode="singleTask">
+			android:label="@string/app_name"
+			android:launchMode="singleTask" >
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
 				<category android:name="android.intent.category.LAUNCHER" />
+				<category android:name="net.suteren.medicomp.PERSON" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".ui.PersonProfileActivity"></activity>
+		<activity android:name=".ui.PersonProfileActivity" >
+			<action android:name="net.suteren.medicomp.CHANGE" />
+		</activity>
 	</application>
 
 </manifest>

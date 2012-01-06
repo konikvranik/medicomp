@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical" >
+	android:layout_height="fill_parent" >
 
-	<include
+	<TextView
 		android:id="@+id/textView1"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentRight="true"
-		android:layout_alignParentTop="true"
-		layout="@layout/title" />
-
-	<ListView
-		android:id="@+id/personList"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
+		android:layout_above="@+id/spinner1"
+		android:layout_alignParentLeft="true"
+		android:text="@string/personBirthday"
+		android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	<Spinner
+		android:id="@+id/spinner1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true"
 		android:layout_alignParentRight="true"
-		android:layout_below="@+id/textView1" >
-	</ListView>
+		android:layout_centerVertical="true"
+		android:prompt="@string/genderPrompt" />
 
 </RelativeLayout>

@@ -19,8 +19,6 @@
 		android:layout_alignParentLeft="true"
 		android:layout_alignParentRight="true"
 		android:layout_centerVertical="true"
-		android:inputType="textPersonName" 
-		android:text="xx"
-		/>
+		android:inputType="textPersonName" />
 
 </RelativeLayout>

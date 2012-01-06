@@ -9,12 +9,15 @@ import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Person;
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -35,10 +38,10 @@ public class PersonListAdapter implements ListAdapter {
 				.getInstance(context);
 
 		personDao = dbf.createDao(Person.class);
-	
+
 		layoutInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
+
 	}
 
 	@Override
@@ -82,12 +85,36 @@ public class PersonListAdapter implements ListAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			// convertView = View.inflate(context, R.layout.person_list_row,
 			// parent);
 
-			convertView = layoutInflater.inflate(R.layout.person_list_row, parent, false);
+			convertView = layoutInflater.inflate(R.layout.person_list_row,
+					parent, false);
+			convertView.setFocusable(false);
+			convertView.setClickable(false);
+			convertView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Log.d(LOG_TAG, "Clicked inner");
+
+				}
+			});
+			convertView.setOnLongClickListener(new OnLongClickListener() {
+
+				@Override
+				public boolean onLongClick(View v) {
+					Person p = (Person) getItem(position);
+					Intent intent = new Intent(context,
+							PersonProfileActivity.class);
+					intent.putExtra("person", p.getId());
+					context.startActivity(intent);
+					return true;
+				}
+			});
 		}
 		Person person = getItem(position);
 		if (person != null) {
@@ -124,6 +151,7 @@ public class PersonListAdapter implements ListAdapter {
 
 	@Override
 	public void registerDataSetObserver(DataSetObserver observer) {
+
 		// TODO Auto-generated method stub
 
 	}
@@ -137,13 +165,32 @@ public class PersonListAdapter implements ListAdapter {
 	@Override
 	public boolean areAllItemsEnabled() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isEnabled(int position) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
+	}
+
+	public Person getItemById(int id) throws SQLException {
+		return personDao.queryForId(id);
+	}
+
+	public int getPosition(Person person) throws SQLException {
+		List<Person> persons = personDao.queryForAll();
+		return persons.indexOf(persons);
+	}
+
+	public int getPosition(int id) throws SQLException {
+		List<Person> persons = personDao.queryForAll();
+		for (int i = 0; i < persons.size(); i++) {
+			if (persons.get(i).getId() == id)
+				return i;
+
+		}
+		throw new IllegalArgumentException("ID not found.");
 	}
 
 }

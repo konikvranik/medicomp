@@ -2,6 +2,7 @@ package net.suteren.medicomp.domain;
 
 import java.util.Date;
 
+import net.suteren.medicomp.R;
 import net.suteren.medicomp.SerialBitmap;
 
 import com.j256.ormlite.dao.ForeignCollection;
@@ -23,7 +24,7 @@ public class Person {
 	private static final String COLUMN_NAME_GENDER = "gender";
 	public static final String PERSON_TABLE_NAME = "persons";
 
-	@DatabaseField(generatedId = true,columnName=_ID)
+	@DatabaseField(generatedId = true, columnName = _ID)
 	private int id;
 
 	@DatabaseField(canBeNull = false, columnName = Person.COLUMN_NAME_NAME)
@@ -48,7 +49,15 @@ public class Person {
 	private Gender gender;
 
 	public enum Gender {
-		MALE, FEMALE, OTHER
+		MALE, FEMALE, OTHER;
+
+		@Override
+		public String toString() {
+			String[] res = ApplicationContextHolder.getContext().getResources()
+					.getStringArray(R.array.genders);
+
+			return res[ordinal() + 1];
+		};
 	}
 
 	public int getId() {
