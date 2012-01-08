@@ -1,12 +1,13 @@
 package net.suteren.medicomp.domain;
 
+import static net.suteren.medicomp.ui.MedicompActivity.LOG_TAG;
+
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
 
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
+import android.util.Log;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -17,14 +18,33 @@ public class Field<T> {
 
 	private static final String COLUMN_NAME_TYPE = "type";
 
-	@DatabaseField(generatedId = true)
+	private static final String COLUMN_NAME_RECORD = "record";
+
+	private static final String _ID = "id";
+
+	@DatabaseField(generatedId = true, columnName = _ID)
 	private int id;
 
 	@DatabaseField(canBeNull = false, columnName = COLUMN_NAME_NAME)
 	private String name;
 
-	@DatabaseField(canBeNull = false, columnName = COLUMN_NAME_TYPE, foreign = true)
+	@DatabaseField(canBeNull = false, columnName = COLUMN_NAME_TYPE)
 	private Type type;
+
+	@DatabaseField(canBeNull = false, columnName = COLUMN_NAME_RECORD, foreign = true)
+	private Record record;
+
+	@DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
+	private StringValue stringValue;
+
+	@DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
+	private DoubleValue doubleValue;
+
+	@DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
+	private IntegerValue integerValue;
+
+	@DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
+	private DateValue dateValue;
 
 	private Value<T> value;
 
@@ -52,81 +72,112 @@ public class Field<T> {
 		this.type = type;
 	}
 
-	public T getValue() throws SQLException {
-		if (this.value == null) {
-			createValue(null);
-		}
+	@SuppressWarnings("unchecked")
+	public T getValue() {
+		Log.d(LOG_TAG, "getValue: " + this.value + ", "
+				+ (this.value == null ? null : this.value.getValue()));
+		if (this.value == null || this.value.getValue() == null)
+			this.value = (Value<T>) getStringValue();
+		Log.d(LOG_TAG, "getValue after String: " + this.value + ", "
+				+ (this.value == null ? null : this.value.getValue()));
+		if (this.value == null || this.value.getValue() == null)
+			this.value = (Value<T>) getIntegerValue();
+		Log.d(LOG_TAG, "getValue after Integer: " + this.value + ", "
+				+ (this.value == null ? null : this.value.getValue()));
+		if (this.value == null || this.value.getValue() == null)
+			this.value = (Value<T>) getDoubleValue();
+		Log.d(LOG_TAG, "getValue after Double: " + this.value + ", "
+				+ (this.value == null ? null : this.value.getValue()));
+		if (this.value == null || this.value.getValue() == null)
+			this.value = (Value<T>) getDateValue();
+		Log.d(LOG_TAG, "getValue after Date: " + this.value + ", "
+				+ (this.value == null ? null : this.value.getValue()));
 		if (value == null)
 			return null;
 		return value.getValue();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setValue(T value) throws SQLException {
-		if (this.value == null) {
-			createValue(value);
-		} else if (value == null)
+		if (value == null)
 			return;
-		this.value.setValue(value);
+		if (this.value == null) {
+			if (value instanceof String) {
+				this.value = (Value<T>) new StringValue();
+				this.value.setField(this);
+				this.value.setValue(value);
+				setStringValue((StringValue) this.value);
+			}
+			if (value instanceof Integer) {
+				this.value = (Value<T>) new IntegerValue();
+				this.value.setField(this);
+				this.value.setValue(value);
+				setIntegerValue((IntegerValue) this.value);
+			}
+			if (value instanceof Double) {
+				this.value = (Value<T>) new DoubleValue();
+				this.value.setField(this);
+				this.value.setValue(value);
+				setDoubleValue((DoubleValue) this.value);
+			}
+			if (value instanceof Date) {
+				this.value = (Value<T>) new DateValue();
+				this.value.setField(this);
+				this.value.setValue(value);
+				setDateValue((DateValue) this.value);
+			}
+		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void createValue(T value) throws SQLException {
-		MediCompDatabaseFactory dbf = MediCompDatabaseFactory.getInstance();
-		if (value instanceof String) {
-			Dao<StringValue, Integer> dao = (Dao<StringValue, Integer>) dbf
-					.createDao(StringValue.class);
-			List<StringValue> list = dao.queryForEq(
-					StringValue.COLUMN_NAME_FIELD, this);
-			if (list.size() > 0) {
-				this.value = (Value<T>) list.get(0);
-			} else if (value != null) {
-				StringValue sValue = new StringValue((Field<String>) this,
-						(String) value);
-				dao.create(sValue);
-				this.value = (Value<T>) sValue;
-			}
-		} else if (value instanceof Integer) {
-			Dao<IntegerValue, Integer> dao = (Dao<IntegerValue, Integer>) dbf
-					.createDao(IntegerValue.class);
-			List<IntegerValue> list = dao.queryForEq(
-					IntegerValue.COLUMN_NAME_FIELD, this);
-			if (list.size() > 0) {
-				this.value = (Value<T>) list.get(0);
-			} else if (value != null) {
-				IntegerValue sValue = new IntegerValue((Field<Integer>) this,
-						(Integer) value);
-				dao.create(sValue);
-				this.value = (Value<T>) sValue;
-			}
-		} else if (value instanceof Double) {
-			Dao<DoubleValue, Integer> dao = (Dao<DoubleValue, Integer>) dbf
-					.createDao(DoubleValue.class);
-			List<DoubleValue> list = dao.queryForEq(
-					DoubleValue.COLUMN_NAME_FIELD, this);
-			if (list.size() > 0) {
-				this.value = (Value<T>) list.get(0);
-			} else if (value != null) {
-				DoubleValue sValue = new DoubleValue((Field<Double>) this,
-						(Double) value);
-				dao.create(sValue);
-				this.value = (Value<T>) sValue;
-			}
-		} else if (value instanceof Date) {
-			Dao<DateValue, Integer> dao = (Dao<DateValue, Integer>) dbf
-					.createDao(DateValue.class);
-			List<DateValue> list = dao.queryForEq(DateValue.COLUMN_NAME_FIELD,
-					this);
-			if (list.size() > 0) {
-				this.value = (Value<T>) list.get(0);
-			} else if (value != null) {
-				DateValue sValue = new DateValue((Field<Date>) this,
-						(Date) value);
-				dao.create(sValue);
-				this.value = (Value<T>) sValue;
-			}
-		} else {
-			throw new UnsupportedOperationException("Type "
-					+ value.getClass().getName() + " not supported!");
-		}
+	public Record getRecord() {
+		return record;
+	}
+
+	public void setRecord(Record record) {
+		this.record = record;
+	}
+
+	protected DateValue getDateValue() {
+		return dateValue;
+	}
+
+	protected void setDateValue(DateValue value) throws SQLException {
+		this.dateValue = value;
+		MediCompDatabaseFactory.getInstance().createDao(DateValue.class)
+				.createOrUpdate(value);
+	}
+
+	protected IntegerValue getIntegerValue() {
+		return integerValue;
+	}
+
+	protected void setIntegerValue(IntegerValue value) throws SQLException {
+		this.integerValue = value;
+		MediCompDatabaseFactory.getInstance().createDao(IntegerValue.class)
+				.createOrUpdate(value);
+	}
+
+	protected DoubleValue getDoubleValue() {
+		return doubleValue;
+	}
+
+	protected void setDoubleValue(DoubleValue value) throws SQLException {
+		this.doubleValue = value;
+		Log.d(LOG_TAG,
+				"DoubleVAlue: " + value.getId() + ", " + value.getField()
+						+ ", " + value.getValue());
+		MediCompDatabaseFactory.getInstance().createDao(DoubleValue.class)
+				.createOrUpdate(value);
+	}
+
+	protected StringValue getStringValue() {
+		return stringValue;
+
+	}
+
+	protected void setStringValue(StringValue value) throws SQLException {
+		this.stringValue = value;
+		MediCompDatabaseFactory.getInstance().createDao(StringValue.class)
+				.createOrUpdate(value);
 	}
 }

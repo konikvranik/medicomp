@@ -6,10 +6,12 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "alergie")
 public class Alergie {
 
+	private static final String COLUMN_NAME_PERSON = "person";
+
 	@DatabaseField(generatedId = true)
 	private int id;
 
-	@DatabaseField(canBeNull = false, foreign = true)
+	@DatabaseField(columnName = COLUMN_NAME_PERSON, foreign = true)
 	private Person person;
 
 	public int getId() {
@@ -28,5 +30,4 @@ public class Alergie {
 		this.person = person;
 	}
 
-	
 }

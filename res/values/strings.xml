@@ -8,12 +8,18 @@
 	<string name="personBirthday">Day of birth</string>
 	<string name="genderPrompt">Gender</string>
 	<string name="personSaveFailed">Failed to save person!</string>
-
+	<string name="noAvailableType">No available type!</string>
+	<string name="failedToAddTemperature">Failed to add temperature!</string>
+	
 	<string-array name="genders">
 		<item>NONE</item>
 		<item>Male</item>
 		<item>Female</item>
 		<item>Other</item>
 	</string-array>
+	<string name="none">none</string>
+	<string name="last_measured_temperature">Temperature</string>
+	<string name="choosePerson">Choose Person</string>
+	<string name="quit">Quit</string>
 
 </resources>

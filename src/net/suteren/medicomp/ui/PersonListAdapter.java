@@ -1,7 +1,5 @@
 package net.suteren.medicomp.ui;
 
-import static net.suteren.medicomp.PersonListActivity.LOG_TAG;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,6 +8,8 @@ import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Person;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.format.DateFormat;
@@ -30,57 +30,45 @@ public class PersonListAdapter implements ListAdapter {
 	private Dao<Person, Integer> personDao;
 	private Context context;
 
+	List<Person> persons;
+
 	LayoutInflater layoutInflater;
 
 	public PersonListAdapter(Context context) throws SQLException {
 		this.context = context;
-		MediCompDatabaseFactory dbf = MediCompDatabaseFactory
-				.getInstance(context);
-
-		personDao = dbf.createDao(Person.class);
 
 		layoutInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		update();
+
+	}
+
+	private void update() throws SQLException {
+		MediCompDatabaseFactory dbf = MediCompDatabaseFactory
+				.getInstance(context);
+		personDao = dbf.createDao(Person.class);
+		persons = personDao.queryForAll();
 
 	}
 
 	@Override
 	public int getCount() {
-		try {
-			return (int) personDao.countOf();
-		} catch (Exception e) {
-			Log.e(LOG_TAG, "Failed: ", e);
-			return -1;
-		}
+		return persons.size();
 	}
 
 	@Override
 	public Person getItem(int position) {
-		List<Person> persons = null;
-		try {
-			persons = personDao.queryForAll();
-			return persons.get(position);
-		} catch (Exception e) {
-			Log.e(LOG_TAG, "Failed: ", e);
-			return null;
-		}
+		return persons.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		List<Person> persons = null;
-		try {
-			persons = personDao.queryForAll();
-			return persons.get(position).getId();
-		} catch (Exception e) {
-			Log.e(LOG_TAG, "Failed: ", e);
-			return -1;
-		}
+		return persons.get(position).getId();
 	}
 
 	@Override
 	public int getItemViewType(int position) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -98,8 +86,16 @@ public class PersonListAdapter implements ListAdapter {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Log.d(LOG_TAG, "Clicked inner");
+					Person person = getItem(position);
+					Editor prefs = context.getSharedPreferences(
+							MedicompActivity.MEDICOMP_PREFS,
+							Context.MODE_WORLD_WRITEABLE).edit();
+					prefs.putInt(MedicompActivity.PERSON_ID, person.getId());
+					prefs.commit();
+					Intent intent = new Intent(context, DashboardActivity.class);
+					intent.putExtra("person", person.getId());
+					context.startActivity(intent);
+					Log.d(MedicompActivity.LOG_TAG, "Clicked inner");
 
 				}
 			});
@@ -129,24 +125,17 @@ public class PersonListAdapter implements ListAdapter {
 
 	@Override
 	public int getViewTypeCount() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 
 	@Override
 	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		try {
-			return personDao.countOf() < 1;
-		} catch (SQLException e) {
-			Log.e(LOG_TAG, "Failed: ", e);
-			return true;
-		}
+		return persons == null || persons.isEmpty();
 	}
 
 	@Override
@@ -164,13 +153,11 @@ public class PersonListAdapter implements ListAdapter {
 
 	@Override
 	public boolean areAllItemsEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled(int position) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
@@ -179,12 +166,10 @@ public class PersonListAdapter implements ListAdapter {
 	}
 
 	public int getPosition(Person person) throws SQLException {
-		List<Person> persons = personDao.queryForAll();
 		return persons.indexOf(persons);
 	}
 
 	public int getPosition(int id) throws SQLException {
-		List<Person> persons = personDao.queryForAll();
 		for (int i = 0; i < persons.size(); i++) {
 			if (persons.get(i).getId() == id)
 				return i;

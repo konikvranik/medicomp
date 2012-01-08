@@ -1,7 +1,5 @@
 package net.suteren.medicomp.ui;
 
-import static net.suteren.medicomp.PersonListActivity.LOG_TAG;
-
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -61,14 +59,14 @@ public class PersonProfileAdapter implements ListAdapter {
 
 	@Override
 	public int getItemViewType(int position) {
-		Log.d(LOG_TAG, "Item View Type: " + position);
+		Log.d(MedicompActivity.LOG_TAG, "Item View Type: " + position);
 		return Math.min(position, 3);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		Log.d(LOG_TAG, "View Position: " + position);
+		Log.d(MedicompActivity.LOG_TAG, "View Position: " + position);
 
 		switch (position) {
 		case 0:

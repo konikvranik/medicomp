@@ -1,60 +1,43 @@
 package net.suteren.medicomp.ui;
 
-import static net.suteren.medicomp.PersonListActivity.LOG_TAG;
-import static net.suteren.medicomp.PersonListActivity.PERSON_DATA_CHANGE_ACTION;
-import static net.suteren.medicomp.PersonListActivity.PERSON_DATA_CHANGE_CATEGORY;
+import static net.suteren.medicomp.ui.PersonListActivity.PERSON_DATA_CHANGE_ACTION;
+import static net.suteren.medicomp.ui.PersonListActivity.PERSON_DATA_CHANGE_CATEGORY;
 
 import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
-import net.suteren.medicomp.domain.ApplicationContextHolder;
 import net.suteren.medicomp.domain.Person;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.j256.ormlite.dao.Dao;
 
-public class PersonProfileActivity extends Activity {
+public class PersonProfileActivity extends MedicompActivity {
+	private Person person;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-
-		ApplicationContextHolder.setContext(getApplicationContext());
-
 		int personId = getIntent().getExtras().getInt("person");
-
-		Log.d(LOG_TAG, "PersonId: " + personId);
-
+		Log.d(MedicompActivity.LOG_TAG, "PersonId: " + personId);
 		MediCompDatabaseFactory.init(getApplicationContext());
-
 		MediCompDatabaseFactory dbf = MediCompDatabaseFactory.getInstance();
 
 		try {
 			final Dao<Person, Integer> personDao = dbf.createDao(Person.class);
-
-			final Person personQuery = new Person();
+			Person personQuery = new Person();
 			personQuery.setId(personId);
-
-			Log.d(LOG_TAG, "Person before: " + personQuery.getName());
-
-			final Person person = personDao.queryForSameId(personQuery);
-
-			Log.d(LOG_TAG, "Person after: " + person.getName());
-
-			if (person == null)
-				return;
+			Log.d(MedicompActivity.LOG_TAG, "Person before: " + personQuery.getName());
+			person = personDao.queryForSameId(personQuery);
+			Log.d(MedicompActivity.LOG_TAG, "Person after: " + person.getName());
 
 			setContentView(R.layout.person_profile);
 			ListView listView = (ListView) getWindow().findViewById(
@@ -71,7 +54,7 @@ public class PersonProfileActivity extends Activity {
 					try {
 						personDao.createOrUpdate(person);
 					} catch (SQLException e) {
-						Log.e(LOG_TAG, "Failed: ", e);
+						Log.e(MedicompActivity.LOG_TAG, "Failed: ", e);
 						Builder db = new AlertDialog.Builder(
 								PersonProfileActivity.this);
 						db.setMessage(R.string.personSaveFailed);
@@ -82,7 +65,7 @@ public class PersonProfileActivity extends Activity {
 					Intent intent = new Intent();
 					intent.addCategory(PERSON_DATA_CHANGE_CATEGORY);
 					intent.setAction(PERSON_DATA_CHANGE_ACTION);
-//					intent.setData(Uri.parse("context://" + person.getId()));
+					// intent.setData(Uri.parse("context://" + person.getId()));
 
 					sendBroadcast(intent);
 
@@ -99,15 +82,11 @@ public class PersonProfileActivity extends Activity {
 				}
 			});
 
-			try {
-				listView.setAdapter(new PersonProfileAdapter(
-						PersonProfileActivity.this, person));
-			} catch (Exception e) {
-				Log.e(LOG_TAG, "Failed: ", e);
-			}
-
-		} catch (SQLException e1) {
-			Log.e(LOG_TAG, "Failed: ", e1);
+			listView.setAdapter(new PersonProfileAdapter(
+					PersonProfileActivity.this, person));
+		} catch (Exception e) {
+			Log.e(MedicompActivity.LOG_TAG, "Failed: ", e);
 		}
+
 	}
 }

@@ -1,7 +1,5 @@
 package net.suteren.medicomp.dao;
 
-import static net.suteren.medicomp.PersonListActivity.LOG_TAG;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -14,6 +12,7 @@ import net.suteren.medicomp.domain.IntegerValue;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.StringValue;
+import net.suteren.medicomp.ui.MedicompActivity;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -53,15 +52,15 @@ public class MediCompDatabaseHelper extends SQLiteOpenHelper {
 			createTable(db, Insurance.class);
 			createTable(db, Alergie.class);
 
-			createTable(db, Field.class);
 			createTable(db, Record.class);
+			createTable(db, Field.class);
 			createTable(db, StringValue.class);
 			createTable(db, IntegerValue.class);
 			createTable(db, DateValue.class);
 			createTable(db, DoubleValue.class);
 
 		} catch (SQLException e) {
-			Log.e(LOG_TAG, "Failed: ", e);
+			Log.e(MedicompActivity.LOG_TAG, "Failed: ", e);
 		}
 
 	}

@@ -10,18 +10,24 @@
 		android:icon="@drawable/medicomp"
 		android:label="@string/app_name" >
 		<activity
-			android:name=".PersonListActivity"
-			android:label="@string/app_name"
+			android:name=".ui.DashboardActivity"
 			android:launchMode="singleTask" >
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
 				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".ui.PersonListActivity"
+			android:label="@string/app_name"
+			android:launchMode="singleTask" >
+			<intent-filter>
 				<category android:name="net.suteren.medicomp.PERSON" />
 			</intent-filter>
 		</activity>
 		<activity android:name=".ui.PersonProfileActivity" >
-			<action android:name="net.suteren.medicomp.CHANGE" />
+<!-- 			<action android:name="net.suteren.medicomp.CHANGE" /> -->
 		</activity>
 	</application>
 

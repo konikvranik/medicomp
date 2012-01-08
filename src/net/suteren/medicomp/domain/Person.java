@@ -1,5 +1,6 @@
 package net.suteren.medicomp.domain;
 
+import java.util.Collection;
 import java.util.Date;
 
 import net.suteren.medicomp.R;
@@ -19,8 +20,6 @@ public class Person {
 	public static final String COLUMN_NAME_BIRTHDATE = "birthdate";
 	public static final String COLUMN_NAME_PICTURE = "picture";
 	public static final String COLUMN_NAME_NAME = "name";
-	private static final String COLUMN_NAME_OTHER_INSURANCE = "other_insurances";
-	private static final String COLUMN_NAME_ALERGIES = "alergies";
 	private static final String COLUMN_NAME_GENDER = "gender";
 	public static final String PERSON_TABLE_NAME = "persons";
 
@@ -39,14 +38,17 @@ public class Person {
 	@DatabaseField(canBeNull = true, columnName = COLUMN_NAME_STATUTORY_INSURANCE, foreign = true)
 	private Insurance statutoryInsurance;
 
-	@ForeignCollectionField(eager = false, columnName = COLUMN_NAME_OTHER_INSURANCE)
+	@ForeignCollectionField(eager = false)
 	private ForeignCollection<Insurance> otherInsurances;
 
-	@ForeignCollectionField(eager = false, columnName = COLUMN_NAME_ALERGIES)
+	@ForeignCollectionField(eager = false)
 	private ForeignCollection<Alergie> alergies;
 
 	@DatabaseField(canBeNull = true, columnName = Person.COLUMN_NAME_GENDER)
 	private Gender gender;
+
+	@ForeignCollectionField(eager = false)
+	private Collection<Record> records;
 
 	public enum Gender {
 		MALE, FEMALE, OTHER;
@@ -122,6 +124,14 @@ public class Person {
 
 	public void setGender(Gender gender) {
 		this.gender = gender;
+	}
+
+	public Collection<Record> getRecords() {
+		return records;
+	}
+
+	public void setRecords(Collection<Record> records) {
+		this.records = records;
 	}
 
 }
