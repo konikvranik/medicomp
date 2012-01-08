@@ -20,11 +20,14 @@ import org.achartengine.chart.AbstractChart;
 import org.achartengine.chart.TimeChart;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
+import org.achartengine.renderer.BasicStroke;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint.Cap;
+import android.graphics.Paint.Join;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +50,8 @@ public class TemperatureGraphWidget extends AbstractWidget implements Widget {
 		Log.d(LOG_TAG,
 				"TemperatureGraph Type: "
 						+ (((RelativeLayout) convertView).getId() == R.id.temperatureGraphWidget));
-
+		Log.d(LOG_TAG,"Person in TemperatureGraphWidget: "+person.getId());
+		
 		Collection<Record> rs = getRecords();
 		if (rs != null && rs.size() > 1) {
 
@@ -70,8 +74,6 @@ public class TemperatureGraphWidget extends AbstractWidget implements Widget {
 				}
 				if (t != null && record.getTimestamp() != null) {
 					xyseries.add(record.getTimestamp().getTime(), t);
-					Log.d(LOG_TAG, "Data: " + i + ", "
-							+ record.getTimestamp().getTime() + ", " + t);
 
 				}
 
@@ -88,17 +90,18 @@ public class TemperatureGraphWidget extends AbstractWidget implements Widget {
 			renderer.setAntialiasing(true);
 
 			XYSeriesRenderer seriesRenderer = new XYSeriesRenderer();
-			seriesRenderer.setFillPoints(true);
-			seriesRenderer.setDisplayChartValues(true);
+//			seriesRenderer.setFillPoints(true);
+//			seriesRenderer.setDisplayChartValues(true);
 			seriesRenderer.setGradientEnabled(true);
-			seriesRenderer.setGradientStart(35, Color.argb(200, 0, 255, 255));
-			seriesRenderer.setGradientStop(39, Color.argb(200, 255, 0, 0));
+			seriesRenderer.setGradientStart(35, Color.rgb(0, 255, 255));
+			seriesRenderer.setGradientStop(39, Color.rgb(255, 0, 0));
 //			seriesRenderer.setFillBelowLineColor(Color.argb(200, 255, 255, 0));
-//			seriesRenderer.setColor(Color.argb(200, 255, 0, 255));
+//			seriesRenderer.setFillBelowLine(false);
+			seriesRenderer.setColor(Color.argb(200, 255, 255, 0));
 			seriesRenderer.setLineWidth(6);
-//			BasicStroke basicstroke = new BasicStroke(Cap.ROUND, Join.ROUND,
-//					.01f, new float[] { 1f, 0f }, .01f);
-//			seriesRenderer.setStroke(basicstroke);
+			BasicStroke basicstroke = new BasicStroke(Cap.ROUND, Join.ROUND,
+					6f, new float[] { 6f, 0f }, .6f);
+			seriesRenderer.setStroke(basicstroke);
 
 			renderer.addSeriesRenderer(seriesRenderer);
 

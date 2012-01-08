@@ -25,26 +25,31 @@ public class PersonProfileActivity extends MedicompActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		int personId = getIntent().getExtras().getInt("person");
-		Log.d(MedicompActivity.LOG_TAG, "PersonId: " + personId);
-		MediCompDatabaseFactory.init(getApplicationContext());
-		MediCompDatabaseFactory dbf = MediCompDatabaseFactory.getInstance();
 
 		try {
+			super.onCreate(savedInstanceState);
+			MediCompDatabaseFactory.init(getApplicationContext());
+			MediCompDatabaseFactory dbf = MediCompDatabaseFactory.getInstance();
 			final Dao<Person, Integer> personDao = dbf.createDao(Person.class);
-			Person personQuery = new Person();
-			personQuery.setId(personId);
-			Log.d(MedicompActivity.LOG_TAG, "Person before: " + personQuery.getName());
-			person = personDao.queryForSameId(personQuery);
-			Log.d(MedicompActivity.LOG_TAG, "Person after: " + person.getName());
 
+			int personId = -1;
+			if (getIntent().getExtras() != null)
+				personId = getIntent().getExtras().getInt("person");
+			if (personId > 0) {
+				Person personQuery = new Person();
+				personQuery.setId(personId);
+				person = personDao.queryForSameId(personQuery);
+			} else {
+				person = new Person();
+			}
 			setContentView(R.layout.person_profile);
 			ListView listView = (ListView) getWindow().findViewById(
 					R.id.personProfile);
 			Button okButton = (Button) getWindow().findViewById(R.id.button1);
 			Button cancelButton = (Button) getWindow().findViewById(
 					R.id.button2);
+			Button deleteButton = (Button) getWindow().findViewById(
+					R.id.button3);
 
 			okButton.setOnClickListener(new OnClickListener() {
 
@@ -54,7 +59,7 @@ public class PersonProfileActivity extends MedicompActivity {
 					try {
 						personDao.createOrUpdate(person);
 					} catch (SQLException e) {
-						Log.e(MedicompActivity.LOG_TAG, "Failed: ", e);
+						Log.e(LOG_TAG, e.getMessage(), e);
 						Builder db = new AlertDialog.Builder(
 								PersonProfileActivity.this);
 						db.setMessage(R.string.personSaveFailed);
@@ -82,6 +87,24 @@ public class PersonProfileActivity extends MedicompActivity {
 				}
 			});
 
+			deleteButton.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					try {
+						personDao.delete(person);
+					} catch (SQLException e) {
+						Log.e(LOG_TAG, e.getMessage(), e);
+						Builder db = new AlertDialog.Builder(
+								PersonProfileActivity.this);
+						db.setMessage(R.string.personDeleteFailed);
+						AlertDialog ad = db.create();
+						ad.show();
+					}
+					PersonProfileActivity.this.finish();
+
+				}
+			});
 			listView.setAdapter(new PersonProfileAdapter(
 					PersonProfileActivity.this, person));
 		} catch (Exception e) {

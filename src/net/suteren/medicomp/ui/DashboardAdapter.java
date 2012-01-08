@@ -31,6 +31,7 @@ public class DashboardAdapter implements ListAdapter {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.person = person;
 
+		widgets.add(new PersonWidget(context, person));
 		widgets.add(new TemperatureWidget(context, person));
 		widgets.add(new TemperatureGraphWidget(context, person));
 	}
@@ -57,7 +58,7 @@ public class DashboardAdapter implements ListAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Log.d(LOG_TAG, "View: " + position + ", " + convertView);
+		Log.d(LOG_TAG, "Person in DashboardAdapter: " + person.getId());
 		return widgets.get(position).getView(convertView, parent);
 	}
 

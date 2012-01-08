@@ -8,7 +8,8 @@
 	<string name="personBirthday">Day of birth</string>
 	<string name="genderPrompt">Gender</string>
 	<string name="personSaveFailed">Failed to save person!</string>
-	<string name="noAvailableType">No available type!</string>
+	<string name="personDeleteFailed">Failed to remove person!</string>
+		<string name="noAvailableType">No available type!</string>
 	<string name="failedToAddTemperature">Failed to add temperature!</string>
 	
 	<string-array name="genders">
@@ -22,5 +23,7 @@
 	<string name="choosePerson">Choose Person</string>
 	<string name="quit">Quit</string>
 	<string name="celsius">°C</string>
+	<string name="addPerson">Add person</string>
+	<string name="delete">Remove</string>
 
 </resources>

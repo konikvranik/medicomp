@@ -2,8 +2,11 @@ package net.suteren.medicomp.ui;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.domain.ApplicationContextHolder;
+import net.suteren.medicomp.domain.Person;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +41,10 @@ public class MedicompActivity extends Activity {
 			startActivity(new Intent(this, PersonListActivity.class));
 			break;
 
+		case R.id.addPerson:
+			Intent intent = new Intent(this, PersonProfileActivity.class);
+			this.startActivity(intent);
+			break;
 		default:
 			break;
 		}

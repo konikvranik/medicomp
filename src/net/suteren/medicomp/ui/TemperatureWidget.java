@@ -35,36 +35,24 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 
 	@Override
 	public View getView(View convertView, ViewGroup parent) {
-		if (convertView == null) {
+		if (convertView == null) 
 			convertView = layoutInflater.inflate(
 					R.layout.dashboard_temperature, parent, false);
-			temp = (TextView) convertView.findViewById(R.id.textView2);
-		}
+		temp = (TextView) convertView.findViewById(R.id.textView2);
 		Log.d(LOG_TAG,
 				"TemperatureWidget Type: "
 						+ (((RelativeLayout) convertView).getId() == R.id.temperatureWidget));
-
+		Log.d(LOG_TAG, "Person in TemperatureWidget: " + person.getId());
 		Collection<Record> rs = person.getRecords();
 		NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 		Double val = null;
 
-		Log.d(LOG_TAG, "REcords: " + rs.size());
 
 		Iterator<Record> ri = rs.iterator();
 		Record r = null;
 		while (ri.hasNext()) {
 			Record rx = ri.next();
-			Log.d(LOG_TAG, "Type: " + rx.getType());
-			Log.d(LOG_TAG, "Category: " + rx.getCategory());
-			Log.d(LOG_TAG, "Type: " + rx.getTimestamp());
 
-			Log.d(LOG_TAG,
-					(r == null ? null : r.getTimestamp())
-							+ " < "
-							+ rx.getTimestamp()
-							+ " = "
-							+ (r == null || r.getTimestamp().compareTo(
-									rx.getTimestamp()) < 0));
 
 			if (rx.getType() == Type.TEMPERATURE
 					&& rx.getCategory() == Category.MEASURE
@@ -73,19 +61,13 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 				r = rx;
 		}
 
-		Log.d(LOG_TAG, "Record: " + r);
 
 		if (r != null) {
 			Collection<Field> fs = r.getFields();
-			Log.d(LOG_TAG, "Fields: " + fs.size());
 			Iterator<Field> fi = fs.iterator();
 			while (fi.hasNext()) {
 				Field f = fi.next();
-				Log.d(LOG_TAG, "Field: " + f.getId());
-				Log.d(LOG_TAG, "Value: " + f.getValue());
 				if (f.getType() == Type.TEMPERATURE) {
-					Log.d(LOG_TAG, "TEmperature field: "
-							+ f.getClass().getName());
 					val = (Double) f.getValue();
 					break;
 				}
@@ -93,11 +75,6 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 			try {
 				List<DoubleValue> dv = MediCompDatabaseFactory.getInstance()
 						.createDao(DoubleValue.class).queryForAll();
-				for (DoubleValue doubleValue : dv) {
-					Log.d(LOG_TAG, "DoubleValue: " + doubleValue.getId() + ", "
-							+ doubleValue.getField().getId() + ", "
-							+ doubleValue.getValue());
-				}
 			} catch (SQLException e) {
 				Log.e(LOG_TAG, e.getMessage(), e);
 			}
@@ -105,7 +82,6 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		}
 
 		if (val != null) {
-			Log.d(LOG_TAG, "VAl: " + val + " temp: " + temp + " nf: " + nf);
 			temp.setText(nf.format(val));
 			double min = 30;
 			double max = 38;

@@ -59,14 +59,12 @@ public class PersonProfileAdapter implements ListAdapter {
 
 	@Override
 	public int getItemViewType(int position) {
-		Log.d(MedicompActivity.LOG_TAG, "Item View Type: " + position);
 		return Math.min(position, 3);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		Log.d(MedicompActivity.LOG_TAG, "View Position: " + position);
 
 		switch (position) {
 		case 0:

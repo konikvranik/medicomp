@@ -74,24 +74,14 @@ public class Field<T> {
 
 	@SuppressWarnings("unchecked")
 	public T getValue() {
-		Log.d(LOG_TAG, "getValue: " + this.value + ", "
-				+ (this.value == null ? null : this.value.getValue()));
 		if (this.value == null || this.value.getValue() == null)
 			this.value = (Value<T>) getStringValue();
-		Log.d(LOG_TAG, "getValue after String: " + this.value + ", "
-				+ (this.value == null ? null : this.value.getValue()));
 		if (this.value == null || this.value.getValue() == null)
 			this.value = (Value<T>) getIntegerValue();
-		Log.d(LOG_TAG, "getValue after Integer: " + this.value + ", "
-				+ (this.value == null ? null : this.value.getValue()));
 		if (this.value == null || this.value.getValue() == null)
 			this.value = (Value<T>) getDoubleValue();
-		Log.d(LOG_TAG, "getValue after Double: " + this.value + ", "
-				+ (this.value == null ? null : this.value.getValue()));
 		if (this.value == null || this.value.getValue() == null)
 			this.value = (Value<T>) getDateValue();
-		Log.d(LOG_TAG, "getValue after Date: " + this.value + ", "
-				+ (this.value == null ? null : this.value.getValue()));
 		if (value == null)
 			return null;
 		return value.getValue();
@@ -163,9 +153,6 @@ public class Field<T> {
 
 	protected void setDoubleValue(DoubleValue value) throws SQLException {
 		this.doubleValue = value;
-		Log.d(LOG_TAG,
-				"DoubleVAlue: " + value.getId() + ", " + value.getField()
-						+ ", " + value.getValue());
 		MediCompDatabaseFactory.getInstance().createDao(DoubleValue.class)
 				.createOrUpdate(value);
 	}

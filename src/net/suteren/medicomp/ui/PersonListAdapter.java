@@ -95,7 +95,6 @@ public class PersonListAdapter implements ListAdapter {
 					Intent intent = new Intent(context, DashboardActivity.class);
 					intent.putExtra("person", person.getId());
 					context.startActivity(intent);
-					Log.d(MedicompActivity.LOG_TAG, "Clicked inner");
 
 				}
 			});

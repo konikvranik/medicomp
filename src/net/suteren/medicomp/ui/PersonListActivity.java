@@ -1,5 +1,6 @@
 package net.suteren.medicomp.ui;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.j256.ormlite.dao.Dao;
@@ -27,24 +29,21 @@ public class PersonListActivity extends MedicompActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			listView.invalidateViews();
-			Log.d(MedicompActivity.LOG_TAG, "Broadcast recieved.");
 		}
 	}
 
 	public static final String PERSON_DATA_CHANGE_CATEGORY = "net.suteren.medicomp.PERSON";
 	public static final String PERSON_DATA_CHANGE_ACTION = "net.suteren.medicomp.CHANGE";
 	private ChangeReceiver changeReceiver;
+	private ListView listView;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		createDemoData();
-
 		setContentView(R.layout.person_list);
-		final ListView listView = (ListView) getWindow().findViewById(
-				R.id.personList);
+		listView = (ListView) getWindow().findViewById(R.id.personList);
 
 		try {
 
@@ -63,30 +62,33 @@ public class PersonListActivity extends MedicompActivity {
 
 	}
 
-	private void createDemoData() {
-		MediCompDatabaseFactory.init(getApplicationContext());
-
-		MediCompDatabaseFactory dbf = MediCompDatabaseFactory.getInstance();
-
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
 		try {
-			Dao<Person, Integer> personDao = dbf.createDao(Person.class);
-
-			Person person = new Person();
-			person.setName("Daddy");
-			person.setBirthDate(dateFormat.parse("1970-06-16"));
-
-			personDao.create(person);
-
-			person = new Person();
-			person.setName("Baby");
-			person.setBirthDate(dateFormat.parse("2011-06-30"));
-
-			personDao.create(person);
-
-		} catch (Exception e) {
-			Log.e(MedicompActivity.LOG_TAG, "Failed:", e);
+			listView.setAdapter(new PersonListAdapter(this));
+		} catch (SQLException e) {
+			Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		try {
+			listView.setAdapter(new PersonListAdapter(this));
+		} catch (SQLException e) {
+			Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		try {
+			listView.setAdapter(new PersonListAdapter(this));
+		} catch (SQLException e) {
+			Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
 		}
 	}
 
