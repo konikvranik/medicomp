@@ -25,5 +25,6 @@
 	<string name="celsius">°C</string>
 	<string name="addPerson">Add person</string>
 	<string name="delete">Remove</string>
+	<string name="showRecords">Show person\'s records</string>
 
 </resources>

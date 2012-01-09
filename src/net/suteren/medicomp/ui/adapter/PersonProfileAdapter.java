@@ -1,4 +1,4 @@
-package net.suteren.medicomp.ui;
+package net.suteren.medicomp.ui.adapter;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -8,7 +8,6 @@ import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Person.Gender;
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,6 +1,6 @@
-package net.suteren.medicomp.ui;
+package net.suteren.medicomp.ui.widget;
 
-import static net.suteren.medicomp.ui.MedicompActivity.LOG_TAG;
+import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 
 import java.util.Collection;
 import java.util.Comparator;

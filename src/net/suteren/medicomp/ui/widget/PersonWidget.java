@@ -1,6 +1,6 @@
-package net.suteren.medicomp.ui;
+package net.suteren.medicomp.ui.widget;
 
-import static net.suteren.medicomp.ui.MedicompActivity.LOG_TAG;
+import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.domain.Person;
 import android.content.Context;

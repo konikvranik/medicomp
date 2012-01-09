@@ -12,7 +12,7 @@ import net.suteren.medicomp.domain.IntegerValue;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.StringValue;
-import net.suteren.medicomp.ui.MedicompActivity;
+import net.suteren.medicomp.ui.activity.MedicompActivity;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;

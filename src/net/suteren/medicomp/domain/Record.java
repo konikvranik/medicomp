@@ -3,27 +3,28 @@ package net.suteren.medicomp.domain;
 import java.util.Collection;
 import java.util.Date;
 
+
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "records")
-public class Record {
+public class Record implements PersistableWithId {
 
 	public static final String _ID = "id";
 
-	private static final String COLUMN_NAME_TITLE = "title";
+	public static final String COLUMN_NAME_TITLE = "title";
 
-	private static final String COLUMN_NAME_TIMESTAMP = "timestamp";
+	public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
 
-	private static final String COLUMN_NAME_TYPE = "type";
+	public static final String COLUMN_NAME_TYPE = "type";
 
-	private static final String COLUMN_NAME_CATEGORY = "category";
+	public static final String COLUMN_NAME_CATEGORY = "category";
 
-	private static final String COLUMN_NAME_PARENT = "parent";
+	public static final String COLUMN_NAME_PARENT = "parent";
 
-	private static final String COLUMN_NAME_PERSON = "person";
+	public static final String COLUMN_NAME_PERSON = "person";
 
 	@DatabaseField(generatedId = true, columnName = _ID)
 	private int id;

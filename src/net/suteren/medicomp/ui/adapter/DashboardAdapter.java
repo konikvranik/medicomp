@@ -1,39 +1,36 @@
-package net.suteren.medicomp.ui;
+package net.suteren.medicomp.ui.adapter;
 
+import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.suteren.medicomp.domain.Person;
+import net.suteren.medicomp.ui.widget.PersonWidget;
+import net.suteren.medicomp.ui.widget.TemperatureGraphWidget;
+import net.suteren.medicomp.ui.widget.TemperatureWidget;
+import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import static net.suteren.medicomp.ui.MedicompActivity.LOG_TAG;
 
-public class DashboardAdapter implements ListAdapter {
+public class DashboardAdapter extends AbstractListAdapter<Person> {
 
 	private Person person;
-	private Context context;
-	private LayoutInflater layoutInflater;
 
 	private List<Widget> widgets = new ArrayList<Widget>();
 
-	public DashboardAdapter(Context context, Person person) {
-		if (context == null)
-			throw new NullPointerException("Context == null");
+	public DashboardAdapter(Context context, Person person) throws SQLException {
+		super(context);
 		if (person == null)
 			throw new NullPointerException("Person == null!");
-		this.context = context;
-		layoutInflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.person = person;
 
-		widgets.add(new PersonWidget(context, person));
-		widgets.add(new TemperatureWidget(context, person));
-		widgets.add(new TemperatureGraphWidget(context, person));
+		update();
+
 	}
 
 	@Override
@@ -42,7 +39,7 @@ public class DashboardAdapter implements ListAdapter {
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public Person getItem(int position) {
 		return person;
 	}
 
@@ -97,6 +94,20 @@ public class DashboardAdapter implements ListAdapter {
 	@Override
 	public boolean isEnabled(int position) {
 		return true;
+	}
+
+	@Override
+	public void update() throws SQLException {
+		widgets = new ArrayList<Widget>();
+		widgets.add(new PersonWidget(context, person));
+		widgets.add(new TemperatureWidget(context, person));
+		widgets.add(new TemperatureGraphWidget(context, person));
+
+	}
+
+	@Override
+	public Person getItemById(int id) throws Exception {
+		return person;
 	}
 
 }

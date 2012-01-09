@@ -1,4 +1,4 @@
-package net.suteren.medicomp.ui;
+package net.suteren.medicomp.ui.activity;
 
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -7,17 +7,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Category;
 import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.ui.adapter.DashboardAdapter;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,21 +32,30 @@ import com.j256.ormlite.dao.Dao;
 public class DashboardActivity extends MedicompActivity {
 
 	private static final int TYPE_CHOOSER_DIALOG = 1;
-	private Person person;
 	private Type choosedType;
 	private ArrayList<Type> availableTypes;
-	private Dao<Person, Integer> personDao;
 	private Dao<Record, Integer> recordDao;
+	@SuppressWarnings("rawtypes")
 	private Dao<Field, Integer> fieldDao;
-	private ListView listView;
 	private EditText inputTextField;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
-		MediCompDatabaseFactory.init(getApplicationContext());
-		setContentView(R.layout.dashboard);
-		listView = (ListView) getWindow().findViewById(R.id.dashboard);
+		try {
+			recordDao = dbf.createDao(Record.class);
+			fieldDao = dbf.createDao(Field.class);
+		} catch (SQLException e) {
+			Log.e(LOG_TAG, e.getMessage(), e);
+			throw new RuntimeException(e);
+		}
+
+		if (!setupPerson()) {
+			redirectToPersonList();
+			return;
+		}
+
 		inputTextField = (EditText) getWindow().findViewById(R.id.editText1);
 		inputTextField.setOnKeyListener(new OnKeyListener() {
 
@@ -76,59 +83,6 @@ public class DashboardActivity extends MedicompActivity {
 			}
 		});
 
-		setupPerson();
-
-	}
-
-	private void setupPerson() {
-		try {
-			int personId = 0;
-			Intent intent = getIntent();
-			Bundle extras = null;
-			if (intent != null)
-				extras = intent.getExtras();
-			if (extras != null)
-				personId = extras.getInt("person");
-			if (personId == 0)
-				personId = getSharedPreferences(MEDICOMP_PREFS,
-						Context.MODE_WORLD_WRITEABLE).getInt(PERSON_ID, 0);
-			if (personId == 0) {
-				startActivity(new Intent(this, PersonListActivity.class));
-				finish();
-				return;
-			}
-			Log.d(MedicompActivity.LOG_TAG, "PersonId: " + personId);
-			MediCompDatabaseFactory dbf = MediCompDatabaseFactory.getInstance();
-
-			personDao = dbf.createDao(Person.class);
-			recordDao = dbf.createDao(Record.class);
-			fieldDao = dbf.createDao(Field.class);
-			Person personQuery = new Person();
-			personQuery.setId(personId);
-			Log.d(MedicompActivity.LOG_TAG,
-					"Person before: " + personQuery.getId());
-			person = personDao.queryForSameId(personQuery);
-			if (person == null) {
-				startActivity(new Intent(this, PersonListActivity.class));
-				finish();
-				return;
-			}
-			Log.d(MedicompActivity.LOG_TAG, "Person after: " + person.getId()
-					+ ", " + person.getName());
-
-			listView.setAdapter(new DashboardAdapter(DashboardActivity.this,
-					person));
-
-		} catch (SQLException e) {
-			Log.e(MedicompActivity.LOG_TAG, "Failed: ", e);
-		}
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		setupPerson();
-		listView.invalidateViews();
 	}
 
 	@Override
@@ -220,5 +174,27 @@ public class DashboardActivity extends MedicompActivity {
 				break;
 			}
 		inputTextField.setText("");
+	}
+
+	@Override
+	protected ListAdapter getAdapter() {
+		try {
+			Log.d(LOG_TAG, "Calling getAdapter: " + person.getId() + ", "
+					+ person.getName());
+			return new DashboardAdapter(DashboardActivity.this, person);
+		} catch (SQLException e) {
+			Log.e(LOG_TAG, e.getMessage(), e);
+			return null;
+		}
+	}
+
+	@Override
+	protected ListView requestListView() {
+		return (ListView) getWindow().findViewById(R.id.dashboard);
+	}
+
+	@Override
+	protected int getContentViewId() {
+		return R.layout.dashboard;
 	}
 }

@@ -1,75 +1,42 @@
-package net.suteren.medicomp.ui;
+package net.suteren.medicomp.ui.adapter;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Person;
+import net.suteren.medicomp.ui.activity.DashboardActivity;
+import net.suteren.medicomp.ui.activity.MedicompActivity;
+import net.suteren.medicomp.ui.activity.PersonProfileActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.DataSetObserver;
-import android.database.sqlite.SQLiteDatabase;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
+import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 
-public class PersonListAdapter implements ListAdapter {
+public class PersonListAdapter extends AbstractListAdapter<Person> {
 
-	SQLiteDatabase database = null;
 	private Dao<Person, Integer> personDao;
-	private Context context;
-
-	List<Person> persons;
-
-	LayoutInflater layoutInflater;
 
 	public PersonListAdapter(Context context) throws SQLException {
-		this.context = context;
-
-		layoutInflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+		super(context);
+		personDao = MediCompDatabaseFactory.getInstance(context).createDao(
+				Person.class);
 		update();
-
-	}
-
-	private void update() throws SQLException {
-		MediCompDatabaseFactory dbf = MediCompDatabaseFactory
-				.getInstance(context);
-		personDao = dbf.createDao(Person.class);
-		persons = personDao.queryForAll();
-
 	}
 
 	@Override
-	public int getCount() {
-		return persons.size();
-	}
-
-	@Override
-	public Person getItem(int position) {
-		return persons.get(position);
-	}
-
-	@Override
-	public long getItemId(int position) {
-		return persons.get(position).getId();
-	}
-
-	@Override
-	public int getItemViewType(int position) {
-		return 0;
+	public void update() throws SQLException {
+		collection = personDao.queryForAll();
+		Log.d(LOG_TAG, "PersonListAdapter: " + collection.size());
 	}
 
 	@Override
@@ -123,58 +90,8 @@ public class PersonListAdapter implements ListAdapter {
 	}
 
 	@Override
-	public int getViewTypeCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean hasStableIds() {
-		return false;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return persons == null || persons.isEmpty();
-	}
-
-	@Override
-	public void registerDataSetObserver(DataSetObserver observer) {
-
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unregisterDataSetObserver(DataSetObserver observer) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean areAllItemsEnabled() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled(int position) {
-		return true;
-	}
-
 	public Person getItemById(int id) throws SQLException {
 		return personDao.queryForId(id);
-	}
-
-	public int getPosition(Person person) throws SQLException {
-		return persons.indexOf(persons);
-	}
-
-	public int getPosition(int id) throws SQLException {
-		for (int i = 0; i < persons.size(); i++) {
-			if (persons.get(i).getId() == id)
-				return i;
-
-		}
-		throw new IllegalArgumentException("ID not found.");
 	}
 
 }

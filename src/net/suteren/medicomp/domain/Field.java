@@ -1,6 +1,6 @@
 package net.suteren.medicomp.domain;
 
-import static net.suteren.medicomp.ui.MedicompActivity.LOG_TAG;
+import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 
 import java.sql.SQLException;
 import java.util.Date;

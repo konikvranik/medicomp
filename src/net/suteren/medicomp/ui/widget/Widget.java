@@ -1,4 +1,4 @@
-package net.suteren.medicomp.ui;
+package net.suteren.medicomp.ui.widget;
 
 import android.view.View;
 import android.view.ViewGroup;

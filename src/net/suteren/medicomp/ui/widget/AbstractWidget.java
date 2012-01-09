@@ -1,4 +1,4 @@
-package net.suteren.medicomp.ui;
+package net.suteren.medicomp.ui.widget;
 
 import net.suteren.medicomp.domain.Person;
 import android.content.Context;
