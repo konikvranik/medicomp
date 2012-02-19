@@ -15,6 +15,7 @@ import net.suteren.medicomp.domain.PersistableWithId;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.ui.adapter.AbstractListAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -31,9 +32,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -340,6 +341,17 @@ public abstract class MedicompActivity extends Activity {
 				break;
 			}
 		inputTextField.setText("");
+		if (listView != null) {
+			listView.invalidateViews();
+			listView.invalidate();
+			listView.forceLayout();
+			try {
+				((AbstractListAdapter<? extends PersistableWithId>) listView
+						.getAdapter()).update();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	@Override

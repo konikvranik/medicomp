@@ -114,7 +114,8 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 				EditText valueView = (EditText) v;
 				nameView.setText(fieldName);
 				typeView.setText(type.toString());
-				valueView.setText(fieldValue.toString());
+				valueView.setText(fieldValue == null ? null : fieldValue
+						.toString());
 			}
 			fieldMap.put(field, convertView);
 			break;
@@ -140,8 +141,7 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 			Field field = element.getKey();
 			View convertView = element.getValue();
 
-			EditText nameView = (EditText) convertView
-					.findViewById(R.id.name);
+			EditText nameView = (EditText) convertView.findViewById(R.id.name);
 			field.setName(nameView.getEditableText().toString());
 
 			EditText valueView = (EditText) convertView
