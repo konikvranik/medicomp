@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import android.content.Context;
 
 import com.j256.ormlite.android.AndroidConnectionSource;
-import com.j256.ormlite.android.apptools.OrmLiteConfigUtil;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;

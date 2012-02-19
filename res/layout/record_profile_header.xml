@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:focusable="false" >
+
+	<EditText
+		android:id="@+id/editText1"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentTop="true"
+		android:focusable="true"
+		android:inputType="textAutoComplete" >
+
+		<requestFocus />
+	</EditText>
+
+	<DatePicker
+		android:id="@+id/datePicker1"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_below="@+id/editText1"
+		android:focusable="true" />
+
+	<TimePicker
+		android:id="@+id/timePicker1"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_below="@+id/datePicker1"
+		android:focusable="true" />
+
+</RelativeLayout>

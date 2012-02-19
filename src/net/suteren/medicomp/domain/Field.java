@@ -1,12 +1,9 @@
 package net.suteren.medicomp.domain;
 
-import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
-
 import java.sql.SQLException;
 import java.util.Date;
 
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
-import android.util.Log;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -94,28 +91,24 @@ public class Field<T> {
 		if (this.value == null) {
 			if (value instanceof String) {
 				this.value = (Value<T>) new StringValue();
-				this.value.setField(this);
-				this.value.setValue(value);
-				setStringValue((StringValue) this.value);
-			}
-			if (value instanceof Integer) {
+			} else if (value instanceof Integer) {
 				this.value = (Value<T>) new IntegerValue();
-				this.value.setField(this);
-				this.value.setValue(value);
-				setIntegerValue((IntegerValue) this.value);
-			}
-			if (value instanceof Double) {
+			} else if (value instanceof Double) {
 				this.value = (Value<T>) new DoubleValue();
-				this.value.setField(this);
-				this.value.setValue(value);
-				setDoubleValue((DoubleValue) this.value);
-			}
-			if (value instanceof Date) {
+			} else if (value instanceof Date) {
 				this.value = (Value<T>) new DateValue();
-				this.value.setField(this);
-				this.value.setValue(value);
-				setDateValue((DateValue) this.value);
 			}
+			this.value.setField(this);
+		}
+		this.value.setValue(value);
+		if (value instanceof String) {
+			setStringValue((StringValue) this.value);
+		} else if (value instanceof Integer) {
+			setIntegerValue((IntegerValue) this.value);
+		} else if (value instanceof Double) {
+			setDoubleValue((DoubleValue) this.value);
+		} else if (value instanceof Date) {
+			setDateValue((DateValue) this.value);
 		}
 	}
 

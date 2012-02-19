@@ -50,8 +50,8 @@ public class TemperatureGraphWidget extends AbstractWidget implements Widget {
 		Log.d(LOG_TAG,
 				"TemperatureGraph Type: "
 						+ (((RelativeLayout) convertView).getId() == R.id.temperatureGraphWidget));
-		Log.d(LOG_TAG,"Person in TemperatureGraphWidget: "+person.getId());
-		
+		Log.d(LOG_TAG, "Person in TemperatureGraphWidget: " + person.getId());
+
 		Collection<Record> rs = getRecords();
 		if (rs != null && rs.size() > 1) {
 
@@ -66,7 +66,7 @@ public class TemperatureGraphWidget extends AbstractWidget implements Widget {
 				Record record = it.next();
 				Iterator<Field> fit = record.getFields().iterator();
 				while (fit.hasNext()) {
-					Field f = fit.next();
+					Field<?> f = fit.next();
 					if (f.getType() == Type.TEMPERATURE) {
 						t = (Double) f.getValue();
 						break;
@@ -79,7 +79,6 @@ public class TemperatureGraphWidget extends AbstractWidget implements Widget {
 
 			}
 
-
 			// -------------------
 
 			XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
@@ -90,13 +89,14 @@ public class TemperatureGraphWidget extends AbstractWidget implements Widget {
 			renderer.setAntialiasing(true);
 
 			XYSeriesRenderer seriesRenderer = new XYSeriesRenderer();
-//			seriesRenderer.setFillPoints(true);
-//			seriesRenderer.setDisplayChartValues(true);
+			// seriesRenderer.setFillPoints(true);
+			// seriesRenderer.setDisplayChartValues(true);
 			seriesRenderer.setGradientEnabled(true);
 			seriesRenderer.setGradientStart(35, Color.rgb(0, 255, 255));
 			seriesRenderer.setGradientStop(39, Color.rgb(255, 0, 0));
-//			seriesRenderer.setFillBelowLineColor(Color.argb(200, 255, 255, 0));
-//			seriesRenderer.setFillBelowLine(false);
+			// seriesRenderer.setFillBelowLineColor(Color.argb(200, 255, 255,
+			// 0));
+			// seriesRenderer.setFillBelowLine(false);
 			seriesRenderer.setColor(Color.argb(200, 255, 255, 0));
 			seriesRenderer.setLineWidth(6);
 			BasicStroke basicstroke = new BasicStroke(Cap.ROUND, Join.ROUND,

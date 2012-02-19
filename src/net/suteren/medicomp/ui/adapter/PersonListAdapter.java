@@ -1,5 +1,8 @@
 package net.suteren.medicomp.ui.adapter;
 
+import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
+import static net.suteren.medicomp.ui.activity.MedicompActivity.PERSON_ID_EXTRA;
+
 import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
@@ -7,6 +10,7 @@ import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.ui.activity.DashboardActivity;
 import net.suteren.medicomp.ui.activity.MedicompActivity;
+import net.suteren.medicomp.ui.activity.PersonListActivity;
 import net.suteren.medicomp.ui.activity.PersonProfileActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,13 +24,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
-import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 
 public class PersonListAdapter extends AbstractListAdapter<Person> {
 
 	private Dao<Person, Integer> personDao;
 
-	public PersonListAdapter(Context context) throws SQLException {
+	public PersonListAdapter(PersonListActivity context) throws SQLException {
 		super(context);
 		personDao = MediCompDatabaseFactory.getInstance(context).createDao(
 				Person.class);
@@ -57,10 +60,10 @@ public class PersonListAdapter extends AbstractListAdapter<Person> {
 					Editor prefs = context.getSharedPreferences(
 							MedicompActivity.MEDICOMP_PREFS,
 							Context.MODE_WORLD_WRITEABLE).edit();
-					prefs.putInt(MedicompActivity.PERSON_ID, person.getId());
+					prefs.putInt(PERSON_ID_EXTRA, person.getId());
 					prefs.commit();
 					Intent intent = new Intent(context, DashboardActivity.class);
-					intent.putExtra("person", person.getId());
+					intent.putExtra(PERSON_ID_EXTRA, person.getId());
 					context.startActivity(intent);
 
 				}
@@ -72,7 +75,7 @@ public class PersonListAdapter extends AbstractListAdapter<Person> {
 					Person p = (Person) getItem(position);
 					Intent intent = new Intent(context,
 							PersonProfileActivity.class);
-					intent.putExtra("person", p.getId());
+					intent.putExtra(PERSON_ID_EXTRA, p.getId());
 					context.startActivity(intent);
 					return true;
 				}

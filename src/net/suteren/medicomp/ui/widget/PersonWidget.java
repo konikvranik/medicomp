@@ -3,7 +3,9 @@ package net.suteren.medicomp.ui.widget;
 import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.domain.Person;
+import net.suteren.medicomp.ui.activity.PersonListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +21,18 @@ public class PersonWidget extends AbstractWidget implements Widget {
 
 	@Override
 	public View getView(View convertView, ViewGroup parent) {
-		if (convertView == null)
+		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.dashboard_person,
 					parent, false);
+			convertView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					context.startActivity(new Intent(context,
+							PersonListActivity.class));
 
+				}
+			});
+		}
 		name = (TextView) convertView.findViewById(R.id.textView1);
 
 		name.setText(person.getName());

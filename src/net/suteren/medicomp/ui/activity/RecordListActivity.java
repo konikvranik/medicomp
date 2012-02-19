@@ -3,37 +3,26 @@ package net.suteren.medicomp.ui.activity;
 import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.ui.adapter.RecordListAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.j256.ormlite.dao.Dao;
-
-public class RecordListActivity extends MedicompActivity {
-
-	private Dao<Record, Integer> recordDao;
-	@SuppressWarnings("rawtypes")
-	private Dao<Field, Integer> fieldDao;
+public class RecordListActivity extends ListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-		try {
-			recordDao = dbf.createDao(Record.class);
-			fieldDao = dbf.createDao(Field.class);
-		} catch (SQLException e) {
-			Log.e(LOG_TAG, e.getMessage(), e);
-			throw new RuntimeException(e);
-		}
 
 		if (!setupPerson()) {
 			redirectToPersonList();
 			return;
 		}
+
+		listView.setAdapter(getAdapter());
 
 	}
 
@@ -56,4 +45,20 @@ public class RecordListActivity extends MedicompActivity {
 	protected int getContentViewId() {
 		return R.layout.record_list;
 	}
+
+	@Override
+	public void edit(long id) {
+		Log.d(LOG_TAG, "Edit " + id);
+		Intent intent = new Intent(this, RecordProfileActivity.class);
+		intent.putExtra(RECORD_ID_EXTRA,(int) id);
+		this.startActivity(intent);
+	}
+
+	@Override
+	protected void delete(long id) {
+		Log.d(LOG_TAG, "delete " + id);
+		// TODO Auto-generated method stub
+
+	}
+
 }

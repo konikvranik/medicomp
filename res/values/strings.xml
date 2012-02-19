@@ -26,5 +26,6 @@
 	<string name="addPerson">Add person</string>
 	<string name="delete">Remove</string>
 	<string name="showRecords">Show person\'s records</string>
+	<string name="edit">Edit</string>
 
 </resources>

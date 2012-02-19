@@ -6,8 +6,8 @@ import java.util.Locale;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Person.Gender;
+import net.suteren.medicomp.ui.activity.PersonProfileActivity;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,23 +19,22 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class PersonProfileAdapter implements ListAdapter {
+public class PersonProfileAdapter extends ProfileAdapter<Person> {
 
 	private LayoutInflater layoutInflater;
-	private Context context;
+	private PersonProfileActivity profileActivity;
 	private Person person;
 
-	public PersonProfileAdapter(Context context, Person person) {
+	public PersonProfileAdapter(PersonProfileActivity context, Person person) {
 		if (context == null)
 			throw new NullPointerException("Context == null");
 		if (person == null)
 			throw new NullPointerException("Person == null!");
-		this.context = context;
+		this.profileActivity = context;
 		layoutInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.person = person;
@@ -47,23 +46,12 @@ public class PersonProfileAdapter implements ListAdapter {
 	}
 
 	@Override
-	public Object getItem(int arg0) {
-		return person;
-	}
-
-	@Override
-	public long getItemId(int position) {
-		return person.getId();
-	}
-
-	@Override
-	public int getItemViewType(int position) {
-		return Math.min(position, 3);
+	public int getViewTypeCount() {
+		return 3;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-
 
 		switch (position) {
 		case 0:
@@ -126,7 +114,7 @@ public class PersonProfileAdapter implements ListAdapter {
 						parent, false);
 			Spinner gender = (Spinner) convertView.findViewById(R.id.spinner1);
 			ArrayAdapter<Gender> genderAdapter = new ArrayAdapter<Gender>(
-					context, android.R.layout.simple_dropdown_item_1line,
+					profileActivity, android.R.layout.simple_dropdown_item_1line,
 					Gender.values());
 			gender.setAdapter(genderAdapter);
 			gender.setSelection(genderAdapter.getPosition(person.getGender()));
@@ -149,46 +137,9 @@ public class PersonProfileAdapter implements ListAdapter {
 
 		default:
 			if (convertView == null)
-				convertView = new View(context);
+				convertView = new View(profileActivity);
 		}
 		return convertView;
-	}
-
-	@Override
-	public int getViewTypeCount() {
-		return 3;
-	}
-
-	@Override
-	public boolean hasStableIds() {
-		return true;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return person != null;
-	}
-
-	@Override
-	public void registerDataSetObserver(DataSetObserver observer) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unregisterDataSetObserver(DataSetObserver observer) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean areAllItemsEnabled() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled(int position) {
-		return true;
 	}
 
 }

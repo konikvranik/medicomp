@@ -3,7 +3,6 @@ package net.suteren.medicomp.domain;
 import java.util.Collection;
 import java.util.Date;
 
-
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -47,7 +46,6 @@ public class Record implements PersistableWithId {
 	@DatabaseField(canBeNull = true, columnName = COLUMN_NAME_PARENT, foreign = true)
 	private Record parent;
 
-	@SuppressWarnings("rawtypes")
 	@ForeignCollectionField(eager = false)
 	private Collection<Field> fields;
 
@@ -103,12 +101,10 @@ public class Record implements PersistableWithId {
 		this.parent = parent;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public Collection<Field> getFields() {
 		return fields;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void setFields(Collection<Field> fields) {
 		this.fields = fields;
 	}

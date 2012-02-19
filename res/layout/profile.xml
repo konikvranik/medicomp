@@ -5,56 +5,30 @@
 
 	<include
 		android:id="@+id/textView1"
-		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true"
 		android:layout_alignParentRight="true"
 		android:layout_alignParentTop="true"
 		layout="@layout/title" />
 
 	<ListView
-		android:id="@+id/personProfile"
+		android:id="@+id/profile"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_above="@+id/relativeLayout1"
 		android:layout_alignParentLeft="true"
 		android:layout_alignParentRight="true"
 		android:layout_below="@+id/textView1" >
-
 	</ListView>
 
-	<RelativeLayout
+	<include
 		android:id="@+id/relativeLayout1"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentRight="true"
-		android:orientation="horizontal" >
-
-		<Button
-			android:id="@+id/button1"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/save" 
-			android:layout_toLeftOf="@+id/button2"
-			/>
-
-		<Button
-			android:id="@+id/button2"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/cancel"
-			android:layout_alignParentRight="true"
-			 />
-
-		<Button
-			android:id="@+id/button3"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/delete"
-			android:layout_alignParentLeft="true"
-			 />
-
-			</RelativeLayout>
+		layout="@layout/form_buttons"
+		android:orientation="horizontal" />
 
 </RelativeLayout>

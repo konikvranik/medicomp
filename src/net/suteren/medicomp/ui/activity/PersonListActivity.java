@@ -3,6 +3,8 @@ package net.suteren.medicomp.ui.activity;
 import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
+import net.suteren.medicomp.domain.Person;
+import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.ui.adapter.PersonListAdapter;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +12,7 @@ import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class PersonListActivity extends MedicompActivity {
+public class PersonListActivity extends ListActivity {
 
 	/** Called when the activity is first created. */
 	@Override
@@ -65,5 +67,19 @@ public class PersonListActivity extends MedicompActivity {
 	@Override
 	protected int getContentViewId() {
 		return R.layout.person_list;
+	}
+
+	@Override
+	protected void edit(long id) {
+		Log.d(LOG_TAG, "Edit " + id);
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void delete(long id) {
+		Log.d(LOG_TAG, "delete " + id);
+		// TODO Auto-generated method stub
+
 	}
 }

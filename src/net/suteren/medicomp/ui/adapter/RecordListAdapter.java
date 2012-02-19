@@ -10,7 +10,7 @@ import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
-import android.content.Context;
+import net.suteren.medicomp.ui.activity.RecordListActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +24,14 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 
 	private Person person;
 
-	public RecordListAdapter(Context context, Person person)
-			throws SQLException {
-		super(context);
-		recordDao = MediCompDatabaseFactory.getInstance(context).createDao(
-				Record.class);
+	RecordListActivity recordListActivity;
+
+	public RecordListAdapter(RecordListActivity recordListActivity,
+			Person person) throws SQLException {
+		super(recordListActivity);
+		this.recordListActivity = recordListActivity;
+		recordDao = MediCompDatabaseFactory.getInstance(recordListActivity)
+				.createDao(Record.class);
 		Log.d(LOG_TAG, "REcordListAdapter.............");
 		if (person == null)
 			throw new NullPointerException("Person == null!");
@@ -40,10 +43,17 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.record_list_row,
 					parent, false);
+			convertView.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View view) {
+					recordListActivity.edit(getItemId(position));
+					return true;
+				}
+			});
 		}
 		DateFormat df = android.text.format.DateFormat.getDateFormat(context);
 		DateFormat tf = android.text.format.DateFormat.getTimeFormat(context);
@@ -58,9 +68,12 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 		TextView valueField = (TextView) convertView
 				.findViewById(R.id.textView3);
 		StringBuffer sb = new StringBuffer();
+		boolean first = true;
 		for (Field<?> f : record.getFields()) {
+			if (!first)
+				sb.append(", ");
+			first = false;
 			sb.append(f.getValue());
-			sb.append(", ");
 		}
 		valueField.setText(sb.toString());
 		return convertView;
@@ -78,8 +91,7 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 
 	@Override
 	public Record getItemById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return recordDao.queryForId(id);
 	}
 
 }

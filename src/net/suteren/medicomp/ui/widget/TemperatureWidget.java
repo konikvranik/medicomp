@@ -17,7 +17,9 @@ import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.ui.activity.RecordListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -35,9 +37,21 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 
 	@Override
 	public View getView(View convertView, ViewGroup parent) {
-		if (convertView == null) 
+		if (convertView == null) {
 			convertView = layoutInflater.inflate(
 					R.layout.dashboard_temperature, parent, false);
+			convertView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+
+					context.startActivity(new Intent(context,
+							RecordListActivity.class));
+
+					// TODO Auto-generated method stub
+				}
+			});
+		}
+
 		temp = (TextView) convertView.findViewById(R.id.textView2);
 		Log.d(LOG_TAG,
 				"TemperatureWidget Type: "
@@ -47,12 +61,10 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 		Double val = null;
 
-
 		Iterator<Record> ri = rs.iterator();
 		Record r = null;
 		while (ri.hasNext()) {
 			Record rx = ri.next();
-
 
 			if (rx.getType() == Type.TEMPERATURE
 					&& rx.getCategory() == Category.MEASURE
@@ -61,12 +73,11 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 				r = rx;
 		}
 
-
 		if (r != null) {
 			Collection<Field> fs = r.getFields();
 			Iterator<Field> fi = fs.iterator();
 			while (fi.hasNext()) {
-				Field f = fi.next();
+				Field<?> f = fi.next();
 				if (f.getType() == Type.TEMPERATURE) {
 					val = (Double) f.getValue();
 					break;
