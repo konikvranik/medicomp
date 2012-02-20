@@ -85,9 +85,10 @@ public class PersonListAdapter extends AbstractListAdapter<Person> {
 		if (person != null) {
 			((TextView) convertView.findViewById(R.id.name)).setText(person
 					.getName());
-			((TextView) convertView.findViewById(R.id.birthday))
-					.setText(DateFormat.getDateFormat(context).format(
-							person.getBirthDate()));
+			if (person.getBirthDate() != null)
+				((TextView) convertView.findViewById(R.id.birthday))
+						.setText(DateFormat.getDateFormat(context).format(
+								person.getBirthDate()));
 		}
 		return convertView;
 	}

@@ -11,7 +11,6 @@ import android.content.Context;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -21,13 +20,15 @@ import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 public class PersonProfileAdapter extends ProfileAdapter<Person> {
 
 	private LayoutInflater layoutInflater;
 	private PersonProfileActivity profileActivity;
 	private Person person;
+	private Calendar ts = Calendar.getInstance(Locale.getDefault());
+	private CharSequence nameEditText;
+	private Gender gender;
 
 	public PersonProfileAdapter(PersonProfileActivity context, Person person) {
 		if (context == null)
@@ -55,28 +56,22 @@ public class PersonProfileAdapter extends ProfileAdapter<Person> {
 
 		switch (position) {
 		case 0:
-			if (convertView == null)
+			if (convertView == null) {
 				convertView = layoutInflater.inflate(R.layout.name_edit,
 						parent, false);
-			EditText name = (EditText) convertView.findViewById(R.id.editText1);
-			name.setText(person.getName());
-			name.setOnFocusChangeListener(new OnFocusChangeListener() {
+				EditText nameEditText = (EditText) convertView
+						.findViewById(R.id.editText1);
+				nameEditText.setText(person.getName());
+				nameEditText
+						.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+							@Override
+							public void onFocusChange(View view, boolean flag) {
+								PersonProfileAdapter.this.nameEditText = ((EditText) view)
+										.getText();
 
-				@Override
-				public void onFocusChange(View v, boolean hasFocus) {
-					person.setName(((EditText) v).getText().toString());
-
-				}
-			});
-			name.setOnEditorActionListener(new OnEditorActionListener() {
-
-				@Override
-				public boolean onEditorAction(TextView v, int actionId,
-						KeyEvent event) {
-					person.setName(v.getText().toString());
-					return false;
-				}
-			});
+							}
+						});
+			}
 			break;
 
 		case 1:
@@ -97,42 +92,41 @@ public class PersonProfileAdapter extends ProfileAdapter<Person> {
 							@Override
 							public void onDateChanged(DatePicker view,
 									int year, int monthOfYear, int dayOfMonth) {
-								Calendar cal = Calendar.getInstance(Locale
-										.getDefault());
-								cal.set(Calendar.YEAR, year);
-								cal.set(Calendar.MONTH, monthOfYear);
-								cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-								person.setBirthDate(cal.getTime());
+								ts.set(Calendar.YEAR, year);
+								ts.set(Calendar.MONTH, monthOfYear);
+								ts.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 							}
 						});
 			}
 			break;
 
 		case 2:
-			if (convertView == null)
+			if (convertView == null) {
 				convertView = layoutInflater.inflate(R.layout.gender_edit,
 						parent, false);
-			Spinner gender = (Spinner) convertView.findViewById(R.id.spinner1);
-			ArrayAdapter<Gender> genderAdapter = new ArrayAdapter<Gender>(
-					profileActivity, android.R.layout.simple_dropdown_item_1line,
-					Gender.values());
-			gender.setAdapter(genderAdapter);
-			gender.setSelection(genderAdapter.getPosition(person.getGender()));
-			gender.setOnItemSelectedListener(new OnItemSelectedListener() {
+				Spinner gender = (Spinner) convertView
+						.findViewById(R.id.spinner1);
+				ArrayAdapter<Gender> genderAdapter = new ArrayAdapter<Gender>(
+						profileActivity,
+						android.R.layout.simple_dropdown_item_1line,
+						Gender.values());
+				gender.setAdapter(genderAdapter);
+				gender.setSelection(genderAdapter.getPosition(person
+						.getGender()));
+				gender.setOnItemSelectedListener(new OnItemSelectedListener() {
+					@Override
+					public void onItemSelected(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						PersonProfileAdapter.this.gender = Gender.values()[arg2];
 
-				@Override
-				public void onItemSelected(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					person.setGender(Gender.values()[arg2]);
+					}
 
-				}
-
-				@Override
-				public void onNothingSelected(AdapterView<?> arg0) {
-					person.setGender(null);
-				}
-
-			});
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+						PersonProfileAdapter.this.gender = null;
+					}
+				});
+			}
 			break;
 
 		default:
@@ -142,4 +136,17 @@ public class PersonProfileAdapter extends ProfileAdapter<Person> {
 		return convertView;
 	}
 
+	public Calendar getBirthday() {
+		return ts;
+	}
+
+	public String getName() {
+		if (nameEditText == null)
+			return null;
+		return nameEditText.toString();
+	}
+
+	public Gender getGender() {
+		return gender;
+	}
 }

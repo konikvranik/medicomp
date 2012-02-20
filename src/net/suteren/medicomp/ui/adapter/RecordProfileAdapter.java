@@ -17,6 +17,7 @@ import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
 import net.suteren.medicomp.ui.activity.RecordProfileActivity;
 import android.content.Context;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 	private Record record;
 	@SuppressWarnings("rawtypes")
 	private ArrayList<Field> fields;
-	private EditText name;
+	private String name;
 	private DatePicker dp;
 	private TimePicker tp;
 	private Calendar ts = Calendar.getInstance(Locale.getDefault());
@@ -73,7 +74,8 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 			if (convertView == null) {
 				convertView = layoutInflater.inflate(
 						R.layout.record_profile_header, parent, false);
-				name = (EditText) convertView.findViewById(R.id.editText1);
+				EditText name = (EditText) convertView
+						.findViewById(R.id.editText1);
 
 				ts.setTime(record.getTimestamp());
 				dp = (DatePicker) convertView.findViewById(R.id.datePicker1);
@@ -92,8 +94,15 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 				tp.setCurrentHour(ts.get(Calendar.HOUR_OF_DAY));
 				tp.setCurrentMinute(ts.get(Calendar.MINUTE));
 				name.setText(record.getTitle());
+				name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+					@Override
+					public void onFocusChange(View view, boolean flag) {
+						RecordProfileAdapter.this.name = ((EditText) view)
+								.getText().toString();
+					}
+				});
 			}
-			name = (EditText) convertView.findViewById(R.id.editText1);
 			break;
 
 		default:
@@ -127,7 +136,7 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 	public String getTitle() {
 		if (name == null)
 			return null;
-		return name.getEditableText().toString();
+		return name;
 	}
 
 	public Calendar getTimestamp() {

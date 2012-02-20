@@ -30,7 +30,6 @@ public class PersonProfileActivity extends ProfileActivity {
 			Log.e(MedicompActivity.LOG_TAG, "Failed: ", e);
 		}
 
-	
 	}
 
 	@Override
@@ -45,6 +44,13 @@ public class PersonProfileActivity extends ProfileActivity {
 
 	@Override
 	protected void onSaveEvent(View v) {
+
+		PersonProfileAdapter adapter = (PersonProfileAdapter) listView
+				.getAdapter();
+		person.setName(adapter.getName());
+		person.setGender(adapter.getGender());
+		person.setBirthDate(adapter.getBirthday().getTime());
+
 		try {
 			personDao.createOrUpdate(person);
 		} catch (SQLException e) {
@@ -65,6 +71,7 @@ public class PersonProfileActivity extends ProfileActivity {
 
 	@Override
 	protected void onDeleteEvent(View v) {
+
 		try {
 			personDao.delete(person);
 		} catch (SQLException e) {
