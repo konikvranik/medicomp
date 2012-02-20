@@ -1,6 +1,7 @@
 package net.suteren.medicomp.ui.activity;
 
 import java.sql.SQLException;
+import java.util.Calendar;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.domain.Record;
@@ -73,6 +74,11 @@ public class RecordProfileActivity extends ProfileActivity {
 		String title = recordAdapter.getTitle();
 		if (title != null)
 			record.setTitle(title);
+
+		Calendar ts = recordAdapter.getTimestamp();
+		if (ts != null)
+			record.setTimestamp(ts.getTime());
+
 		try {
 			recordDao.createOrUpdate(record);
 			recordAdapter.saveFields();
