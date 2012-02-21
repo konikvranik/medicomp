@@ -73,7 +73,7 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 			if (!first)
 				sb.append(", ");
 			first = false;
-			sb.append(f.getValue());
+			sb.append(nf.format(f.getValue()));
 		}
 		valueField.setText(sb.toString());
 		return convertView;

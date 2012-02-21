@@ -1,7 +1,9 @@
 package net.suteren.medicomp.ui.adapter;
 
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import net.suteren.medicomp.domain.PersistableWithId;
 import android.content.Context;
@@ -13,6 +15,7 @@ public abstract class AbstractListAdapter<T extends PersistableWithId>
 		implements ListAdapter {
 
 	protected Context context;
+	protected NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 
 	protected List<T> collection;
 

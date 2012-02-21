@@ -75,6 +75,7 @@ public abstract class MedicompActivity extends Activity {
 	private EditText inputTextField;
 	private Type choosedType;
 	private ArrayList<Type> availableTypes;
+	protected NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 	private static final int TYPE_CHOOSER_DIALOG = 1;
 
 	@Override
@@ -277,7 +278,6 @@ public abstract class MedicompActivity extends Activity {
 	}
 
 	private void processInput() {
-		NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 		choosedType = null;
 		availableTypes = new ArrayList<Type>();
 		boolean isNumber = false;
@@ -322,7 +322,7 @@ public abstract class MedicompActivity extends Activity {
 					f.setRecord(r);
 
 					recordDao.create(r);
-					fieldDao.create(f);
+					f.persist();
 
 					f.setValue(n.doubleValue());
 					fieldDao.update(f);

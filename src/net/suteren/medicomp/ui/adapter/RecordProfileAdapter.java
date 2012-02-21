@@ -1,15 +1,12 @@
 package net.suteren.medicomp.ui.adapter;
 
 import java.sql.SQLException;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 
+import net.suteren.medicomp.FieldFormatter;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Person;
@@ -17,7 +14,6 @@ import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
 import net.suteren.medicomp.ui.activity.RecordProfileActivity;
 import android.content.Context;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +34,6 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 	private DatePicker dp;
 	private TimePicker tp;
 	private Calendar ts = Calendar.getInstance(Locale.getDefault());
-	private Map<Field, View> fieldMap = new HashMap<Field, View>();
 
 	@SuppressWarnings("rawtypes")
 	public RecordProfileAdapter(RecordProfileActivity context, Person person,
@@ -115,14 +110,14 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 			break;
 
 		default:
-			Field<?> field = fields.get(position - 1);
+			final Field<?> field = fields.get(position - 1);
 			if (convertView == null) {
 				convertView = layoutInflater.inflate(R.layout.record_field,
 						parent, false);
 
 				String fieldName = field.getName();
 				Object fieldValue = field.getValue();
-				Type type = field.getType();
+				final Type type = field.getType();
 
 				TextView v = (TextView) convertView.findViewById(R.id.name);
 				EditText nameView = (EditText) v;
@@ -131,11 +126,29 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 				v = (TextView) convertView.findViewById(R.id.value);
 				EditText valueView = (EditText) v;
 				nameView.setText(fieldName);
+				nameView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+					@Override
+					public void onFocusChange(View view, boolean flag) {
+						field.setName(((TextView) view).getText().toString());
+					}
+				});
 				typeView.setText(type.toString());
-				valueView.setText(fieldValue == null ? null : fieldValue
-						.toString());
+				FieldFormatter f = new FieldFormatter(field);
+				valueView.setText(f.getValue());
+				valueView
+						.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+							@Override
+							public void onFocusChange(View v, boolean hasFocus) {
+								FieldFormatter f = new FieldFormatter(field);
+								try {
+									f.setValue(((TextView) v).getText()
+											.toString());
+								} catch (Exception e) {
+									throw new RuntimeException(e);
+								}
+							}
+						});
 			}
-			fieldMap.put(field, convertView);
 			break;
 
 		}
@@ -153,19 +166,8 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 	}
 
 	public void saveFields() throws SQLException, ParseException {
-		for (Entry<Field, View> element : fieldMap.entrySet()) {
-			Field field = element.getKey();
-			View convertView = element.getValue();
-
-			EditText nameView = (EditText) convertView.findViewById(R.id.name);
-			field.setName(nameView.getEditableText().toString());
-
-			EditText valueView = (EditText) convertView
-					.findViewById(R.id.value);
-
-			NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
-			field.setValue(nf.parse(valueView.getEditableText().toString())
-					.doubleValue());
+		for (Field f : record.getFields()) {
+			f.persist();
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package net.suteren.medicomp.ui.adapter;
 
+import java.text.NumberFormat;
+
 import net.suteren.medicomp.domain.PersistableWithId;
 import android.database.DataSetObserver;
 import android.widget.ListAdapter;
@@ -8,6 +10,7 @@ public abstract class ProfileAdapter<T extends PersistableWithId> implements
 		ListAdapter {
 
 	private T profileObject;
+	protected NumberFormat nf = NumberFormat.getInstance();
 
 	@Override
 	public T getItem(int arg0) {

@@ -3,12 +3,11 @@ package net.suteren.medicomp.ui.widget;
 import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 
 import java.sql.SQLException;
-import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
+import net.suteren.medicomp.FieldFormatter;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Category;
@@ -58,7 +57,6 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 						+ (((RelativeLayout) convertView).getId() == R.id.temperatureWidget));
 		Log.d(LOG_TAG, "Person in TemperatureWidget: " + person.getId());
 		Collection<Record> rs = person.getRecords();
-		NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 		Double val = null;
 
 		Iterator<Record> ri = rs.iterator();
@@ -73,12 +71,14 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 				r = rx;
 		}
 
+		FieldFormatter ff = null;
 		if (r != null) {
 			Collection<Field> fs = r.getFields();
 			Iterator<Field> fi = fs.iterator();
 			while (fi.hasNext()) {
 				Field<?> f = fi.next();
 				if (f.getType() == Type.TEMPERATURE) {
+					ff = new FieldFormatter(f);
 					val = (Double) f.getValue();
 					break;
 				}
@@ -93,24 +93,25 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		}
 
 		if (val != null) {
-			temp.setText(nf.format(val));
-			double min = 30;
+			temp.setText(ff == null ? "--,-" : ff.getValue());
+			double min = 36.3;
+			double high = 37;
 			double max = 38;
-			double optimal = 36.6;
 			int red = 0;
 			int green = 0;
 			int blue = 0;
 
 			if (val <= min) {
 				blue = 255;
-			} else if (val <= optimal) {
-				green = (int) ((val - min) / (optimal - min) * 255);
-				blue = 256 - green;
-			} else if (val <= max) {
-				red = (int) ((val - optimal) / (max - optimal) * 255);
-				green = 256 - red;
+				green = 128;
+			} else if (val < high) {
+				green = (255);
+			} else if (val < max) {
+				red = (255);
+				green = 200;
 			} else {
 				red = 255;
+				green = 70;
 			}
 
 			temp.setTextColor(Color.rgb(red, green, blue));

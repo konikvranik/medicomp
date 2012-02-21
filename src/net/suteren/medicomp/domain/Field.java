@@ -5,6 +5,7 @@ import java.util.Date;
 
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -18,6 +19,25 @@ public class Field<T> {
 	private static final String COLUMN_NAME_RECORD = "record";
 
 	private static final String _ID = "id";
+
+	private Dao<StringValue, Integer> stringValueDao;
+	private Dao<DateValue, Integer> dateValueDao;
+	private Dao<DoubleValue, Integer> doubleValueDao;
+	private Dao<IntegerValue, Integer> integerValueDao;
+	private Dao<Field, Integer> fieldValueDao;
+
+	public Field() throws SQLException {
+		stringValueDao = MediCompDatabaseFactory.getInstance().createDao(
+				StringValue.class);
+		integerValueDao = MediCompDatabaseFactory.getInstance().createDao(
+				IntegerValue.class);
+		doubleValueDao = MediCompDatabaseFactory.getInstance().createDao(
+				DoubleValue.class);
+		dateValueDao = MediCompDatabaseFactory.getInstance().createDao(
+				DateValue.class);
+		fieldValueDao = MediCompDatabaseFactory.getInstance().createDao(
+				Field.class);
+	}
 
 	@DatabaseField(generatedId = true, columnName = _ID)
 	private int id;
@@ -159,5 +179,17 @@ public class Field<T> {
 		this.stringValue = value;
 		MediCompDatabaseFactory.getInstance().createDao(StringValue.class)
 				.createOrUpdate(value);
+	}
+
+	public void persist() throws SQLException {
+		fieldValueDao.createOrUpdate(this);
+		if (this.stringValue != null)
+			stringValueDao.createOrUpdate(this.stringValue);
+		if (this.integerValue != null)
+			integerValueDao.createOrUpdate(this.integerValue);
+		if (this.dateValue != null)
+			dateValueDao.createOrUpdate(this.dateValue);
+		if (this.doubleValue != null)
+			doubleValueDao.createOrUpdate(this.doubleValue);
 	}
 }
