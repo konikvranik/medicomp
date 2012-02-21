@@ -93,6 +93,15 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 						});
 				tp.setCurrentHour(ts.get(Calendar.HOUR_OF_DAY));
 				tp.setCurrentMinute(ts.get(Calendar.MINUTE));
+				tp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+					@Override
+					public void onTimeChanged(TimePicker view, int hourOfDay,
+							int minute) {
+						ts.set(Calendar.HOUR_OF_DAY, view.getCurrentHour());
+						ts.set(Calendar.MINUTE, view.getCurrentMinute());
+					}
+				});
 				name.setText(record.getTitle());
 				name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
@@ -140,8 +149,6 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 	}
 
 	public Calendar getTimestamp() {
-		ts.set(Calendar.HOUR_OF_DAY, tp.getCurrentHour());
-		ts.set(Calendar.MINUTE, tp.getCurrentMinute());
 		return ts;
 	}
 
