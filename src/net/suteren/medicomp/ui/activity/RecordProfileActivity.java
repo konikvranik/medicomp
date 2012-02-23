@@ -51,8 +51,7 @@ public class RecordProfileActivity extends ProfileActivity {
 		Integer recordId = determineRecordId();
 		if (recordId == null)
 			return false;
-		recordQuery.setId(recordId);
-		record = setupObject(recordDao, recordQuery);
+		record = setupObject(recordDao, recordId);
 		return record != null;
 	}
 

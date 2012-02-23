@@ -48,22 +48,22 @@ public class RecordListActivity extends ListActivity {
 	}
 
 	@Override
-	public void edit(long id) {
+	public void edit(int id) {
 		Log.d(LOG_TAG, "Edit " + id);
 		Intent intent = new Intent(this, RecordProfileActivity.class);
-		intent.putExtra(RECORD_ID_EXTRA, (int) id);
+		intent.putExtra(RECORD_ID_EXTRA,  id);
 		this.startActivity(intent);
 	}
 
 	@Override
-	protected void delete(long id) {
+	protected void delete(int id) {
 		Log.d(LOG_TAG, "delete " + id);
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	protected boolean onItemClick(View view, long position, long id) {
+	protected boolean onItemClick(View view, int position, int id) {
 		// TODO Auto-generated method stub
 		return true;
 	}

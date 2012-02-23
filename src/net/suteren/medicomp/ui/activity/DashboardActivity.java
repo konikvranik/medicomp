@@ -51,19 +51,19 @@ public class DashboardActivity extends ListActivity {
 	}
 
 	@Override
-	protected void edit(long id) {
+	protected void edit(int id) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	protected void delete(long id) {
+	protected void delete(int id) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	protected boolean onItemClick(View view, long position, long id) {
+	protected boolean onItemClick(View view, int position, int id) {
 		Log.d(LOG_TAG, "clicked dashboard " + id);
 		return getAdapter().getItemById((int) id).onClick(view, position, id);
 	}

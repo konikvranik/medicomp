@@ -71,7 +71,7 @@ public class PersonListActivity extends ListActivity {
 	}
 
 	@Override
-	protected void edit(long id) {
+	protected void edit(int id) {
 		Log.d(LOG_TAG, "Edit " + id);
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(this, PersonProfileActivity.class);
@@ -80,18 +80,18 @@ public class PersonListActivity extends ListActivity {
 	}
 
 	@Override
-	protected void delete(long id) {
+	protected void delete(int id) {
 		Log.d(LOG_TAG, "delete " + id);
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	protected boolean onItemClick(View view, long position, long id) {
+	protected boolean onItemClick(View view, int position, int id) {
 		Editor prefs = this.getSharedPreferences(
 				MedicompActivity.MEDICOMP_PREFS, Context.MODE_WORLD_WRITEABLE)
 				.edit();
-		prefs.putLong(PERSON_ID_EXTRA, id);
+		prefs.putInt(PERSON_ID_EXTRA, id);
 		prefs.commit();
 		Intent intent = new Intent(this, DashboardActivity.class);
 		intent.putExtra(PERSON_ID_EXTRA, id);

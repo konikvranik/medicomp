@@ -188,15 +188,11 @@ public abstract class MedicompActivity extends Activity {
 	}
 
 	protected <T extends PersistableWithId> T setupObject(
-			Dao<T, Integer> objectDao, T object) {
+			Dao<T, Integer> objectDao, int id) {
 		try {
 
-			if (object == null) {
-				return null;
-			}
-
-			Log.d(MedicompActivity.LOG_TAG, "Object before: " + object.getId());
-			object = objectDao.queryForSameId(object);
+			Log.d(MedicompActivity.LOG_TAG, "Object before: " + id);
+			T object = objectDao.queryForId(id);
 			if (object != null)
 				Log.d(MedicompActivity.LOG_TAG,
 						"Object after: " + object.getId() + ", ");
@@ -212,8 +208,7 @@ public abstract class MedicompActivity extends Activity {
 		Integer personId = determinePersonId();
 		if (personId == null)
 			return false;
-		personQuery.setId(personId);
-		person = setupObject(personDao, personQuery);
+		person = setupObject(personDao, personId);
 		return person != null;
 	}
 
@@ -238,8 +233,13 @@ public abstract class MedicompActivity extends Activity {
 			return personId;
 
 		if (cache)
-			personId = (int) getSharedPreferences(MEDICOMP_PREFS,
-					Context.MODE_WORLD_WRITEABLE).getLong(PERSON_ID_EXTRA, 0);
+			try {
+				personId = getSharedPreferences(MEDICOMP_PREFS,
+						Context.MODE_WORLD_WRITEABLE)
+						.getInt(PERSON_ID_EXTRA, 0);
+			} catch (ClassCastException e) {
+				return null;
+			}
 		if (personId != 0)
 			return personId;
 

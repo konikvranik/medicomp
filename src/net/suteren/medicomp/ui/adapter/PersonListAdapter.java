@@ -36,29 +36,11 @@ public class PersonListAdapter extends AbstractListAdapter<Person> {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			// convertView = View.inflate(context, R.layout.person_list_row,
-			// parent);
 
 			convertView = layoutInflater.inflate(R.layout.person_list_row,
 					parent, false);
 			convertView.setFocusable(false);
 			convertView.setClickable(false);
-//			convertView.setOnClickListener(new OnClickListener() {
-//
-//				@Override
-//				public void onClick(View v) {
-//					Person person = getItem(position);
-//					Editor prefs = context.getSharedPreferences(
-//							MedicompActivity.MEDICOMP_PREFS,
-//							Context.MODE_WORLD_WRITEABLE).edit();
-//					prefs.putInt(PERSON_ID_EXTRA, person.getId());
-//					prefs.commit();
-//					Intent intent = new Intent(context, DashboardActivity.class);
-//					intent.putExtra(PERSON_ID_EXTRA, person.getId());
-//					context.startActivity(intent);
-//
-//				}
-//			});
 		}
 		Person person = getItem(position);
 		if (person != null) {

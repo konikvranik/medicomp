@@ -28,7 +28,7 @@ public abstract class ListActivity extends MedicompActivity {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					Log.d(LOG_TAG, "list item click " + id);
-					ListActivity.this.onItemClick(view, position,id);
+					ListActivity.this.onItemClick(view, position,(int) id);
 				}
 			});
 		}
@@ -50,19 +50,19 @@ public abstract class ListActivity extends MedicompActivity {
 				.getMenuInfo();
 		switch (item.getItemId()) {
 		case R.id.edit:
-			edit(info.id);
+			edit((int) info.id);
 			return true;
 		case R.id.delete:
-			delete(info.id);
+			delete((int) info.id);
 			return true;
 		default:
 			return super.onContextItemSelected(item);
 		}
 	}
 
-	protected abstract void edit(long id);
+	protected abstract void edit(int id);
 
-	protected abstract void delete(long id);
+	protected abstract void delete(int id);
 
-	protected abstract boolean onItemClick(View view, long id, long id2);
+	protected abstract boolean onItemClick(View view, int id, int id2);
 }
