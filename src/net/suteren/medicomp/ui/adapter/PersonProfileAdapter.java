@@ -8,7 +8,6 @@ import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Person.Gender;
 import net.suteren.medicomp.ui.activity.PersonProfileActivity;
 import android.content.Context;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class PersonProfileAdapter extends ProfileAdapter<Person> {
 

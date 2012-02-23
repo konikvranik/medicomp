@@ -143,6 +143,7 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 								try {
 									f.setValue(((TextView) v).getText()
 											.toString());
+								} catch (ParseException e) {
 								} catch (Exception e) {
 									throw new RuntimeException(e);
 								}

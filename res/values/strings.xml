@@ -9,23 +9,31 @@
 	<string name="genderPrompt">Gender</string>
 	<string name="personSaveFailed">Failed to save person!</string>
 	<string name="personDeleteFailed">Failed to remove person!</string>
-		<string name="noAvailableType">No available type!</string>
+	<string name="noAvailableType">No available type!</string>
 	<string name="failedToAddTemperature">Failed to add temperature!</string>
-	
+
 	<string-array name="genders">
 		<item>NONE</item>
 		<item>Male</item>
 		<item>Female</item>
 		<item>Other</item>
 	</string-array>
+
 	<string name="none">none</string>
 	<string name="last_measured_temperature">Temperature</string>
-	<string name="choosePerson">Choose Person</string>
+	<string name="temperature_graph">Temperature</string>
+		<string name="choosePerson">Choose Person</string>
 	<string name="quit">Quit</string>
 	<string name="celsius">°C</string>
 	<string name="addPerson">Add person</string>
 	<string name="delete">Remove</string>
 	<string name="showRecords">Show person\'s records</string>
 	<string name="edit">Edit</string>
-
+	<string name="remove">Remove</string>
+	<string name="move">Move</string>
+	<string name="preferences">Preferences</string>
+	<string name="person">Person</string>
+	<string name="no_preferences">No preferences</string>
+	<string name="temperature_legend">temperature</string>
+		
 </resources>

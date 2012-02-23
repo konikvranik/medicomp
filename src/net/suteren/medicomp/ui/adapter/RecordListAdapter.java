@@ -47,13 +47,6 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.record_list_row,
 					parent, false);
-			convertView.setOnLongClickListener(new View.OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View view) {
-					recordListActivity.edit(getItemId(position));
-					return true;
-				}
-			});
 		}
 		DateFormat df = android.text.format.DateFormat.getDateFormat(context);
 		DateFormat tf = android.text.format.DateFormat.getTimeFormat(context);

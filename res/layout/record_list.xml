@@ -45,8 +45,6 @@
 			android:layout_alignParentTop="true"
 			android:layout_toLeftOf="@+id/imageButton1"
 			android:singleLine="true" >
-
-			<requestFocus />
 		</EditText>
 	</RelativeLayout>
 

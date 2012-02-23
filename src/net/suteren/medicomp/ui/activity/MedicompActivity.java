@@ -108,6 +108,7 @@ public abstract class MedicompActivity extends Activity {
 			intFilter.addCategory(MedicompActivity.PERSON_DATA_CHANGE_CATEGORY);
 			intFilter.addAction(MedicompActivity.DATA_CHANGE_ACTION);
 			registerReceiver(changeReceiver, intFilter);
+			listView.setFocusable(false);
 		}
 
 		inputTextField = (EditText) getWindow().findViewById(R.id.editText1);
@@ -174,6 +175,10 @@ public abstract class MedicompActivity extends Activity {
 			startActivity(new Intent(this, RecordListActivity.class));
 			break;
 
+		case R.id.quit:
+			this.finish();
+			break;
+
 		default:
 			break;
 		}
@@ -233,8 +238,8 @@ public abstract class MedicompActivity extends Activity {
 			return personId;
 
 		if (cache)
-			personId = getSharedPreferences(MEDICOMP_PREFS,
-					Context.MODE_WORLD_WRITEABLE).getInt(PERSON_ID_EXTRA, 0);
+			personId = (int) getSharedPreferences(MEDICOMP_PREFS,
+					Context.MODE_WORLD_WRITEABLE).getLong(PERSON_ID_EXTRA, 0);
 		if (personId != 0)
 			return personId;
 

@@ -7,6 +7,7 @@ import net.suteren.medicomp.ui.adapter.RecordListAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -14,7 +15,7 @@ public class RecordListActivity extends ListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 
 		if (!setupPerson()) {
@@ -32,7 +33,7 @@ public class RecordListActivity extends ListActivity {
 	}
 
 	@Override
-	protected ListAdapter getAdapter() {
+	protected RecordListAdapter getAdapter() {
 		try {
 			return new RecordListAdapter(this, person);
 		} catch (SQLException e) {
@@ -50,7 +51,7 @@ public class RecordListActivity extends ListActivity {
 	public void edit(long id) {
 		Log.d(LOG_TAG, "Edit " + id);
 		Intent intent = new Intent(this, RecordProfileActivity.class);
-		intent.putExtra(RECORD_ID_EXTRA,(int) id);
+		intent.putExtra(RECORD_ID_EXTRA, (int) id);
 		this.startActivity(intent);
 	}
 
@@ -59,6 +60,12 @@ public class RecordListActivity extends ListActivity {
 		Log.d(LOG_TAG, "delete " + id);
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	protected boolean onItemClick(View view, long position, long id) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

@@ -39,16 +39,6 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(
 					R.layout.dashboard_temperature, parent, false);
-			convertView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-
-					context.startActivity(new Intent(context,
-							RecordListActivity.class));
-
-					// TODO Auto-generated method stub
-				}
-			});
 		}
 
 		temp = (TextView) convertView.findViewById(R.id.textView2);
@@ -119,4 +109,16 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		}
 		return convertView;
 	}
+
+	@Override
+	public int getId() {
+		return 3;
+	}
+
+	@Override
+	public boolean onClick(View view, long position, long id) {
+		context.startActivity(new Intent(context, RecordListActivity.class));
+		return true;
+	}
+
 }

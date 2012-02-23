@@ -1,25 +1,16 @@
 package net.suteren.medicomp.ui.adapter;
 
 import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
-import static net.suteren.medicomp.ui.activity.MedicompActivity.PERSON_ID_EXTRA;
 
 import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Person;
-import net.suteren.medicomp.ui.activity.DashboardActivity;
-import net.suteren.medicomp.ui.activity.MedicompActivity;
 import net.suteren.medicomp.ui.activity.PersonListActivity;
-import net.suteren.medicomp.ui.activity.PersonProfileActivity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences.Editor;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -52,34 +43,22 @@ public class PersonListAdapter extends AbstractListAdapter<Person> {
 					parent, false);
 			convertView.setFocusable(false);
 			convertView.setClickable(false);
-			convertView.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					Person person = getItem(position);
-					Editor prefs = context.getSharedPreferences(
-							MedicompActivity.MEDICOMP_PREFS,
-							Context.MODE_WORLD_WRITEABLE).edit();
-					prefs.putInt(PERSON_ID_EXTRA, person.getId());
-					prefs.commit();
-					Intent intent = new Intent(context, DashboardActivity.class);
-					intent.putExtra(PERSON_ID_EXTRA, person.getId());
-					context.startActivity(intent);
-
-				}
-			});
-			convertView.setOnLongClickListener(new OnLongClickListener() {
-
-				@Override
-				public boolean onLongClick(View v) {
-					Person p = (Person) getItem(position);
-					Intent intent = new Intent(context,
-							PersonProfileActivity.class);
-					intent.putExtra(PERSON_ID_EXTRA, p.getId());
-					context.startActivity(intent);
-					return true;
-				}
-			});
+//			convertView.setOnClickListener(new OnClickListener() {
+//
+//				@Override
+//				public void onClick(View v) {
+//					Person person = getItem(position);
+//					Editor prefs = context.getSharedPreferences(
+//							MedicompActivity.MEDICOMP_PREFS,
+//							Context.MODE_WORLD_WRITEABLE).edit();
+//					prefs.putInt(PERSON_ID_EXTRA, person.getId());
+//					prefs.commit();
+//					Intent intent = new Intent(context, DashboardActivity.class);
+//					intent.putExtra(PERSON_ID_EXTRA, person.getId());
+//					context.startActivity(intent);
+//
+//				}
+//			});
 		}
 		Person person = getItem(position);
 		if (person != null) {

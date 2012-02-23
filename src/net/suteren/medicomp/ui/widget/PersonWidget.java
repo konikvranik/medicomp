@@ -24,14 +24,6 @@ public class PersonWidget extends AbstractWidget implements Widget {
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.dashboard_person,
 					parent, false);
-			convertView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					context.startActivity(new Intent(context,
-							PersonListActivity.class));
-
-				}
-			});
 		}
 		name = (TextView) convertView.findViewById(R.id.textView1);
 
@@ -40,6 +32,17 @@ public class PersonWidget extends AbstractWidget implements Widget {
 		Log.d(LOG_TAG, "Setting name: " + name.getText());
 
 		return convertView;
+	}
+
+	@Override
+	public int getId() {
+		return 1;
+	}
+
+	@Override
+	public boolean onClick(View view, long position, long id) {
+		context.startActivity(new Intent(context, PersonListActivity.class));
+		return true;
 	}
 
 }

@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListAdapter;
 
 public class PersonProfileActivity extends ProfileActivity {
 
@@ -33,7 +32,7 @@ public class PersonProfileActivity extends ProfileActivity {
 	}
 
 	@Override
-	protected ListAdapter getAdapter() {
+	protected PersonProfileAdapter getAdapter() {
 		return new PersonProfileAdapter(this, person);
 	}
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">MediComp</string>
+	<string name="personName">Jméno</string>
+	<string name="cancel">Storno</string>
+	<string name="save">Uložit</string>
+	<string name="personBirthday">Datum narození</string>
+	<string name="genderPrompt">Pohlaví</string>
+	<string name="personSaveFailed">Nepodařilo se uložit osobu!</string>
+	<string name="personDeleteFailed">Nepodařilo se smazat záznam osoby!</string>
+	<string name="noAvailableType">Žádný typ k dispozici!</string>
+	<string name="failedToAddTemperature">NEpodařilo se přidat záznam o teplotě!</string>
+
+	<string-array name="genders">
+		<item>NIC</item>
+		<item>Muž</item>
+		<item>Žena</item>
+		<item>Jiné</item>
+	</string-array>
+
+	<string name="none">nic</string>
+	<string name="last_measured_temperature">Teplota</string>
+	<string name="temperature_graph">Teplota</string>
+		<string name="choosePerson">Zvolte osobu</string>
+	<string name="quit">Konec</string>
+	<string name="celsius">°C</string>
+	<string name="addPerson">Přidat osobu</string>
+	<string name="delete">Odstranit</string>
+	<string name="showRecords">Zobrazit záznamy osoby</string>
+	<string name="edit">Upravit</string>
+	<string name="remove">Odstranit</string>
+	<string name="move">Přesunout</string>
+	<string name="preferences">Nastavení</string>
+	<string name="person">Osoba</string>
+	<string name="no_preferences">Žádná nastavení</string>
+	<string name="temperature_legend">teplota</string>
+		
+</resources>

@@ -17,7 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class DashboardAdapter extends AbstractListAdapter<Person> {
+public class DashboardAdapter extends AbstractListAdapter<Widget> {
 
 	private Person person;
 
@@ -39,13 +39,13 @@ public class DashboardAdapter extends AbstractListAdapter<Person> {
 	}
 
 	@Override
-	public Person getItem(int position) {
-		return person;
+	public Widget getItem(int position) {
+		return widgets.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		return person.getId();
+		return widgets.get(position).getId();
 	}
 
 	@Override
@@ -56,7 +56,11 @@ public class DashboardAdapter extends AbstractListAdapter<Person> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Log.d(LOG_TAG, "Person in DashboardAdapter: " + person.getId());
-		return widgets.get(position).getView(convertView, parent);
+		View view = widgets.get(position).getView(convertView, parent);
+		view.setClickable(false);
+		view.setLongClickable(false);
+		view.setFocusableInTouchMode(false);
+		return view;
 	}
 
 	@Override
@@ -66,7 +70,7 @@ public class DashboardAdapter extends AbstractListAdapter<Person> {
 
 	@Override
 	public boolean hasStableIds() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -106,8 +110,17 @@ public class DashboardAdapter extends AbstractListAdapter<Person> {
 	}
 
 	@Override
-	public Person getItemById(int id) throws Exception {
-		return person;
+	public Widget getItemById(int id) {
+		Widget wi = null;
+		for (Widget w : widgets) {
+			int i = w.getId();
+			if (i == id) {
+				Log.d(LOG_TAG, "ID: " + id);
+				wi = w;
+				break;
+			}
+		}
+		return wi;
 	}
 
 }

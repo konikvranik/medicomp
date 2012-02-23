@@ -2,24 +2,36 @@ package net.suteren.medicomp.ui.activity;
 
 import net.suteren.medicomp.R;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 
 public abstract class ListActivity extends MedicompActivity {
 
 	protected void onCreate(Bundle savedInstanceState) {
-		
-		super.onCreate(savedInstanceState);
-		
-		ListView lv = requestListView();
-		if (lv != null)
-			registerForContextMenu(lv);
 
+		super.onCreate(savedInstanceState);
+
+		ListView lv = requestListView();
+		if (lv != null) {
+			registerForContextMenu(lv);
+			lv.setClickable(false);
+			lv.setItemsCanFocus(false);
+			lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					Log.d(LOG_TAG, "list item click " + id);
+					ListActivity.this.onItemClick(view, position,id);
+				}
+			});
+		}
 	}
 
 	@Override
@@ -51,4 +63,6 @@ public abstract class ListActivity extends MedicompActivity {
 	protected abstract void edit(long id);
 
 	protected abstract void delete(long id);
+
+	protected abstract boolean onItemClick(View view, long id, long id2);
 }

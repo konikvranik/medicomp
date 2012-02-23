@@ -1,35 +1,20 @@
 package net.suteren.medicomp.ui.activity;
 
 import java.sql.SQLException;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Locale;
 
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.domain.Category;
-import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.Record;
-import net.suteren.medicomp.domain.Type;
 import net.suteren.medicomp.ui.adapter.DashboardAdapter;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListAdapter;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.j256.ormlite.dao.Dao;
-
-public class DashboardActivity extends MedicompActivity {
+public class DashboardActivity extends ListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +29,7 @@ public class DashboardActivity extends MedicompActivity {
 	}
 
 	@Override
-	protected ListAdapter getAdapter() {
+	protected DashboardAdapter getAdapter() {
 		try {
 			Log.d(LOG_TAG, "Calling getAdapter: " + person.getId() + ", "
 					+ person.getName());
@@ -63,5 +48,44 @@ public class DashboardActivity extends MedicompActivity {
 	@Override
 	protected int getContentViewId() {
 		return R.layout.dashboard;
+	}
+
+	@Override
+	protected void edit(long id) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void delete(long id) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected boolean onItemClick(View view, long position, long id) {
+		Log.d(LOG_TAG, "clicked dashboard " + id);
+		return getAdapter().getItemById((int) id).onClick(view, position, id);
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.dashboard_contextmenu, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		switch (item.getItemId()) {
+		case R.id.preferences:
+			return getAdapter().getItemById((int) info.id)
+					.showPreferencesPane();
+		default:
+			return super.onContextItemSelected(item);
+		}
 	}
 }

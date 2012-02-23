@@ -3,12 +3,13 @@ package net.suteren.medicomp.ui.activity;
 import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.domain.Person;
-import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.ui.adapter.PersonListAdapter;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -55,7 +56,7 @@ public class PersonListActivity extends ListActivity {
 	}
 
 	@Override
-	protected ListAdapter getAdapter() {
+	protected PersonListAdapter getAdapter() {
 		try {
 			return new PersonListAdapter(this);
 		} catch (SQLException e) {
@@ -73,7 +74,9 @@ public class PersonListActivity extends ListActivity {
 	protected void edit(long id) {
 		Log.d(LOG_TAG, "Edit " + id);
 		// TODO Auto-generated method stub
-
+		Intent intent = new Intent(this, PersonProfileActivity.class);
+		intent.putExtra(PERSON_ID_EXTRA, id);
+		this.startActivity(intent);
 	}
 
 	@Override
@@ -81,5 +84,18 @@ public class PersonListActivity extends ListActivity {
 		Log.d(LOG_TAG, "delete " + id);
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	protected boolean onItemClick(View view, long position, long id) {
+		Editor prefs = this.getSharedPreferences(
+				MedicompActivity.MEDICOMP_PREFS, Context.MODE_WORLD_WRITEABLE)
+				.edit();
+		prefs.putLong(PERSON_ID_EXTRA, id);
+		prefs.commit();
+		Intent intent = new Intent(this, DashboardActivity.class);
+		intent.putExtra(PERSON_ID_EXTRA, id);
+		this.startActivity(intent);
+		return true;
 	}
 }

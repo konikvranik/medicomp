@@ -13,8 +13,6 @@
 		android:layout_alignParentTop="true"
 		android:focusable="true"
 		android:inputType="textAutoComplete" >
-
-		<requestFocus />
 	</EditText>
 
 	<DatePicker
