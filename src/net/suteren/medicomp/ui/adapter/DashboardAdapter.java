@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.suteren.medicomp.domain.Person;
-import net.suteren.medicomp.ui.widget.PersonWidget;
-import net.suteren.medicomp.ui.widget.TemperatureGraphWidget;
-import net.suteren.medicomp.ui.widget.TemperatureWidget;
 import net.suteren.medicomp.ui.widget.Widget;
+import net.suteren.medicomp.ui.widget.chart.ChartWidget;
+import net.suteren.medicomp.ui.widget.person.PersonWidget;
+import net.suteren.medicomp.ui.widget.temperature.TemperatureWidget;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.util.Log;
@@ -105,7 +105,7 @@ public class DashboardAdapter extends AbstractListAdapter<Widget> {
 		widgets = new ArrayList<Widget>();
 		widgets.add(new PersonWidget(context, person));
 		widgets.add(new TemperatureWidget(context, person));
-		widgets.add(new TemperatureGraphWidget(context, person));
+		widgets.add(new ChartWidget(context, person));
 
 	}
 

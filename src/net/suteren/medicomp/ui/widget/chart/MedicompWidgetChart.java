@@ -1,4 +1,4 @@
-package net.suteren.medicomp.ui.widget;
+package net.suteren.medicomp.ui.widget.chart;
 
 import org.achartengine.chart.AbstractChart;
 import org.achartengine.chart.TimeChart;

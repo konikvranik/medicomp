@@ -1,4 +1,4 @@
-package net.suteren.medicomp.ui.widget;
+package net.suteren.medicomp.ui.widget.chart;
 
 import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 
@@ -15,6 +15,8 @@ import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.ui.widget.AbstractWidget;
+import net.suteren.medicomp.ui.widget.Widget;
 
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
@@ -25,6 +27,7 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.util.Log;
@@ -33,11 +36,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-public class TemperatureGraphWidget extends AbstractWidget implements Widget {
+public class ChartWidget extends AbstractWidget implements Widget {
 
 	private static final int GRAPH_PERIOD = 2 * 24 * 60 * 60 * 1000;
 
-	public TemperatureGraphWidget(Context context, Person person) {
+	public ChartWidget(Context context, Person person) {
 		super(context, person);
 	}
 
@@ -167,4 +170,10 @@ public class TemperatureGraphWidget extends AbstractWidget implements Widget {
 		return 2;
 	}
 
+	@Override
+	public boolean showPreferencesPane() {
+		context.startActivity(new Intent(context,
+				ChartWidgetPreferenceActivity.class));
+		return true;
+	}
 }

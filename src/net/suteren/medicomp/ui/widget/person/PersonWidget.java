@@ -1,9 +1,11 @@
-package net.suteren.medicomp.ui.widget;
+package net.suteren.medicomp.ui.widget.person;
 
 import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.ui.activity.PersonListActivity;
+import net.suteren.medicomp.ui.widget.AbstractWidget;
+import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
