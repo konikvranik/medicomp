@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+	<PreferenceCategory
+		android:summary="Brief summary of category"
+		android:title="Category Name" >
+		<ListPreference
+			android:dialogTitle="Name of the dialog that pops up"
+			android:entries="@array/someArrayForDisplayInList"
+			android:entryValues="@array/anotherArrayForActualValues"
+			android:key="settingName"
+			android:summary="sub title for option"
+			android:title="Main text for option" />
+
+		<PreferenceScreen
+			android:summary="Summary of screen"
+			android:title="Main name of sub screen" >
+			<CheckBoxPreference
+				android:key="settingName"
+				android:summary="A brief summary of the option/setting"
+				android:title="Main Title of Preference" />
+		</PreferenceScreen>
+	</PreferenceCategory>
+
+</PreferenceScreen>
