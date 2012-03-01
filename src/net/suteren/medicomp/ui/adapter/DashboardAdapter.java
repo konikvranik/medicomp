@@ -53,7 +53,6 @@ public class DashboardAdapter extends AbstractListAdapter<Widget> {
 		return position;
 	}
 
-	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Log.d(LOG_TAG, "Person in DashboardAdapter: " + person.getId());
 		View view = widgets.get(position).getView(convertView, parent);

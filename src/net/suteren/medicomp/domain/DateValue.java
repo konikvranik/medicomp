@@ -28,17 +28,14 @@ public class DateValue implements Value<Date> {
 		setField(field);
 	}
 
-	@Override
 	public Field<Date> getField() {
 		return field;
 	}
 
-	@Override
 	public void setField(Field<Date> field) {
 		this.field = field;
 	}
 
-	@Override
 	public int getId() {
 		return id;
 	}
@@ -47,12 +44,10 @@ public class DateValue implements Value<Date> {
 		this.id = id;
 	}
 
-	@Override
 	public Date getValue() {
 		return value;
 	}
 
-	@Override
 	public void setValue(Date value) {
 		this.value = value;
 	}

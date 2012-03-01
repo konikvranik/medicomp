@@ -51,17 +51,14 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 		this.fields = new ArrayList<Field>(record.getFields());
 	}
 
-	@Override
 	public int getCount() {
 		return record.getFields().size() + 1;
 	}
 
-	@Override
 	public int getViewTypeCount() {
 		return 2;
 	}
 
-	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		switch (position) {
@@ -78,7 +75,6 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 				dp.init(ts.get(Calendar.YEAR), ts.get(Calendar.MONTH),
 						ts.get(Calendar.DAY_OF_MONTH),
 						new OnDateChangedListener() {
-							@Override
 							public void onDateChanged(DatePicker view,
 									int year, int monthOfYear, int dayOfMonth) {
 								ts.set(Calendar.YEAR, year);
@@ -90,7 +86,6 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 				tp.setCurrentMinute(ts.get(Calendar.MINUTE));
 				tp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
 
-					@Override
 					public void onTimeChanged(TimePicker view, int hourOfDay,
 							int minute) {
 						ts.set(Calendar.HOUR_OF_DAY, view.getCurrentHour());
@@ -100,7 +95,6 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 				name.setText(record.getTitle());
 				name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
-					@Override
 					public void onFocusChange(View view, boolean flag) {
 						RecordProfileAdapter.this.name = ((EditText) view)
 								.getText().toString();
@@ -127,7 +121,6 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 				EditText valueView = (EditText) v;
 				nameView.setText(fieldName);
 				nameView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-					@Override
 					public void onFocusChange(View view, boolean flag) {
 						field.setName(((TextView) view).getText().toString());
 					}
@@ -137,7 +130,6 @@ public class RecordProfileAdapter extends ProfileAdapter<Record> {
 				valueView.setText(f.getValue());
 				valueView
 						.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-							@Override
 							public void onFocusChange(View v, boolean hasFocus) {
 								FieldFormatter f = new FieldFormatter(field);
 								try {

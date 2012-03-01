@@ -39,17 +39,14 @@ public class PersonProfileAdapter extends ProfileAdapter<Person> {
 		this.person = person;
 	}
 
-	@Override
 	public int getCount() {
 		return 3;
 	}
 
-	@Override
 	public int getViewTypeCount() {
 		return 3;
 	}
 
-	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		switch (position) {
@@ -62,7 +59,6 @@ public class PersonProfileAdapter extends ProfileAdapter<Person> {
 				nameEditText.setText(person.getName());
 				nameEditText
 						.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-							@Override
 							public void onFocusChange(View view, boolean flag) {
 								PersonProfileAdapter.this.nameEditText = ((EditText) view)
 										.getText();
@@ -87,7 +83,6 @@ public class PersonProfileAdapter extends ProfileAdapter<Person> {
 						birthDate.get(Calendar.DAY_OF_MONTH),
 						new OnDateChangedListener() {
 
-							@Override
 							public void onDateChanged(DatePicker view,
 									int year, int monthOfYear, int dayOfMonth) {
 								ts.set(Calendar.YEAR, year);
@@ -112,14 +107,12 @@ public class PersonProfileAdapter extends ProfileAdapter<Person> {
 				gender.setSelection(genderAdapter.getPosition(person
 						.getGender()));
 				gender.setOnItemSelectedListener(new OnItemSelectedListener() {
-					@Override
 					public void onItemSelected(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 						PersonProfileAdapter.this.gender = Gender.values()[arg2];
 
 					}
 
-					@Override
 					public void onNothingSelected(AdapterView<?> arg0) {
 						PersonProfileAdapter.this.gender = null;
 					}

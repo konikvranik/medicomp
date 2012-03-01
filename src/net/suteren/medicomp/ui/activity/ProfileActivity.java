@@ -31,7 +31,6 @@ public abstract class ProfileActivity extends MedicompActivity {
 					R.id.save_button);
 
 			okButton.setOnClickListener(new OnClickListener() {
-				@Override
 				public void onClick(View v) {
 					onSaveEvent(v);
 				}
@@ -40,7 +39,6 @@ public abstract class ProfileActivity extends MedicompActivity {
 			Button cancelButton = (Button) getWindow().findViewById(
 					R.id.cancel_button);
 			cancelButton.setOnClickListener(new OnClickListener() {
-				@Override
 				public void onClick(View v) {
 					onCancelEvent(v);
 				}
@@ -49,7 +47,6 @@ public abstract class ProfileActivity extends MedicompActivity {
 			Button deleteButton = (Button) getWindow().findViewById(
 					R.id.delete_button);
 			deleteButton.setOnClickListener(new OnClickListener() {
-				@Override
 				public void onClick(View v) {
 					onDeleteEvent(v);
 				}

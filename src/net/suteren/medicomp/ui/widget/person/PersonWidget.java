@@ -21,7 +21,6 @@ public class PersonWidget extends AbstractWidget implements Widget {
 		super(context, person);
 	}
 
-	@Override
 	public View getView(View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.dashboard_person,
@@ -36,7 +35,6 @@ public class PersonWidget extends AbstractWidget implements Widget {
 		return convertView;
 	}
 
-	@Override
 	public int getId() {
 		return 1;
 	}

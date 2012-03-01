@@ -3,6 +3,7 @@
 	<name>MediComp</name>
 	<comment></comment>
 	<projects>
+		<project>android-dependencies</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -36,7 +36,6 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		super(context, person);
 	}
 
-	@Override
 	public View getView(View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(
@@ -112,7 +111,6 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		return convertView;
 	}
 
-	@Override
 	public int getId() {
 		return 3;
 	}

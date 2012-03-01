@@ -24,7 +24,6 @@ public abstract class ListActivity extends MedicompActivity {
 			lv.setClickable(false);
 			lv.setItemsCanFocus(false);
 			lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					Log.d(LOG_TAG, "list item click " + id);

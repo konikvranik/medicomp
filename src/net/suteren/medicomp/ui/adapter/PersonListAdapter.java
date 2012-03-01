@@ -33,7 +33,6 @@ public class PersonListAdapter extends AbstractListAdapter<Person> {
 		Log.d(LOG_TAG, "PersonListAdapter: " + collection.size());
 	}
 
-	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 

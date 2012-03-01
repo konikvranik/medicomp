@@ -25,17 +25,14 @@ public class StringValue implements Value<String> {
 		setField(field);
 	}
 
-	@Override
 	public Field<String> getField() {
 		return field;
 	}
 
-	@Override
 	public void setField(Field<String> field) {
 		this.field = field;
 	}
 
-	@Override
 	public int getId() {
 		return id;
 	}
@@ -44,12 +41,10 @@ public class StringValue implements Value<String> {
 		this.id = id;
 	}
 
-	@Override
 	public String getValue() {
 		return value;
 	}
 
-	@Override
 	public void setValue(String value) {
 		this.value = value;
 	}

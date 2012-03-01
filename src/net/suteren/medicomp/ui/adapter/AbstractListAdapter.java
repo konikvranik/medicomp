@@ -30,60 +30,49 @@ public abstract class AbstractListAdapter<T extends PersistableWithId>
 
 	public abstract void update() throws SQLException;
 
-	@Override
 	public int getCount() {
 		return collection.size();
 	}
 
-	@Override
 	public T getItem(int position) {
 		return collection.get(position);
 	}
 
-	@Override
 	public long getItemId(int position) {
 		return collection.get(position).getId();
 	}
 
-	@Override
 	public int getItemViewType(int position) {
 		return 0;
 	}
 
-	@Override
 	public int getViewTypeCount() {
 		return 1;
 	}
 
-	@Override
 	public boolean hasStableIds() {
 		return false;
 	}
 
-	@Override
 	public boolean isEmpty() {
 		return collection == null || collection.isEmpty();
 	}
 
-	@Override
 	public void registerDataSetObserver(DataSetObserver observer) {
 
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void unregisterDataSetObserver(DataSetObserver observer) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public boolean areAllItemsEnabled() {
 		return true;
 	}
 
-	@Override
 	public boolean isEnabled(int position) {
 		return true;
 	}

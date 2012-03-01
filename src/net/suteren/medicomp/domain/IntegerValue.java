@@ -25,17 +25,14 @@ public class IntegerValue implements Value<Integer> {
 		setField(field);
 	}
 
-	@Override
 	public Field<Integer> getField() {
 		return field;
 	}
 
-	@Override
 	public void setField(Field<Integer> field) {
 		this.field = field;
 	}
 
-	@Override
 	public int getId() {
 		return id;
 	}
@@ -44,12 +41,10 @@ public class IntegerValue implements Value<Integer> {
 		this.id = id;
 	}
 
-	@Override
 	public Integer getValue() {
 		return value;
 	}
 
-	@Override
 	public void setValue(Integer value) {
 		this.value = value;
 	}

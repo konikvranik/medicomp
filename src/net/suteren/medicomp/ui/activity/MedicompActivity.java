@@ -115,7 +115,6 @@ public abstract class MedicompActivity extends Activity {
 		if (inputTextField != null)
 			inputTextField.setOnKeyListener(new OnKeyListener() {
 
-				@Override
 				public boolean onKey(View v, int keyCode, KeyEvent event) {
 
 					if (event.getAction() == KeyEvent.ACTION_DOWN)
@@ -133,7 +132,6 @@ public abstract class MedicompActivity extends Activity {
 				R.id.imageButton1);
 		if (ib != null)
 			ib.setOnClickListener(new OnClickListener() {
-				@Override
 				public void onClick(View view) {
 					processInput();
 				}

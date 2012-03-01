@@ -26,17 +26,14 @@ public class DoubleValue implements Value<Double> {
 		setField(field);
 	}
 
-	@Override
 	public Field<Double> getField() {
 		return field;
 	}
 
-	@Override
 	public void setField(Field<Double> field) {
 		this.field = field;
 	}
 
-	@Override
 	public int getId() {
 		return id;
 	}
@@ -45,12 +42,10 @@ public class DoubleValue implements Value<Double> {
 		this.id = id;
 	}
 
-	@Override
 	public Double getValue() {
 		return value;
 	}
 
-	@Override
 	public void setValue(Double value) {
 		this.value = value;
 	}

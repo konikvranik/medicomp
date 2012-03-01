@@ -42,7 +42,6 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 		update();
 	}
 
-	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.record_list_row,

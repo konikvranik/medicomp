@@ -20,18 +20,15 @@ public abstract class AbstractWidget implements Widget {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
-	@Override
 	public boolean showPreferencesPane() {
 		Toast.makeText(context, R.string.no_preferences, Toast.LENGTH_SHORT).show();
 		return false;
 	}
 
-	@Override
 	public void setId(int id) {
 
 	}
 
-	@Override
 	public boolean onClick(View view, long position, long id) {
 		return false;
 	}

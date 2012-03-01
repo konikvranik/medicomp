@@ -44,7 +44,6 @@ public class ChartWidget extends AbstractWidget implements Widget {
 		super(context, person);
 	}
 
-	@Override
 	public View getView(View convertView, ViewGroup parent) {
 
 		if (convertView == null)
@@ -141,7 +140,6 @@ public class ChartWidget extends AbstractWidget implements Widget {
 	private Collection<Record> getRecords() {
 		SortedSet<Record> rs = new TreeSet<Record>(new Comparator<Record>() {
 
-			@Override
 			public int compare(Record lhs, Record rhs) {
 				if (lhs != null && rhs != null)
 					return lhs.getTimestamp().compareTo(rhs.getTimestamp());
@@ -163,7 +161,6 @@ public class ChartWidget extends AbstractWidget implements Widget {
 		return rs;
 	}
 
-	@Override
 	public int getId() {
 		return 2;
 	}
