@@ -21,7 +21,9 @@ import net.suteren.medicomp.ui.widget.AbstractWidget;
 import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +33,11 @@ import android.widget.TextView;
 public class TemperatureWidget extends AbstractWidget implements Widget {
 
 	private TextView temp;
+	private SharedPreferences preferences;
 
 	public TemperatureWidget(Context context, Person person) {
 		super(context, person);
+		preferences = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
 	public View getView(View convertView, ViewGroup parent) {
@@ -85,27 +89,27 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 
 		if (val != null) {
 			temp.setText(ff == null ? "--,-" : ff.getValue());
-			double min = 36.3;
-			double high = 37;
-			double max = 38;
-			int red = 0;
-			int green = 0;
-			int blue = 0;
+			double min = preferences.getFloat("lowerTemperatureBound", 35);
+			double high = preferences.getFloat("higherTemperatureBound", 37);
+			double max = preferences.getFloat("upperTemperatureBound", 38);
 
 			if (val <= min) {
-				blue = 255;
-				green = 128;
+				temp.setTextColor(preferences.getInt(
+						"hypothermiaColor",
+						context.getResources().getColor(
+								R.color.hypothermiaColor)));
 			} else if (val < high) {
-				green = (255);
+				temp.setTextColor(preferences.getInt(
+						"rightTemperatureColor",
+						context.getResources().getColor(
+								R.color.rightTemperatureColor)));
 			} else if (val < max) {
-				red = (255);
-				green = 200;
+				temp.setTextColor(preferences.getInt("heatColor", context
+						.getResources().getColor(R.color.heatColor)));
 			} else {
-				red = 255;
-				green = 70;
+				temp.setTextColor(preferences.getInt("feverColor", context
+						.getResources().getColor(R.color.feverColor)));
 			}
-
-			temp.setTextColor(Color.rgb(red, green, blue));
 
 		}
 		return convertView;
@@ -121,4 +125,10 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		return true;
 	}
 
+	@Override
+	public boolean showPreferencesPane() {
+		context.startActivity(new Intent(context,
+				TemperatureWidgetPreferenceActivity.class));
+		return true;
+	}
 }

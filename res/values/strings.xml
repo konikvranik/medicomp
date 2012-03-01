@@ -35,8 +35,35 @@
 	<string name="person">Person</string>
 	<string name="no_preferences">No preferences</string>
 	<string name="temperature_legend">temperature</string>
-	<string name="chart_widget_color_setting_summary">Setting of collors of charts</string>
-	<string name="color_settings">Colors</string>
-	<string name="chart_limits">Chart limits</string>
+	<string name="chart_widget_color_setting_summary">Setting of chart colors</string>
+	<string name="chart_widget_color_settings_title">Colors</string>
+	<string name="temperature_widget_color_settings_summary">Setting of temperature colors</string>
+	<string name="temperature_widget_color_settings_title">Colors</string>
+	<string name="chart_limits_title">Chart limits</string>
+	<string name="chart_limits_summary">Set range of displayed values</string>
+	<string name="temperature_limits_title">Temperature limits</string>
+	<string name="temperature_limits_summary">Set upper and lower bounds for temperature</string>
+	<string name="chartTemperatureColor_title">Temperature color</string>
+	<string name="chartTemperatureColor_summary">Color of line in chart</string>
+	<string name="chartTemperaturePeriod_title">Chart range</string>
+	<string name="chartTemperaturePeriod_summary">Chart range</string>
+	<string name="higherTemperatureBound_title">Heat</string>
+	<string name="higherTemperatureBound_summary">When color changes to heat</string>
+	<string name="upperTemperatureBound_title">Fever</string>
+	<string name="upperTemperatureBound_summary">When color changes to fever</string>
+	<string name="lowerTemperatureBound_title">Hypothermia</string>
+	<string name="lowerTemperatureBound_summary">When color changes to hypothermia</string>
+	<string name="feverColor_title">Fever color</string>
+	<string name="feverColor_summary">Color to display temperature in case of fever</string>
+	<string name="hypothermiaColor_title">Hypothermia color</string>
+	<string name="hypothermiaColor_summary">Color to display temperature in case of hypothermia</string>
+	<string name="heatColor_title">Heat color</string>
+	<string name="heatColor_summary">Color to display temperature in case of heat</string>
+	<string name="rightTemperatureColor_title">Healthy color</string>
+	<string name="rightTemperatureColor_summary">Color to display temperature in case of right temperature</string>
+
+	<!-- Color Picker -->
+	<string name="dialog_color_picker">Color Picker</string>
+	<string name="press_color_to_apply">Press on Color to apply</string>
 
 </resources>

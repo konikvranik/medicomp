@@ -1,0 +1,63 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:medicomp="http://schemas.android.com/apk/res/net.suteren.medicomp" >
+
+	<PreferenceScreen
+		android:summary="@string/temperature_widget_color_settings_summary"
+		android:title="@string/temperature_widget_color_settings_title" >
+		<net.margaritov.preference.colorpicker.ColorPickerPreference
+			alphaSlider="false"
+			android:defaultValue="@color/feverColor"
+			android:key="feverColor"
+			android:summary="@string/feverColor_summary"
+			android:title="@string/feverColor_title" />
+		<net.margaritov.preference.colorpicker.ColorPickerPreference
+			alphaSlider="false"
+			android:defaultValue="@color/hypothermiaColor"
+			android:key="hypothermiaColor"
+			android:summary="@string/hypothermiaColor_summary"
+			android:title="@string/hypothermiaColor_title" />
+		<net.margaritov.preference.colorpicker.ColorPickerPreference
+			alphaSlider="false"
+			android:defaultValue="@color/heatColor"
+			android:key="heatColor"
+			android:summary="@string/heatColor_summary"
+			android:title="@string/heatColor_title" />
+		<net.margaritov.preference.colorpicker.ColorPickerPreference
+			alphaSlider="false"
+			android:defaultValue="@color/rightTemperatureColor"
+			android:key="rightTemperatureColor"
+			android:summary="@string/rightTemperatureColor_summary"
+			android:title="@string/rightTemperatureColor_title" />
+	</PreferenceScreen>
+
+	<PreferenceCategory
+		android:orderingFromXml="true"
+		android:summary="@string/temperature_limits_summary"
+		android:title="@string/temperature_limits_title" >
+		<net.suteren.medicomp.ui.component.SeekBarPreference
+			android:defaultValue="36"
+			medicomp:interval=".1"
+			android:key="lowerTemperatureBound"
+			medicomp:maximum="40"
+			medicomp:minimum="35"
+			android:summary="@string/lowerTemperatureBound_summary"
+			android:title="@string/lowerTemperatureBound_title" />
+		<net.suteren.medicomp.ui.component.SeekBarPreference
+			android:defaultValue="37"
+			medicomp:interval=".1"
+			android:key="higherTemperatureBound"
+			medicomp:maximum="40"
+			medicomp:minimum="35"
+			android:summary="@string/higherTemperatureBound_summary"
+			android:title="@string/higherTemperatureBound_title" />
+		<net.suteren.medicomp.ui.component.SeekBarPreference
+			android:defaultValue="37"
+			medicomp:interval=".1"
+			android:key="upperTemperatureBound"
+			medicomp:maximum="44"
+			medicomp:minimum="36"
+			android:summary="@string/upperTemperatureBound_summary"
+			android:title="@string/upperTemperatureBound_title" />
+	</PreferenceCategory>
+
+</PreferenceScreen>

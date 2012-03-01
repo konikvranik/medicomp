@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="chartTemperatureColor">#C89632ff</color>
+	<color name="hypothermiaColor">#11CCff</color>
+	<color name="feverColor">#FF1100</color>
+	<color name="rightTemperatureColor">#11ff00</color>
+	<color name="heatColor">#ffcc11</color>
+</resources>

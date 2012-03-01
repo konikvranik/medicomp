@@ -28,8 +28,10 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +40,16 @@ import android.widget.RelativeLayout;
 
 public class ChartWidget extends AbstractWidget implements Widget {
 
-	private static final int GRAPH_PERIOD = 2 * 24 * 60 * 60 * 1000;
+	private static final String CHART_TEMPERATURE_PERIOD = "chartTemperaturePeriod";
+	private static final String CHART_TEMPERATURE_COLOR = "chartTemperatureColor";
+	private static final int GRAPH_PERIOD = 2;
+	private SharedPreferences preferences;
 
 	public ChartWidget(Context context, Person person) {
 		super(context, person);
+
+		preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
 	}
 
 	public View getView(View convertView, ViewGroup parent) {
@@ -67,13 +75,31 @@ public class ChartWidget extends AbstractWidget implements Widget {
 
 			XYMultipleSeriesRenderer renderer = makeMultipleRenderer();
 			renderer.addSeriesRenderer(makeTemperatureRenderer());
-			double[] range = new double[] {
-					new Date().getTime() - GRAPH_PERIOD, new Date().getTime(),
-					temperatureSeries.getMinY(), temperatureSeries.getMaxY() };
-			renderer.setInitialRange(range, 1);
 
 			TimeChart chart = new TimeChart(dataset, renderer);
+			// MedicompWidgetChart chart = new MedicompWidgetChart(dataset,
+			// renderer);
+
+			double diff = temperatureSeries.getMaxY()
+					- temperatureSeries.getMinY();
+			diff = diff * .1;
+			double[] range = new double[] { temperatureSeries.getMinX(),
+					temperatureSeries.getMaxX(), temperatureSeries.getMinY(),
+					temperatureSeries.getMaxY() + diff };
+			try {
+				int period = Math.round(preferences.getFloat(
+						CHART_TEMPERATURE_PERIOD, GRAPH_PERIOD));
+				if (period > 0) {
+					range[0] = new Date().getTime() - period * 24 * 3600 * 1000;
+					range[1] = new Date().getTime();
+				}
+			} catch (Exception e) {
+				preferences.edit().remove(CHART_TEMPERATURE_PERIOD).commit();
+			}
+			renderer.setInitialRange(range);
+			renderer.setRange(range);
 			chart.setCalcRange(range, 1);
+
 			rl.removeAllViews();
 
 			rl.addView(new GraphicalView(context, chart));
@@ -96,7 +122,10 @@ public class ChartWidget extends AbstractWidget implements Widget {
 
 	private XYSeriesRenderer makeTemperatureRenderer() {
 		XYSeriesRenderer temperatureRenderer = new XYSeriesRenderer();
-		temperatureRenderer.setColor(Color.argb(200, 150, 50, 255));
+		temperatureRenderer
+				.setColor(preferences
+						.getInt(CHART_TEMPERATURE_COLOR, context.getResources()
+								.getColor(R.color.chartTemperatureColor)));
 		temperatureRenderer.setGradientEnabled(true);
 		temperatureRenderer.setGradientStart(35.9, Color.CYAN);
 		temperatureRenderer.setGradientStop(40, Color.RED);
@@ -126,9 +155,7 @@ public class ChartWidget extends AbstractWidget implements Widget {
 					break;
 				}
 			}
-			if (t != null
-					&& record.getTimestamp() != null
-					&& record.getTimestamp().getTime() > (new Date().getTime() - GRAPH_PERIOD)) {
+			if (t != null) {
 				xyseries.add(record.getTimestamp(), t);
 
 			}

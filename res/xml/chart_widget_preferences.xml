@@ -1,19 +1,28 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:medicomp="http://schemas.android.com/apk/res/net.suteren.medicomp" >
 
 	<PreferenceScreen
 		android:summary="@string/chart_widget_color_setting_summary"
-		android:title="@string/color_settings" >
+		android:title="@string/chart_widget_color_settings_title" >
 		<net.margaritov.preference.colorpicker.ColorPickerPreference
 			alphaSlider="true"
-			android:defaultValue="@integer/COLOR_BLACK"
-			android:key="color1"
-			android:summary="@string/color1_summary"
-			android:title="@string/color1_title" />
+			android:defaultValue="@color/chartTemperatureColor"
+			android:key="chartTemperatureColor"
+			android:summary="@string/chartTemperatureColor_summary"
+			android:title="@string/chartTemperatureColor_title" />
 	</PreferenceScreen>
 
 	<PreferenceCategory
-		android:summary=""
-		android:title="@string/chart_limits" >
+		android:summary="@string/chart_limits_summary"
+		android:title="@string/chart_limits_title" >
+		<net.suteren.medicomp.ui.component.SeekBarPreference
+			android:key="chartTemperaturePeriod"
+			android:defaultValue="2"
+			medicomp:minimum="0"
+			medicomp:maximum="10"
+			medicomp:interval="1"
+			android:summary="@string/chartTemperaturePeriod_summary"
+			android:title="@string/chartTemperaturePeriod_title" />
 	</PreferenceCategory>
 
 </PreferenceScreen>

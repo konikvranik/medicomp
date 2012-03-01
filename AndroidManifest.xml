@@ -1,40 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="net.suteren.medicomp"
-	android:versionCode="15"
-	android:versionName="0.1-SNAPSHOT" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="16" android:versionName="0.0.10-SNAPSHOT" package="net.suteren.medicomp">
 
-	<uses-sdk android:minSdkVersion="4" />
+	<uses-sdk android:minSdkVersion="4"/>
 
-	<application
-		android:debuggable="true"
-		android:icon="@drawable/medicomp"
-		android:label="@string/app_name" >
-		<activity
-			android:name=".ui.activity.DashboardActivity"
-			android:launchMode="singleTask" >
+	<application android:debuggable="true" android:icon="@drawable/medicomp" android:label="@string/app_name">
+		<activity android:launchMode="singleTask" android:name=".ui.activity.DashboardActivity">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
+				<action android:name="android.intent.action.MAIN"/>
 
-				<category android:name="android.intent.category.LAUNCHER" />
+				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity
-			android:name=".ui.activity.PersonListActivity"
-			android:label="@string/app_name"
-			android:launchMode="singleTask" >
+		<activity android:label="@string/app_name" android:launchMode="singleTask" android:name=".ui.activity.PersonListActivity">
 			<intent-filter>
-				<category android:name="net.suteren.medicomp.PERSON" />
+				<category android:name="net.suteren.medicomp.PERSON"/>
 			</intent-filter>
 		</activity>
-		<activity android:name=".ui.activity.PersonProfileActivity" >
+		<activity android:name=".ui.activity.PersonProfileActivity">
 		</activity>
-		<activity android:name=".ui.activity.RecordListActivity" >
+		<activity android:name=".ui.activity.RecordListActivity">
 		</activity>
-		<activity android:name=".ui.activity.RecordProfileActivity" >
+		<activity android:name=".ui.activity.RecordProfileActivity">
 		</activity>
-		<activity android:name=".ui.widget.chart.ChartWidgetPreferenceActivity" >
+		<activity android:name=".ui.widget.chart.ChartWidgetPreferenceActivity">
 		</activity>
+		<activity android:name=".ui.widget.temperature.TemperatureWidgetPreferenceActivity"></activity>
 	</application>
 
 </manifest>
