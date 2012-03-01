@@ -1,24 +1,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-	<PreferenceCategory
-		android:summary="Brief summary of category"
-		android:title="Category Name" >
-		<ListPreference
-			android:dialogTitle="Name of the dialog that pops up"
-			android:entries="@array/someArrayForDisplayInList"
-			android:entryValues="@array/anotherArrayForActualValues"
-			android:key="settingName"
-			android:summary="sub title for option"
-			android:title="Main text for option" />
+	<PreferenceScreen
+		android:summary="@string/chart_widget_color_setting_summary"
+		android:title="@string/color_settings" >
+		<net.margaritov.preference.colorpicker.ColorPickerPreference
+			alphaSlider="true"
+			android:defaultValue="@integer/COLOR_BLACK"
+			android:key="color1"
+			android:summary="@string/color1_summary"
+			android:title="@string/color1_title" />
+	</PreferenceScreen>
 
-		<PreferenceScreen
-			android:summary="Summary of screen"
-			android:title="Main name of sub screen" >
-			<CheckBoxPreference
-				android:key="settingName"
-				android:summary="A brief summary of the option/setting"
-				android:title="Main Title of Preference" />
-		</PreferenceScreen>
+	<PreferenceCategory
+		android:summary=""
+		android:title="@string/chart_limits" >
 	</PreferenceCategory>
 
 </PreferenceScreen>

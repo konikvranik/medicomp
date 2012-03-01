@@ -22,7 +22,7 @@
 	<string name="none">none</string>
 	<string name="last_measured_temperature">Temperature</string>
 	<string name="temperature_graph">Temperature</string>
-		<string name="choosePerson">Choose Person</string>
+	<string name="choosePerson">Choose Person</string>
 	<string name="quit">Quit</string>
 	<string name="celsius">°C</string>
 	<string name="addPerson">Add person</string>
@@ -35,5 +35,8 @@
 	<string name="person">Person</string>
 	<string name="no_preferences">No preferences</string>
 	<string name="temperature_legend">temperature</string>
-		
+	<string name="chart_widget_color_setting_summary">Setting of collors of charts</string>
+	<string name="color_settings">Colors</string>
+	<string name="chart_limits">Chart limits</string>
+
 </resources>

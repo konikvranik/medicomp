@@ -62,8 +62,6 @@ public class ChartWidget extends AbstractWidget implements Widget {
 			FrameLayout rl = (FrameLayout) convertView
 					.findViewById(R.id.frameLayout1);
 
-			// -------------------
-
 			XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 			TimeSeries temperatureSeries = makeSeries(rs);
 			dataset.addSeries(temperatureSeries);
