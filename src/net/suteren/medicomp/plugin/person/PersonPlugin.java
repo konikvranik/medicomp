@@ -3,7 +3,6 @@ package net.suteren.medicomp.plugin.person;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.plugin.AbstractPlugin;
 import net.suteren.medicomp.plugin.PluginManager;
-import net.suteren.medicomp.ui.activity.PersonListActivity;
 import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
 import android.content.Intent;
@@ -33,8 +32,7 @@ public class PersonPlugin extends AbstractPlugin {
 
 	@Override
 	public Widget newWidgetInstance(Context context) {
-		// TODO Auto-generated method stub
-		return super.newWidgetInstance(context);
+		return new PersonWidget(context);
 	}
 
 	@Override

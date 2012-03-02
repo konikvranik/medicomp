@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public abstract class ListActivity extends MedicompActivity {
 
@@ -27,7 +28,7 @@ public abstract class ListActivity extends MedicompActivity {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					Log.d(LOG_TAG, "list item click " + id);
-					ListActivity.this.onItemClick(view, position,(int) id);
+					ListActivity.this.onItemClick(view, position, (int) id);
 				}
 			});
 		}
@@ -59,9 +60,17 @@ public abstract class ListActivity extends MedicompActivity {
 		}
 	}
 
-	protected abstract void edit(int id);
+	protected void edit(int id) {
+		Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT)
+				.show();
+	}
 
-	protected abstract void delete(int id);
+	protected void delete(int id) {
+		Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT)
+				.show();
+	}
 
-	protected abstract boolean onItemClick(View view, int id, int id2);
+	protected boolean onItemClick(View view, int id, int id2) {
+		return false;
+	}
 }

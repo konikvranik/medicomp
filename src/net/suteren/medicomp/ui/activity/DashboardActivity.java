@@ -3,18 +3,25 @@ package net.suteren.medicomp.ui.activity;
 import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.ui.adapter.DashboardAdapter;
+import net.suteren.medicomp.plugin.Plugin;
+import net.suteren.medicomp.plugin.person.PersonWidget;
+import net.suteren.medicomp.ui.widget.CommonWidgetManager;
+import net.suteren.medicomp.ui.widget.Widget;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class DashboardActivity extends ListActivity {
+
+	private CommonWidgetManager widgetManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +33,11 @@ public class DashboardActivity extends ListActivity {
 			return;
 		}
 
-	}
-
-	@Override
-	protected DashboardAdapter getAdapter() {
 		try {
-			Log.d(LOG_TAG, "Calling getAdapter: " + person.getId() + ", "
-					+ person.getName());
-			return new DashboardAdapter(DashboardActivity.this, person);
+			widgetManager = new CommonWidgetManager(this);
+			widgetManager.registerWidget(new PersonWidget(this), 0);
 		} catch (SQLException e) {
-			Log.e(LOG_TAG, e.getMessage(), e);
-			return null;
+			Log.d(LOG_TAG, e.getMessage(), e);
 		}
 	}
 
@@ -51,28 +52,27 @@ public class DashboardActivity extends ListActivity {
 	}
 
 	@Override
-	protected void edit(int id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void delete(int id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected boolean onItemClick(View view, int position, int id) {
-		Log.d(LOG_TAG, "clicked dashboard " + id);
-		return getAdapter().getItemById((int) id).onClick(view, position, id);
-	}
-
-	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
+			final ContextMenuInfo menuInfo) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.dashboard_contextmenu, menu);
+		SubMenu subMenu = menu.addSubMenu(R.string.add_widget);
+
+		for (Plugin plugin : getPluginManager().getActivePlugins()) {
+			if (plugin.hasWidget()) {
+				final Widget widget = plugin.newWidgetInstance(this);
+				Log.d(LOG_TAG, "plugin: " + plugin.getName());
+				Log.d(LOG_TAG, "widget: " + widget.getName());
+				MenuItem item = subMenu.add(widget.getName());
+				item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+					public boolean onMenuItemClick(MenuItem menuitem) {
+						getWidgetManager().registerWidget(widget,
+								((AdapterContextMenuInfo) menuInfo).position);
+						return true;
+					}
+				});
+			}
+		}
 	}
 
 	@Override
@@ -82,10 +82,28 @@ public class DashboardActivity extends ListActivity {
 				.getMenuInfo();
 		switch (item.getItemId()) {
 		case R.id.preferences:
-			return getAdapter().getItemById((int) info.id)
+			return getWidgetManager().getItemById((int) info.id)
 					.showPreferencesPane();
+		case R.id.remove:
+			return getWidgetManager().unRegisterWidget((int) info.id);
 		default:
 			return super.onContextItemSelected(item);
 		}
 	}
+
+	CommonWidgetManager getWidgetManager() {
+		return widgetManager;
+	}
+
+	@Override
+	protected ListAdapter getAdapter() {
+		return getWidgetManager();
+	}
+
+	@Override
+	protected boolean onItemClick(View view, int position, int id2) {
+		return getWidgetManager().getItemById((int) id2).onClick(view,
+				position, id2);
+	}
+
 }

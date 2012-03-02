@@ -1,5 +1,6 @@
 package net.suteren.medicomp.plugin;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -72,6 +73,7 @@ public class PluginManagerMediCompImpl implements PluginManager {
 		if (store) {
 			Editor editor = getPluginStore().edit();
 			editor.putBoolean(plugin.getClass().getCanonicalName(), false);
+			editor.commit();
 		}
 		registeredPlugins.put(plugin.getClass().getCanonicalName(), plugin);
 		plugin.onRegister(this);
@@ -87,6 +89,7 @@ public class PluginManagerMediCompImpl implements PluginManager {
 	public boolean unregisterPlugin(String className) {
 		Editor editor = getPluginStore().edit();
 		editor.remove(className);
+		editor.commit();
 		return true;
 	}
 
@@ -104,20 +107,34 @@ public class PluginManagerMediCompImpl implements PluginManager {
 	}
 
 	public boolean activatePlugin(Plugin plugin) {
-		Editor editor = getPluginStore().edit();
-		editor.putBoolean(plugin.getClass().getCanonicalName(), true);
 		boolean result = plugin.onActivate(this);
-		if (result)
+		Log.d(MedicompActivity.LOG_TAG, "activating: " + plugin.getName());
+		if (result) {
 			plugin.setActive(true);
+			Log.d(MedicompActivity.LOG_TAG, "activity: " + plugin.isActive());
+			Editor editor = getPluginStore().edit();
+			editor.putBoolean(plugin.getClass().getCanonicalName(),
+					plugin.isActive());
+			editor.commit();
+			Log.d(MedicompActivity.LOG_TAG,
+					"activating save: " + plugin.getName());
+		}
 		return result;
 	}
 
 	public boolean deactivatePlugin(Plugin plugin) {
-		Editor editor = getPluginStore().edit();
-		editor.putBoolean(plugin.getClass().getCanonicalName(), false);
 		boolean result = plugin.onDeactivate(this);
-		if (result)
+		Log.d(MedicompActivity.LOG_TAG, "deactivating: " + plugin.getName());
+		if (result) {
 			plugin.setActive(false);
+			Log.d(MedicompActivity.LOG_TAG, "activity: " + plugin.isActive());
+			Editor editor = getPluginStore().edit();
+			editor.putBoolean(plugin.getClass().getCanonicalName(),
+					plugin.isActive());
+			editor.commit();
+			Log.d(MedicompActivity.LOG_TAG,
+					"deactivating saved: " + plugin.getName());
+		}
 		return result;
 	}
 
@@ -128,6 +145,10 @@ public class PluginManagerMediCompImpl implements PluginManager {
 				result.add(plugin);
 		}
 		return result;
+	}
+
+	public Collection<Plugin> getRegisteredPlugins() {
+		return registeredPlugins.values();
 	}
 
 }

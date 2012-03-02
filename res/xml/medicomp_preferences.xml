@@ -1,0 +1,7 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:medicomp="http://schemas.android.com/apk/res/net.suteren.medicomp" >
+
+	<PreferenceScreen android:title="@string/plugins" android:key="plugins" >
+	</PreferenceScreen>
+
+</PreferenceScreen>

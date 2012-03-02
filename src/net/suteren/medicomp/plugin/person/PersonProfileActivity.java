@@ -1,9 +1,11 @@
-package net.suteren.medicomp.ui.activity;
+package net.suteren.medicomp.plugin.person;
 
 import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.domain.Person;
+import net.suteren.medicomp.ui.activity.MedicompActivity;
+import net.suteren.medicomp.ui.activity.ProfileActivity;
 import net.suteren.medicomp.ui.adapter.PersonProfileAdapter;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;

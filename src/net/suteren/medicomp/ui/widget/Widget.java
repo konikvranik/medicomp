@@ -18,4 +18,5 @@ public interface Widget extends WithId {
 
 	boolean onUnregister(WidgetManager widgetManager);
 
+	int getType();
 }

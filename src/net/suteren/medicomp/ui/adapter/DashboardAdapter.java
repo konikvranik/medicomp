@@ -102,9 +102,9 @@ public class DashboardAdapter extends AbstractListAdapter<Widget> {
 	@Override
 	public void update() throws SQLException {
 		widgets = new ArrayList<Widget>();
-		widgets.add(new PersonWidget(context, person));
-		widgets.add(new TemperatureWidget(context, person));
-		widgets.add(new ChartWidget(context, person));
+		widgets.add(new PersonWidget(context));
+		widgets.add(new TemperatureWidget(context));
+		widgets.add(new ChartWidget(context));
 
 	}
 

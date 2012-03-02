@@ -2,8 +2,6 @@ package net.suteren.medicomp.plugin.person;
 
 import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.domain.Person;
-import net.suteren.medicomp.ui.activity.PersonListActivity;
 import net.suteren.medicomp.ui.widget.AbstractWidget;
 import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
@@ -17,8 +15,8 @@ public class PersonWidget extends AbstractWidget implements Widget {
 
 	private TextView name;
 
-	public PersonWidget(Context context, Person person) {
-		super(context, person);
+	public PersonWidget(Context context) {
+		super(context);
 	}
 
 	public View getView(View convertView, ViewGroup parent) {
@@ -27,8 +25,7 @@ public class PersonWidget extends AbstractWidget implements Widget {
 					parent, false);
 		}
 		name = (TextView) convertView.findViewById(R.id.textView1);
-
-		name.setText(person.getName());
+		name.setText(getPerson().getName());
 
 		Log.d(LOG_TAG, "Setting name: " + name.getText());
 
@@ -47,6 +44,10 @@ public class PersonWidget extends AbstractWidget implements Widget {
 
 	public String getName() {
 		return getName(R.string.person_widget_name);
+	}
+
+	public int getType() {
+		return 1;
 	}
 
 }

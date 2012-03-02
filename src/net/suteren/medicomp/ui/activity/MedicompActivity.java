@@ -19,7 +19,9 @@ import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.plugin.PluginManager;
 import net.suteren.medicomp.plugin.PluginManagerMediCompImpl;
 import net.suteren.medicomp.plugin.chart.ChartPlugin;
+import net.suteren.medicomp.plugin.person.PersonListActivity;
 import net.suteren.medicomp.plugin.person.PersonPlugin;
+import net.suteren.medicomp.plugin.person.PersonProfileActivity;
 import net.suteren.medicomp.plugin.temperature.TemperaturePlugin;
 import net.suteren.medicomp.ui.adapter.AbstractListAdapter;
 import android.app.Activity;
@@ -208,6 +210,10 @@ public abstract class MedicompActivity extends Activity {
 		case R.id.quit:
 			this.finish();
 			break;
+			
+		case R.id.preferences:
+			startActivity(new Intent(this, MedicompPreferencesActivity.class));
+			break;
 
 		default:
 			break;
@@ -275,7 +281,9 @@ public abstract class MedicompActivity extends Activity {
 
 	}
 
-	protected abstract ListAdapter getAdapter();
+	protected ListAdapter getAdapter() {
+		return null;
+	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {

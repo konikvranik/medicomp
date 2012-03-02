@@ -6,7 +6,7 @@ import java.util.Locale;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Person.Gender;
-import net.suteren.medicomp.ui.activity.PersonProfileActivity;
+import net.suteren.medicomp.plugin.person.PersonProfileActivity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

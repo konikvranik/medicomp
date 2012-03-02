@@ -13,7 +13,6 @@ import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Category;
 import net.suteren.medicomp.domain.DoubleValue;
 import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
 import net.suteren.medicomp.ui.activity.RecordListActivity;
@@ -34,8 +33,8 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 	private TextView temp;
 	private SharedPreferences preferences;
 
-	public TemperatureWidget(Context context, Person person) {
-		super(context, person);
+	public TemperatureWidget(Context context) {
+		super(context);
 		preferences = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
@@ -49,8 +48,8 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		Log.d(LOG_TAG,
 				"TemperatureWidget Type: "
 						+ (((RelativeLayout) convertView).getId() == R.id.temperatureWidget));
-		Log.d(LOG_TAG, "Person in TemperatureWidget: " + person.getId());
-		Collection<Record> rs = person.getRecords();
+		Log.d(LOG_TAG, "Person in TemperatureWidget: " + getPerson().getId());
+		Collection<Record> rs = getPerson().getRecords();
 		Double val = null;
 
 		Iterator<Record> ri = rs.iterator();
@@ -130,9 +129,13 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 				TemperatureWidgetPreferenceActivity.class));
 		return true;
 	}
-	
+
 	public String getName() {
 		return getName(R.string.temperature_widget_name);
+	}
+
+	public int getType() {
+		return 2;
 	}
 
 }

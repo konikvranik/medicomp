@@ -1,7 +1,13 @@
 package net.suteren.medicomp.ui.widget;
 
+import java.sql.SQLException;
+
+import com.j256.ormlite.dao.Dao;
+
 import net.suteren.medicomp.R;
+import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Person;
+import net.suteren.medicomp.ui.activity.MedicompActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -11,11 +17,10 @@ import android.widget.Toast;
 public abstract class AbstractWidget implements Widget {
 
 	protected LayoutInflater layoutInflater;
-	protected Person person;
 	protected Context context;
+	private int id;
 
-	public AbstractWidget(Context context, Person person) {
-		this.person = person;
+	public AbstractWidget(Context context) {
 		this.context = context;
 		layoutInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -28,7 +33,11 @@ public abstract class AbstractWidget implements Widget {
 	}
 
 	public void setId(int id) {
+		this.id = id;
+	}
 
+	public int getId() {
+		return id;
 	}
 
 	public boolean onClick(View view, long position, long id) {
@@ -50,5 +59,22 @@ public abstract class AbstractWidget implements Widget {
 	protected SharedPreferences getWidgetPreferences() {
 		return context.getSharedPreferences(this.getClass().getCanonicalName()
 				+ "#" + getId(), Context.MODE_PRIVATE);
+	}
+
+	protected Person getPerson() {
+		Dao<Person, Integer> personDao;
+
+		MediCompDatabaseFactory dbf = MediCompDatabaseFactory.getInstance();
+		try {
+			personDao = dbf.createDao(Person.class);
+
+			return personDao.queryForId(context.getSharedPreferences(
+					MedicompActivity.MEDICOMP_PREFS, Context.MODE_PRIVATE)
+					.getInt(MedicompActivity.PERSON_ID_EXTRA, 0));
+		} catch (SQLException e) {
+		}
+
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

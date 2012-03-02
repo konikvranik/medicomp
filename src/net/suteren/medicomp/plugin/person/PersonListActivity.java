@@ -1,8 +1,11 @@
-package net.suteren.medicomp.ui.activity;
+package net.suteren.medicomp.plugin.person;
 
 import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
+import net.suteren.medicomp.ui.activity.DashboardActivity;
+import net.suteren.medicomp.ui.activity.ListActivity;
+import net.suteren.medicomp.ui.activity.MedicompActivity;
 import net.suteren.medicomp.ui.adapter.PersonListAdapter;
 import android.content.Context;
 import android.content.Intent;

@@ -12,7 +12,6 @@ import java.util.TreeSet;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.domain.Category;
 import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
 import net.suteren.medicomp.ui.widget.AbstractWidget;
@@ -45,8 +44,8 @@ public class ChartWidget extends AbstractWidget implements Widget {
 	private static final int GRAPH_PERIOD = 2;
 	private SharedPreferences preferences;
 
-	public ChartWidget(Context context, Person person) {
-		super(context, person);
+	public ChartWidget(Context context) {
+		super(context);
 
 		preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -61,7 +60,7 @@ public class ChartWidget extends AbstractWidget implements Widget {
 		Log.d(LOG_TAG,
 				"TemperatureGraph Type: "
 						+ (((RelativeLayout) convertView).getId() == R.id.temperatureGraphWidget));
-		Log.d(LOG_TAG, "Person in TemperatureGraphWidget: " + person.getId());
+		Log.d(LOG_TAG, "Person in TemperatureGraphWidget: " + getPerson().getId());
 
 		Collection<Record> rs = getRecords();
 		if (rs != null && rs.size() > 1) {
@@ -180,7 +179,7 @@ public class ChartWidget extends AbstractWidget implements Widget {
 				return 1;
 			}
 		});
-		for (Record r : person.getRecords()) {
+		for (Record r : getPerson().getRecords()) {
 			if (r.getType() == Type.TEMPERATURE
 					&& r.getCategory() == Category.MEASURE)
 				rs.add(r);
@@ -201,6 +200,10 @@ public class ChartWidget extends AbstractWidget implements Widget {
 
 	public String getName() {
 		return getName(R.string.chart_widget_name);
+	}
+
+	public int getType() {
+		return 3;
 	}
 
 }

@@ -8,7 +8,7 @@ public interface WidgetManager {
 	 *            new widget instance
 	 * @return widgetId
 	 */
-	String registerWidget(Widget widget);
+	boolean registerWidget(Widget widget, Integer position);
 
 	/**
 	 * 
@@ -16,14 +16,14 @@ public interface WidgetManager {
 	 *            widgetId
 	 * @return success
 	 */
-	boolean unRegisterWidget(String widgetId);
+	boolean unRegisterWidget(int widgetId);
 
 	/**
 	 * 
 	 * @param widgetId
 	 * @return
 	 */
-	Widget getWidgetById(String widgetId);
+	Widget getItemById(int widgetId);
 
 	/**
 	 * 
@@ -31,5 +31,5 @@ public interface WidgetManager {
 	 *            desired position
 	 * @return real new position
 	 */
-	Integer moveWidgetToPosition(Widget widget, int position);
+	Integer moveWidgetToPosition(int from, int to);
 }

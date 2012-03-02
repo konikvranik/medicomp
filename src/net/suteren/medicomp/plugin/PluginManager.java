@@ -1,5 +1,6 @@
 package net.suteren.medicomp.plugin;
 
+import java.util.Collection;
 import java.util.Set;
 
 import android.content.SharedPreferences;
@@ -21,5 +22,7 @@ public interface PluginManager {
 	SharedPreferences getPluginPreferences(Plugin plugin);
 
 	Set<Plugin> getActivePlugins();
+
+	public Collection<Plugin> getRegisteredPlugins();
 
 }

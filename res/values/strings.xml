@@ -68,6 +68,10 @@
 	<string name="person_plugin_name">Person plugin</string>
 	<string name="chart_plugin_name">Chart plugin</string>
 	<string name="modules_menu">Modules</string>
+	<string name="not_implemented">Not implemented</string>
+	<string name="add_widget">Add widget</string>
+	<string name="empty_widget">EMPTY</string>
+	<string name="plugins">Plugins</string>
 	<!-- Color Picker -->
 	<string name="dialog_color_picker">Color Picker</string>
 	<string name="press_color_to_apply">Press on Color to apply</string>

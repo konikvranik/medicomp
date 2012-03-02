@@ -2,6 +2,7 @@ package net.suteren.medicomp.plugin.temperature;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.plugin.AbstractPlugin;
+import net.suteren.medicomp.plugin.PluginManager;
 import net.suteren.medicomp.ui.activity.RecordListActivity;
 import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
