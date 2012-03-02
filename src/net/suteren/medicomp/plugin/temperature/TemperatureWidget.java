@@ -1,4 +1,4 @@
-package net.suteren.medicomp.ui.widget.temperature;
+package net.suteren.medicomp.plugin.temperature;
 
 import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 
@@ -22,7 +22,6 @@ import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -131,4 +130,9 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 				TemperatureWidgetPreferenceActivity.class));
 		return true;
 	}
+	
+	public String getName() {
+		return getName(R.string.temperature_widget_name);
+	}
+
 }

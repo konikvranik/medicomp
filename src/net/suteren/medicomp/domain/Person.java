@@ -13,7 +13,7 @@ import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "persons")
-public class Person implements PersistableWithId {
+public class Person implements WithId {
 
 	public static final String COLUMN_NAME_STATUTORY_INSURANCE = "statutory_insurance";
 	public static final String _ID = "id";

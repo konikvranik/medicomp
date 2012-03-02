@@ -22,9 +22,9 @@
 		</activity>
 		<activity android:name=".ui.activity.RecordProfileActivity">
 		</activity>
-		<activity android:name=".ui.widget.chart.ChartWidgetPreferenceActivity">
+		<activity android:name=".plugin.chart.ChartWidgetPreferenceActivity">
 		</activity>
-		<activity android:name=".ui.widget.temperature.TemperatureWidgetPreferenceActivity"></activity>
+		<activity android:name=".plugin.temperature.TemperatureWidgetPreferenceActivity"></activity>
 	</application>
 
 </manifest>

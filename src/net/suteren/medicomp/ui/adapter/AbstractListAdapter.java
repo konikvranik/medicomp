@@ -5,13 +5,13 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-import net.suteren.medicomp.domain.PersistableWithId;
+import net.suteren.medicomp.domain.WithId;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.widget.ListAdapter;
 
-public abstract class AbstractListAdapter<T extends PersistableWithId>
+public abstract class AbstractListAdapter<T extends WithId>
 		implements ListAdapter {
 
 	protected Context context;

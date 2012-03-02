@@ -2,11 +2,11 @@ package net.suteren.medicomp.ui.adapter;
 
 import java.text.NumberFormat;
 
-import net.suteren.medicomp.domain.PersistableWithId;
+import net.suteren.medicomp.domain.WithId;
 import android.database.DataSetObserver;
 import android.widget.ListAdapter;
 
-public abstract class ProfileAdapter<T extends PersistableWithId> implements
+public abstract class ProfileAdapter<T extends WithId> implements
 		ListAdapter {
 
 	private T profileObject;

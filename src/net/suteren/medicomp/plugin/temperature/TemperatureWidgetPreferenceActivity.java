@@ -1,16 +1,16 @@
-package net.suteren.medicomp.ui.widget.chart;
+package net.suteren.medicomp.plugin.temperature;
 
 import net.suteren.medicomp.R;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-public class ChartWidgetPreferenceActivity extends PreferenceActivity {
+public class TemperatureWidgetPreferenceActivity extends PreferenceActivity {
 	
 	 @Override
      public void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);  
  
-         addPreferencesFromResource(R.xml.chart_widget_preferences);
+         addPreferencesFromResource(R.xml.temperature_widget_preferences);
      }
 
 }

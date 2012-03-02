@@ -61,7 +61,13 @@
 	<string name="heatColor_summary">Color to display temperature in case of heat</string>
 	<string name="rightTemperatureColor_title">Healthy color</string>
 	<string name="rightTemperatureColor_summary">Color to display temperature in case of right temperature</string>
-
+	<string name="chart_widget_name">Chart widget</string>
+	<string name="person_widget_name">Person widget</string>
+	<string name="temperature_widget_name">Temperature widget</string>
+	<string name="temperature_plugin_name">Temperature plugin</string>
+	<string name="person_plugin_name">Person plugin</string>
+	<string name="chart_plugin_name">Chart plugin</string>
+	<string name="modules_menu">Modules</string>
 	<!-- Color Picker -->
 	<string name="dialog_color_picker">Color Picker</string>
 	<string name="press_color_to_apply">Press on Color to apply</string>

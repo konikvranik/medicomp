@@ -1,6 +1,6 @@
 package net.suteren.medicomp.domain;
 
-public interface PersistableWithId {
+public interface WithId {
 
 	int getId();
 

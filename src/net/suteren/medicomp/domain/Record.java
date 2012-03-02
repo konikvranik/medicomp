@@ -9,7 +9,7 @@ import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "records")
-public class Record implements PersistableWithId {
+public class Record implements WithId {
 
 	public static final String _ID = "id";
 

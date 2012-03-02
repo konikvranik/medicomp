@@ -1,4 +1,4 @@
-package net.suteren.medicomp.ui.widget.chart;
+package net.suteren.medicomp.plugin.chart;
 
 import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 
@@ -198,4 +198,9 @@ public class ChartWidget extends AbstractWidget implements Widget {
 				ChartWidgetPreferenceActivity.class));
 		return true;
 	}
+
+	public String getName() {
+		return getName(R.string.chart_widget_name);
+	}
+
 }

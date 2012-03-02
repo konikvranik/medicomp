@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.suteren.medicomp.domain.Person;
+import net.suteren.medicomp.plugin.chart.ChartWidget;
+import net.suteren.medicomp.plugin.person.PersonWidget;
+import net.suteren.medicomp.plugin.temperature.TemperatureWidget;
 import net.suteren.medicomp.ui.widget.Widget;
-import net.suteren.medicomp.ui.widget.chart.ChartWidget;
-import net.suteren.medicomp.ui.widget.person.PersonWidget;
-import net.suteren.medicomp.ui.widget.temperature.TemperatureWidget;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.util.Log;

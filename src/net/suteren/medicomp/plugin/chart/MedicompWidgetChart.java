@@ -1,4 +1,4 @@
-package net.suteren.medicomp.ui.widget.chart;
+package net.suteren.medicomp.plugin.chart;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

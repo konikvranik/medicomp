@@ -1,4 +1,4 @@
-package net.suteren.medicomp.ui.widget.person;
+package net.suteren.medicomp.plugin.person;
 
 import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 import net.suteren.medicomp.R;
@@ -43,6 +43,10 @@ public class PersonWidget extends AbstractWidget implements Widget {
 	public boolean onClick(View view, long position, long id) {
 		context.startActivity(new Intent(context, PersonListActivity.class));
 		return true;
+	}
+
+	public String getName() {
+		return getName(R.string.person_widget_name);
 	}
 
 }

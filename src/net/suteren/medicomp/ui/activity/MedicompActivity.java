@@ -11,10 +11,16 @@ import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.ApplicationContextHolder;
 import net.suteren.medicomp.domain.Category;
 import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.PersistableWithId;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.domain.WithId;
+import net.suteren.medicomp.plugin.Plugin;
+import net.suteren.medicomp.plugin.PluginManager;
+import net.suteren.medicomp.plugin.PluginManagerMediCompImpl;
+import net.suteren.medicomp.plugin.chart.ChartPlugin;
+import net.suteren.medicomp.plugin.person.PersonPlugin;
+import net.suteren.medicomp.plugin.temperature.TemperaturePlugin;
 import net.suteren.medicomp.ui.adapter.AbstractListAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,6 +37,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
@@ -76,11 +83,17 @@ public abstract class MedicompActivity extends Activity {
 	private Type choosedType;
 	private ArrayList<Type> availableTypes;
 	protected NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
+	private PluginManager pluginManager;
 	private static final int TYPE_CHOOSER_DIALOG = 1;
+	public static final String REGISTERED_PLUGINS_PREFS = "registered_plugins";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+		pluginManager = new PluginManagerMediCompImpl(this);
+
+		registerCorePlugins(pluginManager);
 
 		Log.d(LOG_TAG, "Activity: " + this.getClass().getName());
 
@@ -139,6 +152,12 @@ public abstract class MedicompActivity extends Activity {
 
 	}
 
+	private void registerCorePlugins(PluginManager pluginManager2) {
+		pluginManager2.registerPlugin(new PersonPlugin());
+		pluginManager2.registerPlugin(new TemperaturePlugin());
+		pluginManager2.registerPlugin(new ChartPlugin());
+	}
+
 	protected abstract int getContentViewId();
 
 	protected ListView requestListView() {
@@ -149,6 +168,19 @@ public abstract class MedicompActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_menu, menu);
+		SubMenu modulesMenu = menu.addSubMenu(R.string.modules_menu);
+		for (final Plugin plugin : getPluginManager().getActivePlugins()) {
+			if (plugin.hasActivity()) {
+				MenuItem menuItem = modulesMenu.add(plugin.getName());
+				menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+					public boolean onMenuItemClick(MenuItem item) {
+						startActivity(plugin
+								.newActivityInstance(MedicompActivity.this));
+						return true;
+					}
+				});
+			}
+		}
 		return true;
 	}
 
@@ -163,7 +195,7 @@ public abstract class MedicompActivity extends Activity {
 		case R.id.addPerson:
 			Intent intent = new Intent(this, PersonProfileActivity.class);
 			Editor prefs = getSharedPreferences(MEDICOMP_PREFS,
-					Context.MODE_WORLD_WRITEABLE).edit();
+					Context.MODE_PRIVATE).edit();
 			prefs.remove(PERSON_ID_EXTRA);
 			prefs.commit();
 			this.startActivity(intent);
@@ -185,8 +217,7 @@ public abstract class MedicompActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	protected <T extends PersistableWithId> T setupObject(
-			Dao<T, Integer> objectDao, int id) {
+	protected <T extends WithId> T setupObject(Dao<T, Integer> objectDao, int id) {
 		try {
 
 			Log.d(MedicompActivity.LOG_TAG, "Object before: " + id);
@@ -233,8 +264,7 @@ public abstract class MedicompActivity extends Activity {
 		if (cache)
 			try {
 				personId = getSharedPreferences(MEDICOMP_PREFS,
-						Context.MODE_WORLD_WRITEABLE)
-						.getInt(PERSON_ID_EXTRA, 0);
+						Context.MODE_PRIVATE).getInt(PERSON_ID_EXTRA, 0);
 			} catch (ClassCastException e) {
 				return null;
 			}
@@ -349,8 +379,8 @@ public abstract class MedicompActivity extends Activity {
 			listView.invalidate();
 			listView.forceLayout();
 			try {
-				((AbstractListAdapter<? extends PersistableWithId>) listView
-						.getAdapter()).update();
+				((AbstractListAdapter<? extends WithId>) listView.getAdapter())
+						.update();
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}
@@ -379,5 +409,9 @@ public abstract class MedicompActivity extends Activity {
 		default:
 			super.onPrepareDialog(id, dialog);
 		}
+	}
+
+	public PluginManager getPluginManager() {
+		return pluginManager;
 	}
 }
