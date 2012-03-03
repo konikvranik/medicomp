@@ -73,6 +73,7 @@
 	<string name="empty_widget">EMPTY</string>
 	<string name="plugins">Plugins</string>
 	<string name="move_list_item_info">Click on desired position</string>
+	<string name="smart_input_hint">Enter value</string>
 	<!-- Color Picker -->
 	<string name="dialog_color_picker">Color Picker</string>
 	<string name="press_color_to_apply">Press on Color to apply</string>

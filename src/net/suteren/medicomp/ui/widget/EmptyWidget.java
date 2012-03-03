@@ -13,7 +13,7 @@ public class EmptyWidget extends AbstractWidget implements Widget {
 	}
 
 	public View getView(View convertView, ViewGroup parent) {
-		if (convertView == null) {
+		if (convertView == null || true) {
 			Log.d(this.getClass().getCanonicalName(), "convertView is null");
 			convertView = layoutInflater.inflate(R.layout.empty_widget, parent,
 					false);

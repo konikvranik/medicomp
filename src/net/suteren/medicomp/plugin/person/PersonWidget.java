@@ -26,7 +26,7 @@ public class PersonWidget extends AbstractWidget implements PluginWidget {
 	}
 
 	public View getView(View convertView, ViewGroup parent) {
-		if (convertView == null) {
+		if (convertView == null || true) {
 			convertView = layoutInflater.inflate(R.layout.dashboard_person,
 					parent, false);
 		}

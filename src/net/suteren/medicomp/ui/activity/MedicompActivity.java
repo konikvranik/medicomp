@@ -170,7 +170,7 @@ public abstract class MedicompActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_menu, menu);
-		SubMenu modulesMenu = menu.addSubMenu(R.string.modules_menu);
+		SubMenu modulesMenu = menu.findItem(R.id.modules).getSubMenu();
 		for (final Plugin plugin : getPluginManager().getActivePlugins()) {
 			if (plugin.hasActivity()) {
 				MenuItem menuItem = modulesMenu.add(plugin.getName());

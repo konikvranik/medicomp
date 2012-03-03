@@ -65,7 +65,7 @@ public class DashboardActivity extends ListActivity {
 
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.dashboard_contextmenu, menu);
-		SubMenu subMenu = menu.addSubMenu(R.string.add_widget);
+		SubMenu subMenu = menu.findItem(R.id.add_widget).getSubMenu();
 
 		for (Plugin plugin : getPluginManager().getActivePlugins()) {
 			if (plugin.hasWidget()) {

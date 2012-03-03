@@ -22,7 +22,7 @@
 	<string name="none">nic</string>
 	<string name="last_measured_temperature">Teplota</string>
 	<string name="temperature_graph">Teplota</string>
-		<string name="choosePerson">Zvolte osobu</string>
+	<string name="choosePerson">Zvolte osobu</string>
 	<string name="quit">Konec</string>
 	<string name="celsius">°C</string>
 	<string name="addPerson">Přidat osobu</string>
@@ -35,5 +35,47 @@
 	<string name="person">Osoba</string>
 	<string name="no_preferences">Žádná nastavení</string>
 	<string name="temperature_legend">teplota</string>
-		
+	<string name="add_widget">Přidat widget</string>
+	<string name="chart_widget_color_setting_summary">Nastavení barev grafu</string>
+	<string name="chart_widget_color_settings_title">Barvy</string>
+	<string name="temperature_widget_color_settings_summary">Nastavení barev teploty</string>
+	<string name="temperature_widget_color_settings_title">Barvy</string>
+	<string name="chart_limits_title">Limity grafu</string>
+	<string name="chart_limits_summary">Počet zobrazených dní</string>
+	<string name="temperature_limits_title">Limity teploty</string>
+	<string name="temperature_limits_summary">Nastavení hranic pro změny barvy teploty</string>
+	<string name="chartTemperatureColor_title">Barva teploty</string>
+	<string name="chartTemperatureColor_summary">Barva série dat pro teplotu</string>
+	<string name="chartTemperaturePeriod_title">Limity grafu</string>
+	<string name="chartTemperaturePeriod_summary">Počet zobrazených dní</string>
+	<string name="higherTemperatureBound_title">Teplota</string>
+	<string name="higherTemperatureBound_summary">Hranice pro změnu barvy při zvýšené teplotě</string>
+	<string name="upperTemperatureBound_title">Horečka</string>
+	<string name="upperTemperatureBound_summary">Hranice pro změnu barvy při horečce</string>
+	<string name="lowerTemperatureBound_title">Podchalzení</string>
+	<string name="lowerTemperatureBound_summary">Hranice pro změnu barvy při podchalzení</string>
+	<string name="feverColor_title">Barva pro horečku</string>
+	<string name="feverColor_summary">Barva teploty při horečce</string>
+	<string name="hypothermiaColor_title">Barva pro podchalzení</string>
+	<string name="hypothermiaColor_summary">Barva teploty při podchlazení</string>
+	<string name="heatColor_title">Barva pro zvýšenou teplotu</string>
+	<string name="heatColor_summary">Barva teploty při zvýšené teplotě</string>
+	<string name="rightTemperatureColor_title">Barva pro správnou teplotu</string>
+	<string name="rightTemperatureColor_summary">Barva teploty</string>
+	<string name="chart_widget_name">Graf</string>
+	<string name="person_widget_name">Osoby</string>
+	<string name="temperature_widget_name">Teploty</string>
+	<string name="temperature_plugin_name">Teploty</string>
+	<string name="person_plugin_name">Osoby</string>
+	<string name="chart_plugin_name">Grafy</string>
+	<string name="modules_menu">Moduly</string>
+	<string name="not_implemented">Není implementováno</string>
+	<string name="empty_widget">NIC</string>
+	<string name="plugins">Zásuvné moduly</string>
+	<string name="move_list_item_info">Klikněte na cílovou pozici</string>
+	<string name="smart_input_hint">Vložte hodnotu</string>
+<!-- Color Picker -->
+	<string name="dialog_color_picker">Výběr barvy</string>
+	<string name="press_color_to_apply">Zvolte barvu kliknutím na ni</string>
+	
 </resources>

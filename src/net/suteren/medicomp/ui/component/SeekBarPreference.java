@@ -62,9 +62,6 @@ public class SeekBarPreference extends Preference implements
 	@Override
 	protected View onCreateView(ViewGroup parent) {
 
-		Log.d(this.getClass().getCanonicalName(), "key: " + getKey()
-				+ ", instance: " + this);
-
 		LayoutInflater layoutInflater = (LayoutInflater) getContext()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		RelativeLayout layout = (RelativeLayout) layoutInflater.inflate(
@@ -103,8 +100,6 @@ public class SeekBarPreference extends Preference implements
 		this.oldValue = getValueOfProgress(progress);
 		this.monitorBox.setText(numberFormat.format(this.oldValue));
 		updatePreference(this.oldValue);
-
-		notifyChanged();
 
 	}
 

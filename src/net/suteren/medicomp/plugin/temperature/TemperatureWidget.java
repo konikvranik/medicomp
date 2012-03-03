@@ -41,7 +41,7 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 	}
 
 	public View getView(View convertView, ViewGroup parent) {
-		if (convertView == null) {
+		if (convertView == null || true) {
 			convertView = layoutInflater.inflate(
 					R.layout.dashboard_temperature, parent, false);
 		}

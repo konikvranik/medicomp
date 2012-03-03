@@ -1,8 +1,36 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <menu xmlns:android="http://schemas.android.com/apk/res/android">
-        <item android:id="@+id/choosePerson" android:title="@string/choosePerson"></item>
-        <item android:id="@+id/quit" android:title="@string/quit"></item>
-        <item android:id="@+id/addPerson" android:title="@string/addPerson"></item>
-        <item android:id="@+id/showRecords" android:title="@string/showRecords"></item>
-        <item android:id="@+id/preferences" android:title="@string/preferences"></item>
-    </menu>
+	<item
+		android:id="@+id/choosePerson"
+		android:icon="@android:drawable/ic_menu_edit"
+		android:title="@string/choosePerson">
+	</item>
+	<item
+		android:id="@+id/quit"
+		android:icon="@android:drawable/ic_menu_revert"
+		android:title="@string/quit">
+	</item>
+	<item
+		android:id="@+id/addPerson"
+		android:icon="@android:drawable/ic_menu_add"
+		android:title="@string/addPerson">
+	</item>
+	<item
+		android:id="@+id/showRecords"
+		android:icon="@android:drawable/ic_menu_agenda"
+		android:title="@string/showRecords">
+	</item>
+	<item
+		android:id="@+id/preferences"
+		android:icon="@android:drawable/ic_menu_preferences"
+		android:title="@string/preferences">
+	</item>
+	<item
+		android:id="@+id/modules"
+		android:icon="@android:drawable/ic_menu_directions"
+		android:title="@string/modules_menu">
+		<menu>
+		</menu>
+	</item>
+
+</menu>
