@@ -1,7 +1,5 @@
 package net.suteren.medicomp.ui.adapter;
 
-import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
-
 import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
@@ -30,7 +28,8 @@ public class PersonListAdapter extends AbstractListAdapter<Person> {
 	@Override
 	public void update() throws SQLException {
 		collection = personDao.queryForAll();
-		Log.d(LOG_TAG, "PersonListAdapter: " + collection.size());
+		Log.d(this.getClass().getCanonicalName(), "PersonListAdapter: "
+				+ collection.size());
 	}
 
 	public View getView(final int position, View convertView, ViewGroup parent) {
@@ -54,8 +53,12 @@ public class PersonListAdapter extends AbstractListAdapter<Person> {
 	}
 
 	@Override
-	public Person getItemById(int id) throws SQLException {
-		return personDao.queryForId(id);
+	public Person getItemById(int id) {
+		try {
+			return personDao.queryForId(id);
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

@@ -1,7 +1,5 @@
 package net.suteren.medicomp.plugin.chart;
 
-import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
-
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
@@ -26,11 +24,8 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,12 +37,9 @@ public class ChartWidget extends AbstractWidget implements Widget {
 	private static final String CHART_TEMPERATURE_PERIOD = "chartTemperaturePeriod";
 	private static final String CHART_TEMPERATURE_COLOR = "chartTemperatureColor";
 	private static final int GRAPH_PERIOD = 2;
-	private SharedPreferences preferences;
 
 	public ChartWidget(Context context) {
 		super(context);
-
-		preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
 	}
 
@@ -57,10 +49,11 @@ public class ChartWidget extends AbstractWidget implements Widget {
 			convertView = layoutInflater.inflate(
 					R.layout.dashboard_temperature_graph, parent, false);
 
-		Log.d(LOG_TAG,
+		Log.d(this.getClass().getCanonicalName(),
 				"TemperatureGraph Type: "
 						+ (((RelativeLayout) convertView).getId() == R.id.temperatureGraphWidget));
-		Log.d(LOG_TAG, "Person in TemperatureGraphWidget: " + getPerson().getId());
+		Log.d(this.getClass().getCanonicalName(),
+				"Person in TemperatureGraphWidget: " + getPerson().getId());
 
 		Collection<Record> rs = getRecords();
 		if (rs != null && rs.size() > 1) {
@@ -86,14 +79,15 @@ public class ChartWidget extends AbstractWidget implements Widget {
 					temperatureSeries.getMaxX(), temperatureSeries.getMinY(),
 					temperatureSeries.getMaxY() + diff };
 			try {
-				int period = Math.round(preferences.getFloat(
+				int period = Math.round(getWidgetPreferences().getFloat(
 						CHART_TEMPERATURE_PERIOD, GRAPH_PERIOD));
 				if (period > 0) {
 					range[0] = new Date().getTime() - period * 24 * 3600 * 1000;
 					range[1] = new Date().getTime();
 				}
 			} catch (Exception e) {
-				preferences.edit().remove(CHART_TEMPERATURE_PERIOD).commit();
+				getWidgetPreferences().edit().remove(CHART_TEMPERATURE_PERIOD)
+						.commit();
 			}
 			renderer.setInitialRange(range);
 			renderer.setRange(range);
@@ -122,9 +116,10 @@ public class ChartWidget extends AbstractWidget implements Widget {
 	private XYSeriesRenderer makeTemperatureRenderer() {
 		XYSeriesRenderer temperatureRenderer = new XYSeriesRenderer();
 		temperatureRenderer
-				.setColor(preferences
-						.getInt(CHART_TEMPERATURE_COLOR, context.getResources()
-								.getColor(R.color.chartTemperatureColor)));
+				.setColor(getWidgetPreferences().getInt(
+						CHART_TEMPERATURE_COLOR,
+						context.getResources().getColor(
+								R.color.chartTemperatureColor)));
 		temperatureRenderer.setGradientEnabled(true);
 		temperatureRenderer.setGradientStart(35.9, Color.CYAN);
 		temperatureRenderer.setGradientStop(40, Color.RED);
@@ -187,15 +182,8 @@ public class ChartWidget extends AbstractWidget implements Widget {
 		return rs;
 	}
 
-	public int getId() {
-		return 2;
-	}
-
-	@Override
-	public boolean showPreferencesPane() {
-		context.startActivity(new Intent(context,
-				ChartWidgetPreferenceActivity.class));
-		return true;
+	protected Class<ChartWidgetPreferenceActivity> getPreferenceActivityClass() {
+		return ChartWidgetPreferenceActivity.class;
 	}
 
 	public String getName() {

@@ -1,16 +1,13 @@
 package net.suteren.medicomp.plugin.chart;
 
 import net.suteren.medicomp.R;
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import net.suteren.medicomp.ui.widget.WidgetPreferenceActivity;
 
-public class ChartWidgetPreferenceActivity extends PreferenceActivity {
-	
-	 @Override
-     public void onCreate(Bundle savedInstanceState) {
-         super.onCreate(savedInstanceState);  
- 
-         addPreferencesFromResource(R.xml.chart_widget_preferences);
-     }
+public class ChartWidgetPreferenceActivity extends WidgetPreferenceActivity {
+
+	@Override
+	protected Integer getPreferencesResourceId() {
+		return R.xml.chart_widget_preferences;
+	}
 
 }

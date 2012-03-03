@@ -23,7 +23,7 @@ public interface WidgetManager {
 	 * @param widgetId
 	 * @return
 	 */
-	Widget getItemById(int widgetId);
+	Widget getItemById(int widgetId) throws Exception;
 
 	/**
 	 * 

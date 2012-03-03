@@ -1,7 +1,6 @@
 package net.suteren.medicomp.ui.widget;
 
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.ui.activity.MedicompActivity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +14,7 @@ public class EmptyWidget extends AbstractWidget implements Widget {
 
 	public View getView(View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			Log.d(MedicompActivity.LOG_TAG, "convertView is null");
+			Log.d(this.getClass().getCanonicalName(), "convertView is null");
 			convertView = layoutInflater.inflate(R.layout.empty_widget, parent,
 					false);
 		}
@@ -28,7 +27,7 @@ public class EmptyWidget extends AbstractWidget implements Widget {
 
 	@Override
 	public boolean onRegister(WidgetManager widgetManager) {
-		Log.d(MedicompActivity.LOG_TAG, "registering");
+		Log.d(this.getClass().getCanonicalName(), "registering");
 		return super.onRegister(widgetManager);
 	}
 

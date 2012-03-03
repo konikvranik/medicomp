@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class RecordListActivity extends ListActivity {
@@ -37,7 +36,7 @@ public class RecordListActivity extends ListActivity {
 		try {
 			return new RecordListAdapter(this, person);
 		} catch (SQLException e) {
-			Log.d(LOG_TAG, e.getMessage(), e);
+			Log.d(this.getClass().getCanonicalName(), e.getMessage(), e);
 			return null;
 		}
 	}
@@ -49,15 +48,15 @@ public class RecordListActivity extends ListActivity {
 
 	@Override
 	public void edit(int id) {
-		Log.d(LOG_TAG, "Edit " + id);
+		Log.d(this.getClass().getCanonicalName(), "Edit " + id);
 		Intent intent = new Intent(this, RecordProfileActivity.class);
-		intent.putExtra(RECORD_ID_EXTRA,  id);
+		intent.putExtra(RECORD_ID_EXTRA, id);
 		this.startActivity(intent);
 	}
 
 	@Override
 	protected void delete(int id) {
-		Log.d(LOG_TAG, "delete " + id);
+		Log.d(this.getClass().getCanonicalName(), "delete " + id);
 		// TODO Auto-generated method stub
 
 	}

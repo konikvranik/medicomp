@@ -18,7 +18,8 @@ public class MedicompPreferencesActivity extends PreferenceActivity {
 
 		addPreferencesFromResource(R.xml.medicomp_preferences);
 		PreferenceScreen pref = (PreferenceScreen) findPreference("plugins");
-		final PluginManagerMediCompImpl pm = new PluginManagerMediCompImpl(this);
+		final PluginManagerMediCompImpl pm = PluginManagerMediCompImpl
+				.getInstance(this);
 		for (final Plugin plugin : pm.getRegisteredPlugins()) {
 			CheckBoxPreference p = new CheckBoxPreference(this);
 			p.setTitle(plugin.getName());
@@ -26,7 +27,7 @@ public class MedicompPreferencesActivity extends PreferenceActivity {
 			p.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 				public boolean onPreferenceChange(Preference preference,
 						Object obj) {
-					Log.d(MedicompActivity.LOG_TAG, "obj: "
+					Log.d(this.getClass().getCanonicalName(), "obj: "
 							+ obj.getClass().getCanonicalName() + " " + obj);
 					if ((Boolean) obj) {
 						pm.activatePlugin(plugin);

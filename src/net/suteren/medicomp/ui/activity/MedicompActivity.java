@@ -65,7 +65,6 @@ public abstract class MedicompActivity extends Activity {
 		}
 	}
 
-	public static String LOG_TAG = "MEDICOMP";
 	public static final String PERSON_ID_EXTRA = "personId";
 	public static final String RECORD_ID_EXTRA = "recordId";
 	public static final String MEDICOMP_PREFS = "medicomp_preferences";
@@ -93,11 +92,12 @@ public abstract class MedicompActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		pluginManager = new PluginManagerMediCompImpl(this);
+		pluginManager = PluginManagerMediCompImpl.getInstance(this);
 
 		registerCorePlugins(pluginManager);
 
-		Log.d(LOG_TAG, "Activity: " + this.getClass().getName());
+		Log.d(this.getClass().getCanonicalName(), "Activity: "
+				+ this.getClass().getName());
 
 		ApplicationContextHolder.setContext(this);
 		MediCompDatabaseFactory.init(this);
@@ -107,7 +107,7 @@ public abstract class MedicompActivity extends Activity {
 			personDao = dbf.createDao(Person.class);
 			fieldDao = dbf.createDao(Field.class);
 		} catch (SQLException e) {
-			Log.e(LOG_TAG, e.getMessage(), e);
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
 
@@ -126,7 +126,7 @@ public abstract class MedicompActivity extends Activity {
 			listView.setFocusable(false);
 		}
 
-		inputTextField = (EditText) getWindow().findViewById(R.id.editText1);
+		inputTextField = (EditText) getWindow().findViewById(R.id.smart_input);
 		if (inputTextField != null)
 			inputTextField.setOnKeyListener(new OnKeyListener() {
 
@@ -144,7 +144,7 @@ public abstract class MedicompActivity extends Activity {
 				}
 			});
 		ImageButton ib = (ImageButton) getWindow().findViewById(
-				R.id.imageButton1);
+				R.id.smart_input_button);
 		if (ib != null)
 			ib.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
@@ -210,7 +210,7 @@ public abstract class MedicompActivity extends Activity {
 		case R.id.quit:
 			this.finish();
 			break;
-			
+
 		case R.id.preferences:
 			startActivity(new Intent(this, MedicompPreferencesActivity.class));
 			break;
@@ -226,14 +226,14 @@ public abstract class MedicompActivity extends Activity {
 	protected <T extends WithId> T setupObject(Dao<T, Integer> objectDao, int id) {
 		try {
 
-			Log.d(MedicompActivity.LOG_TAG, "Object before: " + id);
+			Log.d(this.getClass().getCanonicalName(), "Object before: " + id);
 			T object = objectDao.queryForId(id);
 			if (object != null)
-				Log.d(MedicompActivity.LOG_TAG,
-						"Object after: " + object.getId() + ", ");
+				Log.d(this.getClass().getCanonicalName(), "Object after: "
+						+ object.getId() + ", ");
 			return object;
 		} catch (SQLException e) {
-			Log.e(MedicompActivity.LOG_TAG, "Failed: ", e);
+			Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
 			return null;
 		}
 	}
@@ -327,13 +327,14 @@ public abstract class MedicompActivity extends Activity {
 			n = nf.parse(inputTextField.getText().toString());
 			isNumber = true;
 		} catch (ParseException e) {
-			Log.d(LOG_TAG, "Not a number");
+			Log.d(this.getClass().getCanonicalName(), "Not a number");
 		}
 
 		if (isNumber)
 			availableTypes.add(Type.TEMPERATURE);
 
-		Log.d(LOG_TAG, "Types: " + availableTypes.size());
+		Log.d(this.getClass().getCanonicalName(),
+				"Types: " + availableTypes.size());
 
 		if (availableTypes.size() > 1) {
 			showDialog(TYPE_CHOOSER_DIALOG);
@@ -371,7 +372,7 @@ public abstract class MedicompActivity extends Activity {
 					listView.invalidateViews();
 
 				} catch (SQLException e) {
-					Log.e(LOG_TAG, "Failed: ", e);
+					Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
 					Toast.makeText(MedicompActivity.this,
 							R.string.failedToAddTemperature, Toast.LENGTH_SHORT);
 				}
@@ -421,5 +422,9 @@ public abstract class MedicompActivity extends Activity {
 
 	public PluginManager getPluginManager() {
 		return pluginManager;
+	}
+
+	public ListView getListView() {
+		return listView;
 	}
 }

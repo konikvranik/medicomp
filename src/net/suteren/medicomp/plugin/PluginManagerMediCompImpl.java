@@ -18,7 +18,16 @@ public class PluginManagerMediCompImpl implements PluginManager {
 	private SharedPreferences pluginStore;
 	private Map<String, Plugin> registeredPlugins = new HashMap<String, Plugin>();
 
-	public PluginManagerMediCompImpl(Context context) {
+	private static PluginManagerMediCompImpl singleton;
+
+	public static PluginManagerMediCompImpl getInstance(Context context) {
+		if (singleton == null) {
+			singleton = new PluginManagerMediCompImpl(context);
+		}
+		return singleton;
+	}
+
+	private PluginManagerMediCompImpl(Context context) {
 		this.context = context;
 		loadPlugins();
 	}
@@ -34,20 +43,20 @@ public class PluginManagerMediCompImpl implements PluginManager {
 				Plugin plugin = (Plugin) Class.forName(className).newInstance();
 				registerPlugin(plugin, false);
 				if (active) {
-					plugin.onActivate(this);
+					activatePlugin(plugin);
 				}
 				success = true;
 			} catch (ClassNotFoundException e) {
-				Log.d(MedicompActivity.LOG_TAG, "Plugin " + className
+				Log.d(this.getClass().getCanonicalName(), "Plugin " + className
 						+ " not found => unregistering.");
 			} catch (InstantiationException e) {
-				Log.d(MedicompActivity.LOG_TAG, "Plugin " + className
+				Log.d(this.getClass().getCanonicalName(), "Plugin " + className
 						+ " can not be instantiated => unregistering.");
 			} catch (IllegalAccessException e) {
-				Log.d(MedicompActivity.LOG_TAG, "Plugin " + className
+				Log.d(this.getClass().getCanonicalName(), "Plugin " + className
 						+ " has no permissions => unregistering.");
 			} catch (ClassCastException e) {
-				Log.d(MedicompActivity.LOG_TAG, "Class" + className
+				Log.d(this.getClass().getCanonicalName(), "Class" + className
 						+ " is not a plugin=> unregistering.");
 			}
 			if (!success) {
@@ -57,10 +66,13 @@ public class PluginManagerMediCompImpl implements PluginManager {
 	}
 
 	private SharedPreferences getPluginStore() {
-		if (pluginStore == null)
-			pluginStore = context.getSharedPreferences(
-					MedicompActivity.REGISTERED_PLUGINS_PREFS,
-					Context.MODE_PRIVATE);
+		Log.d(this.getClass().getCanonicalName(), "context: "
+				+ context.getClass().getName());
+
+		pluginStore = context
+				.getSharedPreferences(
+						MedicompActivity.REGISTERED_PLUGINS_PREFS,
+						Context.MODE_PRIVATE);
 		return pluginStore;
 	}
 
@@ -72,7 +84,8 @@ public class PluginManagerMediCompImpl implements PluginManager {
 	private void registerPlugin(Plugin plugin, boolean store) {
 		if (store) {
 			Editor editor = getPluginStore().edit();
-			editor.putBoolean(plugin.getClass().getCanonicalName(), false);
+			editor.putBoolean(plugin.getClass().getCanonicalName(),
+					plugin.isActive());
 			editor.commit();
 		}
 		registeredPlugins.put(plugin.getClass().getCanonicalName(), plugin);
@@ -108,15 +121,15 @@ public class PluginManagerMediCompImpl implements PluginManager {
 
 	public boolean activatePlugin(Plugin plugin) {
 		boolean result = plugin.onActivate(this);
-		Log.d(MedicompActivity.LOG_TAG, "activating: " + plugin.getName());
+		Log.d(this.getClass().getCanonicalName(), "activating: " + plugin.getName());
 		if (result) {
 			plugin.setActive(true);
-			Log.d(MedicompActivity.LOG_TAG, "activity: " + plugin.isActive());
+			Log.d(this.getClass().getCanonicalName(), "activity: " + plugin.isActive());
 			Editor editor = getPluginStore().edit();
 			editor.putBoolean(plugin.getClass().getCanonicalName(),
 					plugin.isActive());
 			editor.commit();
-			Log.d(MedicompActivity.LOG_TAG,
+			Log.d(this.getClass().getCanonicalName(),
 					"activating save: " + plugin.getName());
 		}
 		return result;
@@ -124,15 +137,15 @@ public class PluginManagerMediCompImpl implements PluginManager {
 
 	public boolean deactivatePlugin(Plugin plugin) {
 		boolean result = plugin.onDeactivate(this);
-		Log.d(MedicompActivity.LOG_TAG, "deactivating: " + plugin.getName());
+		Log.d(this.getClass().getCanonicalName(), "deactivating: " + plugin.getName());
 		if (result) {
 			plugin.setActive(false);
-			Log.d(MedicompActivity.LOG_TAG, "activity: " + plugin.isActive());
+			Log.d(this.getClass().getCanonicalName(), "activity: " + plugin.isActive());
 			Editor editor = getPluginStore().edit();
 			editor.putBoolean(plugin.getClass().getCanonicalName(),
 					plugin.isActive());
 			editor.commit();
-			Log.d(MedicompActivity.LOG_TAG,
+			Log.d(this.getClass().getCanonicalName(),
 					"deactivating saved: " + plugin.getName());
 		}
 		return result;
@@ -141,8 +154,12 @@ public class PluginManagerMediCompImpl implements PluginManager {
 	public Set<Plugin> getActivePlugins() {
 		HashSet<Plugin> result = new HashSet<Plugin>();
 		for (Plugin plugin : registeredPlugins.values()) {
-			if (plugin.isActive())
+			Log.d(this.getClass().getCanonicalName(), "plugin name " + plugin.getName());
+			if (plugin.isActive()) {
+				Log.d(this.getClass().getCanonicalName(),
+						"active plugin name " + plugin.getName());
 				result.add(plugin);
+			}
 		}
 		return result;
 	}

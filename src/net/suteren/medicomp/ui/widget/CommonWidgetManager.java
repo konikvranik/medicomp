@@ -6,11 +6,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import net.suteren.medicomp.ui.activity.ListActivity;
-import net.suteren.medicomp.ui.activity.MedicompActivity;
 import net.suteren.medicomp.ui.adapter.AbstractListAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -24,19 +24,25 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 
 	private ListActivity context;
 
+	private int typesCount;
+
 	private class DataSetObserver extends android.database.DataSetObserver {
 
 		@Override
 		public void onChanged() {
-			Log.d(MedicompActivity.LOG_TAG, "onChanged");
+			Log.d(this.getClass().getCanonicalName(), "onChanged");
+			notifyOnChange();
+		}
+
+		private void notifyOnChange() {
 			CommonWidgetManager widgetManager = CommonWidgetManager.this;
 			if (widgetManager.isEmpty()) {
-				Log.d(MedicompActivity.LOG_TAG, "is empty");
+				Log.d(this.getClass().getCanonicalName(), "is empty");
 				widgetManager
 						.registerWidget(new EmptyWidget(context), 0, false);
 			} else {
 				for (int i = 0; i < collection.size(); i++) {
-					Widget w = collection.get(i);
+					Widget w = getItem(i);
 					if (w instanceof EmptyWidget && collection.size() > 1)
 						collection.remove(i);
 				}
@@ -45,8 +51,8 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 
 		@Override
 		public void onInvalidated() {
-			Log.d(MedicompActivity.LOG_TAG, "onInvalidated");
-			onChanged();
+			Log.d(this.getClass().getCanonicalName(), "onInvalidated");
+			notifyOnChange();
 		}
 
 	}
@@ -55,12 +61,14 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 		super(context);
 		collection = new ArrayList<Widget>();
 		this.context = context;
-		loadWidgets();
 		DataSetObserver observer = new DataSetObserver();
 		registerDataSetObserver(observer);
+		loadWidgets();
 	}
 
 	private void loadWidgets() {
+
+		Log.d(this.getClass().getCanonicalName(), "Load widgets start...");
 		SharedPreferences prefs = getWidgetStore();
 
 		Map<Integer, Widget> w = new TreeMap<Integer, Widget>();
@@ -71,51 +79,67 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 			int widgetId = Integer.parseInt(pair[0]);
 			int widgetPos = Integer.parseInt(pair[1]);
 			String widgetClassName = prefs.getString(key, null);
-
+			Log.d(this.getClass().getCanonicalName(), "loadwidgets pahse 0 @"
+					+ widgetPos + "#" + widgetId + ": " + widgetClassName);
 			try {
 				@SuppressWarnings("unchecked")
 				Constructor<Widget> c = (Constructor<Widget>) Class.forName(
 						widgetClassName).getConstructor(Context.class);
 				Widget widget = c.newInstance(context);
 				widget.setId(widgetId);
+				Log.d(this.getClass().getCanonicalName(),
+						"loadwidgets pahse 1 @" + widgetPos + "#"
+								+ widget.getId() + ": " + widget.getName());
 				w.put(widgetPos, widget);
 			} catch (InstantiationException e) {
-				Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (IllegalAccessException e) {
-				Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (ClassNotFoundException e) {
-				Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (ClassCastException e) {
-				Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (SecurityException e) {
-				Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (NoSuchMethodException e) {
-				Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (IllegalArgumentException e) {
-				Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (InvocationTargetException e) {
-				Log.e(MedicompActivity.LOG_TAG, e.getMessage(), e);
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			}
 		}
 		for (Integer i : new TreeSet<Integer>(w.keySet())) {
-			registerWidget(w.get(i), i, false);
+			Widget widget = w.get(i);
+			Log.d(this.getClass().getCanonicalName(), "loadwidgets pahse 2 @"
+					+ i + "#" + widget.getId() + ": " + widget.getName());
+
+			registerWidget(widget, i, false);
 		}
+		Log.d(this.getClass().getCanonicalName(), "Load widgets done...");
 	}
 
 	private boolean registerWidget(Widget widget, Integer position, boolean b) {
+		Log.d(this.getClass().getCanonicalName(), "Registering widget "
+				+ widget.getName() + ": " + widget.getId() + "@" + position);
+		typesCount = Math.max(typesCount, widget.getType());
+		if (widget.getId() < 1)
+			widget.setId(getNewId());
 		boolean result = widget.onRegister(this);
 		if (position == null || position > collection.size())
 			position = collection.size();
 		if (position < 0)
 			position = 0;
-		widget.setId(getNewId());
 		if (result) {
 			collection.add(position, widget);
 			if (b) {
 				saveWidgets();
 			}
-			notifyDataSetChanged();
+			update(b);
 		}
+		Log.d(this.getClass().getCanonicalName(),
+				"Registered widget " + widget.getName() + ": #"
+						+ widget.getId() + "@" + position);
 		return true;
 	}
 
@@ -133,24 +157,29 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 		editor.commit();
 	}
 
-	private int getNewId() {
+	private synchronized int getNewId() {
 		Integer last = 0;
-		TreeSet<Widget> widgets = new TreeSet<Widget>(new Comparator<Widget>() {
-			public int compare(Widget arg0, Widget arg1) {
-				if (arg0 == null)
-					return -1;
-				if (arg1 == null)
-					return 1;
-				return arg1.getId() - arg0.getId();
-			}
-		});
+		int newId = 0;
+		SortedSet<Widget> widgets = new TreeSet<Widget>(
+				new Comparator<Widget>() {
+					public int compare(Widget o1, Widget o2) {
+						if (o1 == null)
+							return -1;
+						if (o2 == null)
+							return 1;
+						return o1.getId() - o2.getId();
+					}
+				});
 		widgets.addAll(collection);
 		for (Widget widgetId : widgets) {
-			if (widgetId.getId() - last > 1)
-				return widgetId.getId() - 1;
+			newId = widgetId.getId() - 1;
+			if (newId > last)
+				break;
 			last = widgetId.getId();
+			newId = last + 1;
 		}
-		return last + 1;
+		Log.d(this.getClass().getCanonicalName(), "New Id: " + newId);
+		return newId;
 	}
 
 	private SharedPreferences getWidgetStore() {
@@ -169,8 +198,7 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 		for (int i = 0; i < collection.size(); i++) {
 			if (collection.get(i).getId() == widgetId) {
 				collection.remove(i);
-				saveWidgets();
-				notifyDataSetInvalidated();
+				update(true);
 				return true;
 			}
 		}
@@ -186,44 +214,53 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 		if (to > collection.size())
 			to = collection.size();
 		collection.add(to, w);
-		saveWidgets();
-		notifyDataSetChanged();
+		update(true);
 		return to;
 	}
 
 	@Override
-	public void update() throws SQLException {
-		// TODO Auto-generated method stub
+	public void update() {
+		Log.d(this.getClass().getCanonicalName(), "update");
+		notifyDataSetChanged();
+		notifyDataSetInvalidated();
 
-	}
+	};
 
-	@Override
-	public Widget getItemById(int id) {
-		for (int i = 0; i < collection.size(); i++) {
-			Widget w = collection.get(i);
-			if (w.getId() == id) {
-				return w;
-			}
-		}
-		return null;
+	public void update(boolean b) {
+		update();
+		if (b)
+			saveWidgets();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = collection.get(position).getView(convertView, parent);
-		view.setClickable(false);
-		view.setLongClickable(false);
-		view.setFocusableInTouchMode(false);
+		Log.d(this.getClass().getCanonicalName(), "get view @" + position);
+		View view = getItem(position).getView(convertView, parent);
 		return view;
 	}
 
 	@Override
 	public int getViewTypeCount() {
-		return collection.size() + 1;
+		Log.d(this.getClass().getCanonicalName(), "getViewTypeCount: "
+				+ (typesCount + 1));
+		return typesCount + 1;
 	}
 
 	@Override
 	public int getItemViewType(int position) {
+		Log.d(this.getClass().getCanonicalName(), "getItemViewType @"
+				+ position + ": " + getItem(position).getType());
 		return getItem(position).getType();
 	}
 
+	@Override
+	public boolean hasStableIds() {
+		return true;
+	}
+
+	public Widget getItem(int position) {
+		Widget item = collection.get(position);
+		Log.d(this.getClass().getCanonicalName(), "getItem @" + position + "#"
+				+ item.getId() + ": " + item.getName());
+		return item;
+	}
 }

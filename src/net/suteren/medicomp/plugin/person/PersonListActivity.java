@@ -63,7 +63,7 @@ public class PersonListActivity extends ListActivity {
 		try {
 			return new PersonListAdapter(this);
 		} catch (SQLException e) {
-			Log.e(LOG_TAG, e.getMessage(), e);
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			return null;
 		}
 	}
@@ -75,7 +75,7 @@ public class PersonListActivity extends ListActivity {
 
 	@Override
 	protected void edit(int id) {
-		Log.d(LOG_TAG, "Edit " + id);
+		Log.d(this.getClass().getCanonicalName(), "Edit " + id);
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(this, PersonProfileActivity.class);
 		intent.putExtra(PERSON_ID_EXTRA, id);
@@ -84,7 +84,7 @@ public class PersonListActivity extends ListActivity {
 
 	@Override
 	protected void delete(int id) {
-		Log.d(LOG_TAG, "delete " + id);
+		Log.d(this.getClass().getCanonicalName(), "delete " + id);
 		// TODO Auto-generated method stub
 
 	}

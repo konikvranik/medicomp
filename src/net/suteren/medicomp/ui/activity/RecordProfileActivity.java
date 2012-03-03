@@ -33,7 +33,7 @@ public class RecordProfileActivity extends ProfileActivity {
 			listView.setAdapter(getAdapter());
 
 		} catch (SQLException e) {
-			Log.e(LOG_TAG, e.getMessage(), e);
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
 
@@ -82,7 +82,7 @@ public class RecordProfileActivity extends ProfileActivity {
 			recordDao.createOrUpdate(record);
 			recordAdapter.saveFields();
 		} catch (Exception e) {
-			Log.e(LOG_TAG, e.getMessage(), e);
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			Builder db = new AlertDialog.Builder(RecordProfileActivity.this);
 			db.setMessage(R.string.personSaveFailed);
 			AlertDialog ad = db.create();
@@ -102,7 +102,7 @@ public class RecordProfileActivity extends ProfileActivity {
 		try {
 			recordDao.delete(record);
 		} catch (SQLException e) {
-			Log.e(LOG_TAG, e.getMessage(), e);
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			Builder db = new AlertDialog.Builder(RecordProfileActivity.this);
 			db.setMessage(R.string.personDeleteFailed);
 			AlertDialog ad = db.create();

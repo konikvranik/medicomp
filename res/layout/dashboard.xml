@@ -7,46 +7,13 @@
 	android:longClickable="true"
 	android:orientation="vertical" >
 
-	<!--
-          include
-		android:id="@+id/textView1"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentRight="true"
-		android:layout_alignParentTop="true"
-		layout="@layout/title" /
-	-->
-
-	<RelativeLayout
+	<include
 		android:id="@+id/relativeLayout1"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true"
-		android:layout_below="@+id/textView1" >
-
-		<ImageButton
-			android:id="@+id/imageButton1"
-			style="@android:style/Widget.ImageWell"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignBottom="@+id/editText1"
-			android:layout_alignParentRight="true"
-			android:layout_alignParentTop="true"
-			android:adjustViewBounds="true"
-			android:scaleType="fitCenter"
-			android:src="@drawable/medicomp" />
-
-		<EditText
-			android:id="@+id/editText1"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true"
-			android:layout_alignParentTop="true"
-			android:layout_toLeftOf="@+id/imageButton1"
-			android:singleLine="true" >
-		</EditText>
-	</RelativeLayout>
+		android:layout_below="@+id/textView1"
+		layout="@layout/smart_input" />
 
 	<ListView
 		android:id="@+id/dashboard"

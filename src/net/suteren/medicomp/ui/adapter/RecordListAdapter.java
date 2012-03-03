@@ -1,7 +1,5 @@
 package net.suteren.medicomp.ui.adapter;
 
-import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
-
 import java.sql.SQLException;
 import java.text.DateFormat;
 
@@ -32,12 +30,13 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 		this.recordListActivity = recordListActivity;
 		recordDao = MediCompDatabaseFactory.getInstance(recordListActivity)
 				.createDao(Record.class);
-		Log.d(LOG_TAG, "REcordListAdapter.............");
+		Log.d(this.getClass().getCanonicalName(),
+				"REcordListAdapter.............");
 		if (person == null)
 			throw new NullPointerException("Person == null!");
 		if (person.getId() < 1)
 			throw new IllegalArgumentException("Person has no valid ID");
-		Log.d(LOG_TAG, "RecordDao: " + recordDao);
+		Log.d(this.getClass().getCanonicalName(), "RecordDao: " + recordDao);
 		this.person = person;
 		update();
 	}
@@ -77,13 +76,18 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 			return;
 		collection = recordDao.queryBuilder().where()
 				.eq(Record.COLUMN_NAME_PERSON, person).query();
-		Log.d(LOG_TAG, "RecordListAdapter: " + collection.size());
+		Log.d(this.getClass().getCanonicalName(), "RecordListAdapter: "
+				+ collection.size());
 
 	}
 
 	@Override
-	public Record getItemById(int id) throws Exception {
-		return recordDao.queryForId(id);
+	public Record getItemById(int id) {
+		try {
+			return recordDao.queryForId(id);
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

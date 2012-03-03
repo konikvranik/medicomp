@@ -32,7 +32,7 @@ public class TemperaturePlugin extends AbstractPlugin {
 
 	@Override
 	public Widget newWidgetInstance(Context context) {
-		return super.newWidgetInstance(context);
+		return new TemperatureWidget(context);
 	}
 
 }

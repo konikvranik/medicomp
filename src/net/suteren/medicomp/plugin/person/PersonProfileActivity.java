@@ -28,7 +28,7 @@ public class PersonProfileActivity extends ProfileActivity {
 			}
 
 		} catch (Exception e) {
-			Log.e(MedicompActivity.LOG_TAG, "Failed: ", e);
+			Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
 		}
 
 	}
@@ -55,7 +55,7 @@ public class PersonProfileActivity extends ProfileActivity {
 		try {
 			personDao.createOrUpdate(person);
 		} catch (SQLException e) {
-			Log.e(LOG_TAG, e.getMessage(), e);
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			Builder db = new AlertDialog.Builder(PersonProfileActivity.this);
 			db.setMessage(R.string.personSaveFailed);
 			AlertDialog ad = db.create();
@@ -76,7 +76,7 @@ public class PersonProfileActivity extends ProfileActivity {
 		try {
 			personDao.delete(person);
 		} catch (SQLException e) {
-			Log.e(LOG_TAG, e.getMessage(), e);
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			Builder db = new AlertDialog.Builder(PersonProfileActivity.this);
 			db.setMessage(R.string.personDeleteFailed);
 			AlertDialog ad = db.create();

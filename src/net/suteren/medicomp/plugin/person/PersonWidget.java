@@ -1,6 +1,5 @@
 package net.suteren.medicomp.plugin.person;
 
-import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.ui.widget.AbstractWidget;
 import net.suteren.medicomp.ui.widget.Widget;
@@ -27,13 +26,10 @@ public class PersonWidget extends AbstractWidget implements Widget {
 		name = (TextView) convertView.findViewById(R.id.textView1);
 		name.setText(getPerson().getName());
 
-		Log.d(LOG_TAG, "Setting name: " + name.getText());
+		Log.d(this.getClass().getCanonicalName(),
+				"Setting name: " + name.getText());
 
 		return convertView;
-	}
-
-	public int getId() {
-		return 1;
 	}
 
 	@Override

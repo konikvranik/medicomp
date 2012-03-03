@@ -9,7 +9,9 @@ import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.ui.activity.MedicompActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -27,9 +29,21 @@ public abstract class AbstractWidget implements Widget {
 	}
 
 	public boolean showPreferencesPane() {
-		Toast.makeText(context, R.string.no_preferences, Toast.LENGTH_SHORT)
-				.show();
-		return false;
+		Class<? extends PreferenceActivity> clazz = getPreferenceActivityClass();
+		if (clazz == null) {
+			Toast.makeText(context, R.string.no_preferences, Toast.LENGTH_SHORT)
+					.show();
+			return false;
+		} else {
+			Intent intent = new Intent(context, clazz);
+			intent.putExtra("preferences", getPreferenceName());
+			context.startActivity(intent);
+			return true;
+		}
+	}
+
+	protected Class<? extends PreferenceActivity> getPreferenceActivityClass() {
+		return null;
 	}
 
 	public void setId(int id) {
@@ -57,8 +71,8 @@ public abstract class AbstractWidget implements Widget {
 	}
 
 	protected SharedPreferences getWidgetPreferences() {
-		return context.getSharedPreferences(this.getClass().getCanonicalName()
-				+ "#" + getId(), Context.MODE_PRIVATE);
+		return context.getSharedPreferences(getPreferenceName(),
+				Context.MODE_PRIVATE);
 	}
 
 	protected Person getPerson() {
@@ -74,7 +88,11 @@ public abstract class AbstractWidget implements Widget {
 		} catch (SQLException e) {
 		}
 
-		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public String getPreferenceName() {
+		return getClass().getCanonicalName() + "#" + getId();
+	}
+
 }

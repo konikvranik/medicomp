@@ -4,7 +4,6 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.ui.activity.MedicompActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -63,8 +62,8 @@ public class SeekBarPreference extends Preference implements
 	@Override
 	protected View onCreateView(ViewGroup parent) {
 
-		Log.d(MedicompActivity.LOG_TAG, "key: " + getKey() + ", instance: "
-				+ this);
+		Log.d(this.getClass().getCanonicalName(), "key: " + getKey()
+				+ ", instance: " + this);
 
 		LayoutInflater layoutInflater = (LayoutInflater) getContext()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -92,7 +91,8 @@ public class SeekBarPreference extends Preference implements
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
 
-		Log.d(MedicompActivity.LOG_TAG, "progress changed: " + getKey());
+		Log.d(this.getClass().getCanonicalName(), "progress changed: "
+				+ getKey());
 
 		if (!callChangeListener(getValueOfProgress(progress))) {
 			seekBar.setProgress(getProgressOfValue(this.oldValue));

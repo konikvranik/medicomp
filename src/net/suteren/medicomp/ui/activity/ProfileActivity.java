@@ -53,7 +53,7 @@ public abstract class ProfileActivity extends MedicompActivity {
 			});
 
 		} catch (Exception e) {
-			Log.e(MedicompActivity.LOG_TAG, "Failed: ", e);
+			Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
 		}
 
 	}

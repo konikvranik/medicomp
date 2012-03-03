@@ -1,7 +1,5 @@
 package net.suteren.medicomp.plugin.temperature;
 
-import static net.suteren.medicomp.ui.activity.MedicompActivity.LOG_TAG;
-
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -20,8 +18,7 @@ import net.suteren.medicomp.ui.widget.AbstractWidget;
 import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +28,9 @@ import android.widget.TextView;
 public class TemperatureWidget extends AbstractWidget implements Widget {
 
 	private TextView temp;
-	private SharedPreferences preferences;
 
 	public TemperatureWidget(Context context) {
 		super(context);
-		preferences = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
 	public View getView(View convertView, ViewGroup parent) {
@@ -45,10 +40,11 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		}
 
 		temp = (TextView) convertView.findViewById(R.id.textView2);
-		Log.d(LOG_TAG,
+		Log.d(this.getClass().getCanonicalName(),
 				"TemperatureWidget Type: "
 						+ (((RelativeLayout) convertView).getId() == R.id.temperatureWidget));
-		Log.d(LOG_TAG, "Person in TemperatureWidget: " + getPerson().getId());
+		Log.d(this.getClass().getCanonicalName(),
+				"Person in TemperatureWidget: " + getPerson().getId());
 		Collection<Record> rs = getPerson().getRecords();
 		Double val = null;
 
@@ -80,41 +76,40 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 				List<DoubleValue> dv = MediCompDatabaseFactory.getInstance()
 						.createDao(DoubleValue.class).queryForAll();
 			} catch (SQLException e) {
-				Log.e(LOG_TAG, e.getMessage(), e);
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			}
 
 		}
 
 		if (val != null) {
 			temp.setText(ff == null ? "--,-" : ff.getValue());
-			double min = preferences.getFloat("lowerTemperatureBound", 35);
-			double high = preferences.getFloat("higherTemperatureBound", 37);
-			double max = preferences.getFloat("upperTemperatureBound", 38);
+			double min = getWidgetPreferences().getFloat(
+					"lowerTemperatureBound", 35);
+			double high = getWidgetPreferences().getFloat(
+					"higherTemperatureBound", 37);
+			double max = getWidgetPreferences().getFloat(
+					"upperTemperatureBound", 38);
 
 			if (val <= min) {
-				temp.setTextColor(preferences.getInt(
+				temp.setTextColor(getWidgetPreferences().getInt(
 						"hypothermiaColor",
 						context.getResources().getColor(
 								R.color.hypothermiaColor)));
 			} else if (val < high) {
-				temp.setTextColor(preferences.getInt(
+				temp.setTextColor(getWidgetPreferences().getInt(
 						"rightTemperatureColor",
 						context.getResources().getColor(
 								R.color.rightTemperatureColor)));
 			} else if (val < max) {
-				temp.setTextColor(preferences.getInt("heatColor", context
-						.getResources().getColor(R.color.heatColor)));
+				temp.setTextColor(getWidgetPreferences().getInt("heatColor",
+						context.getResources().getColor(R.color.heatColor)));
 			} else {
-				temp.setTextColor(preferences.getInt("feverColor", context
-						.getResources().getColor(R.color.feverColor)));
+				temp.setTextColor(getWidgetPreferences().getInt("feverColor",
+						context.getResources().getColor(R.color.feverColor)));
 			}
 
 		}
 		return convertView;
-	}
-
-	public int getId() {
-		return 3;
 	}
 
 	@Override
@@ -124,10 +119,8 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 	}
 
 	@Override
-	public boolean showPreferencesPane() {
-		context.startActivity(new Intent(context,
-				TemperatureWidgetPreferenceActivity.class));
-		return true;
+	protected Class<? extends PreferenceActivity> getPreferenceActivityClass() {
+		return TemperatureWidgetPreferenceActivity.class;
 	}
 
 	public String getName() {

@@ -60,7 +60,7 @@ public class MediCompDatabaseHelper extends SQLiteOpenHelper {
 			createTable(db, DoubleValue.class);
 
 		} catch (SQLException e) {
-			Log.e(MedicompActivity.LOG_TAG, "Failed: ", e);
+			Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
 		}
 
 	}
