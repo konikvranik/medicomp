@@ -13,8 +13,8 @@ public abstract class AbstractPlugin implements Plugin {
 
 	public boolean onRegister(PluginManager pluginManager) {
 		preferences = pluginManager.getPluginPreferences(this);
-		if (pluginManager instanceof PluginManagerMediCompImpl)
-			context = ((PluginManagerMediCompImpl) pluginManager).getContext();
+		if (pluginManager instanceof MediCompPluginManager)
+			context = ((MediCompPluginManager) pluginManager).getContext();
 		return true;
 	}
 
@@ -64,5 +64,9 @@ public abstract class AbstractPlugin implements Plugin {
 
 	protected String getName(int resourceId) {
 		return context.getResources().getString(resourceId);
+	}
+
+	public String getId() {
+		return this.getClass().getCanonicalName();
 	}
 }

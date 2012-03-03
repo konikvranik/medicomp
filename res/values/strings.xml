@@ -21,7 +21,7 @@
 
 	<string name="none">none</string>
 	<string name="last_measured_temperature">Temperature</string>
-	<string name="temperature_graph">Temperature</string>
+	<string name="temperature_graph">Chart</string>
 	<string name="choosePerson">Choose Person</string>
 	<string name="quit">Quit</string>
 	<string name="celsius">°C</string>
@@ -72,6 +72,7 @@
 	<string name="add_widget">Add widget</string>
 	<string name="empty_widget">EMPTY</string>
 	<string name="plugins">Plugins</string>
+	<string name="move_list_item_info">Click on desired position</string>
 	<!-- Color Picker -->
 	<string name="dialog_color_picker">Color Picker</string>
 	<string name="press_color_to_apply">Press on Color to apply</string>

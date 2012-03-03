@@ -12,6 +12,7 @@ import java.util.TreeSet;
 
 import net.suteren.medicomp.ui.activity.ListActivity;
 import net.suteren.medicomp.ui.adapter.AbstractListAdapter;
+import net.suteren.medicomp.ui.adapter.OrderableListAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -20,7 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
-		WidgetManager {
+		WidgetManager, OrderableListAdapter {
 
 	private ListActivity context;
 
@@ -91,6 +92,8 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 						"loadwidgets pahse 1 @" + widgetPos + "#"
 								+ widget.getId() + ": " + widget.getName());
 				w.put(widgetPos, widget);
+			} catch (NoSuchMethodException e) {
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (InstantiationException e) {
 				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (IllegalAccessException e) {
@@ -100,8 +103,6 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 			} catch (ClassCastException e) {
 				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (SecurityException e) {
-				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
-			} catch (NoSuchMethodException e) {
 				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			} catch (IllegalArgumentException e) {
 				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
@@ -205,7 +206,7 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 		return false;
 	}
 
-	public Integer moveWidgetToPosition(int from, int to) {
+	public int move(int from, int to) {
 
 		Widget w = collection.get(from);
 		collection.remove(from);
@@ -263,4 +264,5 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 				+ item.getId() + ": " + item.getName());
 		return item;
 	}
+
 }

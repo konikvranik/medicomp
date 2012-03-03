@@ -12,10 +12,6 @@ public interface Plugin {
 
 	boolean hasActivity();
 
-	boolean isActive();
-
-	void setActive(boolean active);
-
 	boolean onActivate(PluginManager pluginManager);
 
 	boolean onDeactivate(PluginManager pluginManager);
@@ -27,5 +23,7 @@ public interface Plugin {
 	Widget newWidgetInstance(Context context);
 
 	Intent newActivityInstance(Context context);
+
+	String getId();
 
 }

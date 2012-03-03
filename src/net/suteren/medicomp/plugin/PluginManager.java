@@ -25,4 +25,6 @@ public interface PluginManager {
 
 	public Collection<Plugin> getRegisteredPlugins();
 
+	public boolean isActive(Plugin plugin);
+	
 }

@@ -12,8 +12,9 @@ import net.suteren.medicomp.domain.Category;
 import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.ui.widget.AbstractWidget;
-import net.suteren.medicomp.ui.widget.Widget;
+import net.suteren.medicomp.ui.widget.PluginWidget;
 
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
@@ -32,15 +33,20 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-public class ChartWidget extends AbstractWidget implements Widget {
+public class ChartWidget extends AbstractWidget implements PluginWidget {
 
 	private static final String CHART_TEMPERATURE_PERIOD = "chartTemperaturePeriod";
 	private static final String CHART_TEMPERATURE_COLOR = "chartTemperatureColor";
 	private static final int GRAPH_PERIOD = 2;
+	private Plugin plugin;
 
 	public ChartWidget(Context context) {
 		super(context);
+	}
 
+	public ChartWidget(Context context, Plugin plugin) {
+		super(context);
+		this.plugin = plugin;
 	}
 
 	public View getView(View convertView, ViewGroup parent) {
@@ -192,6 +198,14 @@ public class ChartWidget extends AbstractWidget implements Widget {
 
 	public int getType() {
 		return 3;
+	}
+
+	public Plugin getPlugin() {
+		return this.plugin;
+	}
+
+	public void setPlugin(Plugin plugin) {
+		this.plugin = plugin;
 	}
 
 }

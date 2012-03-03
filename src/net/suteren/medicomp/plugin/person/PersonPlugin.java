@@ -32,7 +32,7 @@ public class PersonPlugin extends AbstractPlugin {
 
 	@Override
 	public Widget newWidgetInstance(Context context) {
-		return new PersonWidget(context);
+		return new PersonWidget(context, this);
 	}
 
 	@Override

@@ -1,8 +1,9 @@
 package net.suteren.medicomp.plugin.person;
 
 import net.suteren.medicomp.R;
+import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.ui.widget.AbstractWidget;
-import net.suteren.medicomp.ui.widget.Widget;
+import net.suteren.medicomp.ui.widget.PluginWidget;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -10,12 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class PersonWidget extends AbstractWidget implements Widget {
+public class PersonWidget extends AbstractWidget implements PluginWidget {
 
 	private TextView name;
+	private Plugin plugin;
 
 	public PersonWidget(Context context) {
 		super(context);
+	}
+
+	public PersonWidget(Context context, Plugin plugin) {
+		super(context);
+		this.plugin = plugin;
 	}
 
 	public View getView(View convertView, ViewGroup parent) {
@@ -44,6 +51,14 @@ public class PersonWidget extends AbstractWidget implements Widget {
 
 	public int getType() {
 		return 1;
+	}
+
+	public Plugin getPlugin() {
+		return this.plugin;
+	}
+
+	public void setPlugin(Plugin plugin) {
+		this.plugin = plugin;
 	}
 
 }

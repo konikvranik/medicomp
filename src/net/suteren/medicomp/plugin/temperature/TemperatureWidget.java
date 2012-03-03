@@ -13,9 +13,10 @@ import net.suteren.medicomp.domain.DoubleValue;
 import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.ui.activity.RecordListActivity;
 import net.suteren.medicomp.ui.widget.AbstractWidget;
-import net.suteren.medicomp.ui.widget.Widget;
+import net.suteren.medicomp.ui.widget.PluginWidget;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceActivity;
@@ -25,12 +26,18 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class TemperatureWidget extends AbstractWidget implements Widget {
+public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 
 	private TextView temp;
+	private Plugin plugin;
 
 	public TemperatureWidget(Context context) {
 		super(context);
+	}
+
+	public TemperatureWidget(Context context, Plugin plugin) {
+		super(context);
+		this.plugin = plugin;
 	}
 
 	public View getView(View convertView, ViewGroup parent) {
@@ -131,4 +138,11 @@ public class TemperatureWidget extends AbstractWidget implements Widget {
 		return 2;
 	}
 
+	public Plugin getPlugin() {
+		return this.plugin;
+	}
+
+	public void setPlugin(Plugin plugin) {
+		this.plugin = plugin;
+	}
 }

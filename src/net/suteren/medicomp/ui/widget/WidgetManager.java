@@ -31,5 +31,5 @@ public interface WidgetManager {
 	 *            desired position
 	 * @return real new position
 	 */
-	Integer moveWidgetToPosition(int from, int to);
+	int move(int from, int to);
 }

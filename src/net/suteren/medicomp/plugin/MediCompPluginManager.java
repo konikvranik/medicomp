@@ -12,32 +12,28 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
-public class PluginManagerMediCompImpl implements PluginManager {
+public class MediCompPluginManager implements PluginManager {
 
 	private Context context;
 	private SharedPreferences pluginStore;
 	private Map<String, Plugin> registeredPlugins = new HashMap<String, Plugin>();
 
-	private static PluginManagerMediCompImpl singleton;
-
-	public static PluginManagerMediCompImpl getInstance(Context context) {
-		if (singleton == null) {
-			singleton = new PluginManagerMediCompImpl(context);
-		}
-		return singleton;
-	}
-
-	private PluginManagerMediCompImpl(Context context) {
+	public MediCompPluginManager(Context context) {
 		this.context = context;
 		loadPlugins();
 	}
 
 	private void loadPlugins() {
+		Log.d(this.getClass().getCanonicalName(), "loadPlugins: start");
 		SharedPreferences prefs = getPluginStore();
 
 		Map<String, ?> pluginPrefs = prefs.getAll();
 		for (String className : pluginPrefs.keySet()) {
 			boolean active = prefs.getBoolean(className, true);
+
+			Log.d(this.getClass().getCanonicalName(), "loadPlugins: "
+					+ className + " is " + (active ? "" : "not ") + "active");
+
 			boolean success = false;
 			try {
 				Plugin plugin = (Plugin) Class.forName(className).newInstance();
@@ -63,6 +59,7 @@ public class PluginManagerMediCompImpl implements PluginManager {
 				unregisterPlugin(className);
 			}
 		}
+		Log.d(this.getClass().getCanonicalName(), "loadPlugins: done");
 	}
 
 	private SharedPreferences getPluginStore() {
@@ -84,17 +81,16 @@ public class PluginManagerMediCompImpl implements PluginManager {
 	private void registerPlugin(Plugin plugin, boolean store) {
 		if (store) {
 			Editor editor = getPluginStore().edit();
-			editor.putBoolean(plugin.getClass().getCanonicalName(),
-					plugin.isActive());
+			editor.putBoolean(plugin.getId(), isActive(plugin));
 			editor.commit();
 		}
-		registeredPlugins.put(plugin.getClass().getCanonicalName(), plugin);
+		registeredPlugins.put(plugin.getId(), plugin);
 		plugin.onRegister(this);
 	}
 
 	public boolean unregisterPlugin(Plugin plugin) {
 		boolean result = deactivatePlugin(plugin);
-		unregisterPlugin(plugin.getClass().getCanonicalName());
+		unregisterPlugin(plugin.getId());
 		result = result && plugin.onUnregister(this);
 		return result;
 	}
@@ -111,8 +107,8 @@ public class PluginManagerMediCompImpl implements PluginManager {
 	}
 
 	public SharedPreferences getPluginPreferences(Plugin plugin) {
-		return context.getSharedPreferences(plugin.getClass()
-				.getCanonicalName(), Context.MODE_PRIVATE);
+		return context.getSharedPreferences(plugin.getId(),
+				Context.MODE_PRIVATE);
 	}
 
 	public Context getContext() {
@@ -121,32 +117,40 @@ public class PluginManagerMediCompImpl implements PluginManager {
 
 	public boolean activatePlugin(Plugin plugin) {
 		boolean result = plugin.onActivate(this);
-		Log.d(this.getClass().getCanonicalName(), "activating: " + plugin.getName());
+		Log.d(this.getClass().getCanonicalName(),
+				"activating: " + plugin.getName());
 		if (result) {
-			plugin.setActive(true);
-			Log.d(this.getClass().getCanonicalName(), "activity: " + plugin.isActive());
+			Log.d(this.getClass().getCanonicalName(), "activity: "
+					+ isActive(plugin));
 			Editor editor = getPluginStore().edit();
-			editor.putBoolean(plugin.getClass().getCanonicalName(),
-					plugin.isActive());
+			editor.putBoolean(plugin.getId(), true);
 			editor.commit();
 			Log.d(this.getClass().getCanonicalName(),
-					"activating save: " + plugin.getName());
+					"activatePlugin: stored "
+							+ plugin.getId()
+							+ " => "
+							+ getPluginStore()
+									.getBoolean(plugin.getId(), false));
 		}
 		return result;
 	}
 
 	public boolean deactivatePlugin(Plugin plugin) {
 		boolean result = plugin.onDeactivate(this);
-		Log.d(this.getClass().getCanonicalName(), "deactivating: " + plugin.getName());
+		Log.d(this.getClass().getCanonicalName(),
+				"deactivating: " + plugin.getName());
 		if (result) {
-			plugin.setActive(false);
-			Log.d(this.getClass().getCanonicalName(), "activity: " + plugin.isActive());
+			Log.d(this.getClass().getCanonicalName(), "activity: "
+					+ isActive(plugin));
 			Editor editor = getPluginStore().edit();
-			editor.putBoolean(plugin.getClass().getCanonicalName(),
-					plugin.isActive());
+			editor.putBoolean(plugin.getId(), false);
 			editor.commit();
 			Log.d(this.getClass().getCanonicalName(),
-					"deactivating saved: " + plugin.getName());
+					"deactivatePlugin: stored "
+							+ plugin.getId()
+							+ " => "
+							+ getPluginStore()
+									.getBoolean(plugin.getId(), false));
 		}
 		return result;
 	}
@@ -154,10 +158,11 @@ public class PluginManagerMediCompImpl implements PluginManager {
 	public Set<Plugin> getActivePlugins() {
 		HashSet<Plugin> result = new HashSet<Plugin>();
 		for (Plugin plugin : registeredPlugins.values()) {
-			Log.d(this.getClass().getCanonicalName(), "plugin name " + plugin.getName());
-			if (plugin.isActive()) {
-				Log.d(this.getClass().getCanonicalName(),
-						"active plugin name " + plugin.getName());
+			Log.d(this.getClass().getCanonicalName(),
+					"plugin name " + plugin.getName());
+			if (isActive(plugin)) {
+				Log.d(this.getClass().getCanonicalName(), "active plugin name "
+						+ plugin.getName());
 				result.add(plugin);
 			}
 		}
@@ -166,6 +171,10 @@ public class PluginManagerMediCompImpl implements PluginManager {
 
 	public Collection<Plugin> getRegisteredPlugins() {
 		return registeredPlugins.values();
+	}
+
+	public boolean isActive(Plugin plugin) {
+		return getPluginStore().getBoolean(plugin.getId(), true);
 	}
 
 }

@@ -15,9 +15,9 @@ import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
 import net.suteren.medicomp.domain.WithId;
+import net.suteren.medicomp.plugin.MediCompPluginManager;
 import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.plugin.PluginManager;
-import net.suteren.medicomp.plugin.PluginManagerMediCompImpl;
 import net.suteren.medicomp.plugin.chart.ChartPlugin;
 import net.suteren.medicomp.plugin.person.PersonListActivity;
 import net.suteren.medicomp.plugin.person.PersonPlugin;
@@ -92,7 +92,7 @@ public abstract class MedicompActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		pluginManager = PluginManagerMediCompImpl.getInstance(this);
+		pluginManager = new MediCompPluginManager(this);
 
 		registerCorePlugins(pluginManager);
 
@@ -239,7 +239,6 @@ public abstract class MedicompActivity extends Activity {
 	}
 
 	protected boolean setupPerson() {
-		Person personQuery = new Person();
 		Integer personId = determinePersonId();
 		if (personId == null)
 			return false;

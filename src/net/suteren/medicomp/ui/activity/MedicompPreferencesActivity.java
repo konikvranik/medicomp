@@ -2,7 +2,7 @@ package net.suteren.medicomp.ui.activity;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.plugin.Plugin;
-import net.suteren.medicomp.plugin.PluginManagerMediCompImpl;
+import net.suteren.medicomp.plugin.MediCompPluginManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -18,12 +18,11 @@ public class MedicompPreferencesActivity extends PreferenceActivity {
 
 		addPreferencesFromResource(R.xml.medicomp_preferences);
 		PreferenceScreen pref = (PreferenceScreen) findPreference("plugins");
-		final PluginManagerMediCompImpl pm = PluginManagerMediCompImpl
-				.getInstance(this);
+		final MediCompPluginManager pm =new MediCompPluginManager(this);
 		for (final Plugin plugin : pm.getRegisteredPlugins()) {
 			CheckBoxPreference p = new CheckBoxPreference(this);
 			p.setTitle(plugin.getName());
-			p.setChecked(plugin.isActive());
+			p.setChecked(pm.isActive(plugin));
 			p.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 				public boolean onPreferenceChange(Preference preference,
 						Object obj) {

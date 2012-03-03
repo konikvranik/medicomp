@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.plugin.Plugin;
+import net.suteren.medicomp.ui.adapter.OrderableListAdapter;
 import net.suteren.medicomp.ui.widget.CommonWidgetManager;
 import net.suteren.medicomp.ui.widget.EmptyWidget;
 import net.suteren.medicomp.ui.widget.Widget;
@@ -115,7 +116,7 @@ public class DashboardActivity extends ListActivity {
 	}
 
 	@Override
-	protected ListAdapter getAdapter() {
+	protected OrderableListAdapter getAdapter() {
 		return getWidgetManager();
 	}
 
