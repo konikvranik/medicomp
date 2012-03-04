@@ -60,7 +60,11 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 			if (!first)
 				sb.append(", ");
 			first = false;
-			sb.append(nf.format(f.getValue()));
+			try {
+				sb.append(nf.format(f.getValue()));
+			} catch (IllegalArgumentException e) {
+				sb.append(df.format(f.getValue()));
+			}
 		}
 		valueField.setText(sb.toString());
 		return convertView;

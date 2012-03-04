@@ -1,25 +1,20 @@
 package net.suteren.medicomp.domain;
 
 public enum Unit {
-	CELSIUS("°C", new String[] { "c", "C" }, Quantity.TEMPERATURE), FARENTHEIT(
-			"F", null, Quantity.TEMPERATURE), KELVIN("K", null,
-			Quantity.TEMPERATURE), METER("m", new String[] { "M" },
-			Quantity.LENGTH), CENTIMETER("cm", new String[] { "CM" },
-			Quantity.LENGTH), FEET("ft", new String[] { "FT", "feet", "'" },
-			Quantity.LENGTH), INCH("in", new String[] { "inch", "\"" },
-			Quantity.LENGTH), KILOGRAM("kg", new String[] { "Kg", "KG" },
-			Quantity.MASS);
+	CELSIUS("°C", new String[] { "c", "C" }), FARENHEIT("°F", new String[] {
+			"F", "f" }), KELVIN("K", null), METER("m", new String[] { "M" }), CENTIMETER(
+			"cm", new String[] { "CM" }), FEET("ft", new String[] { "FT",
+			"feet", "'" }), INCH("in", new String[] { "inch", "\"" }), KILOGRAM(
+			"kg", new String[] { "Kg", "KG" });
 
-	private Quantity quantity;
 	private String unit;
 	private String[] alternativeUnits;
 
-	Unit(String unit, String[] alternativeUnits, Quantity quantity) {
-		this.quantity = quantity;
-	}
-
-	public Quantity getQuantity() {
-		return quantity;
+	Unit(String unit, String[] alternativeUnits) {
+		this.unit = unit;
+		if (alternativeUnits == null)
+			alternativeUnits = new String[] {};
+		this.alternativeUnits = alternativeUnits;
 	}
 
 	public String[] getAlternativeUnits() {

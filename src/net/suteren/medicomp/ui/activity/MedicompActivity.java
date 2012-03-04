@@ -4,7 +4,11 @@ import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
@@ -14,6 +18,7 @@ import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.domain.Unit;
 import net.suteren.medicomp.domain.WithId;
 import net.suteren.medicomp.plugin.MediCompPluginManager;
 import net.suteren.medicomp.plugin.Plugin;
@@ -26,6 +31,7 @@ import net.suteren.medicomp.plugin.person.PersonPlugin;
 import net.suteren.medicomp.plugin.person.PersonProfileActivity;
 import net.suteren.medicomp.plugin.temperature.TemperaturePlugin;
 import net.suteren.medicomp.ui.adapter.AbstractListAdapter;
+import net.suteren.medicomp.util.TemperatureFormatter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -85,9 +91,9 @@ public abstract class MedicompActivity extends Activity {
 	protected Dao<Field, Integer> fieldDao;
 	private EditText smartInput;
 	private Type choosedType;
-	private ArrayList<Type> availableTypes;
 	protected NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 	private PluginManager pluginManager;
+	private Map<Type, Object> availableTypes;
 	private static final int TYPE_CHOOSER_DIALOG = 1;
 	public static final String REGISTERED_PLUGINS_PREFS = "registered_plugins";
 
@@ -320,23 +326,15 @@ public abstract class MedicompActivity extends Activity {
 
 	private void processInput() {
 		choosedType = null;
-		availableTypes = new ArrayList<Type>();
-		boolean isNumber = false;
-		Number n = null;
-		try {
-			n = nf.parse(smartInput.getText().toString());
-			isNumber = true;
-		} catch (ParseException e) {
-			Log.e(this.getClass().getCanonicalName(), "Not a number");
-		}
 
-		if (isNumber)
-			availableTypes.add(Type.TEMPERATURE);
+		String value = smartInput.getText().toString();
+
+		determineAvaliableTypes(value);
 
 		if (availableTypes.size() > 1) {
 			showDialog(TYPE_CHOOSER_DIALOG);
 		} else if (availableTypes.size() == 1) {
-			choosedType = availableTypes.get(0);
+			choosedType = availableTypes.keySet().iterator().next();
 		} else {
 			Toast.makeText(MedicompActivity.this,
 					getResources().getString(R.string.noAvailableType),
@@ -345,30 +343,21 @@ public abstract class MedicompActivity extends Activity {
 
 		if (choosedType != null)
 			switch (choosedType) {
-			case TEMPERATURE:
-
+			case DISEASE:
 				try {
-
-					Record r = new Record();
-					r.setPerson(person);
-					r.setTitle("temperature");
-					r.setType(Type.TEMPERATURE);
-					r.setCategory(Category.MEASURE);
-
-					Field<Double> f = new Field<Double>();
-					f.setType(Type.TEMPERATURE);
-					f.setName("temperature");
-					f.setRecord(r);
-
-					recordDao.create(r);
-					f.persist();
-
-					f.setValue(n.doubleValue());
-					fieldDao.update(f);
-
+					addDiseaseRecord(value);
 					listView.invalidateViews();
-
-				} catch (SQLException e) {
+				} catch (Exception e) {
+					Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
+					Toast.makeText(MedicompActivity.this,
+							R.string.failedToAddTemperature, Toast.LENGTH_SHORT);
+				}
+				break;
+			case TEMPERATURE:
+				try {
+					addTemperatureRecord(value);
+					listView.invalidateViews();
+				} catch (Exception e) {
 					Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
 					Toast.makeText(MedicompActivity.this,
 							R.string.failedToAddTemperature, Toast.LENGTH_SHORT);
@@ -393,6 +382,71 @@ public abstract class MedicompActivity extends Activity {
 		}
 	}
 
+	private void determineAvaliableTypes(String input) {
+		availableTypes = new HashMap<Type, Object>();
+
+		try {
+			TemperatureFormatter tf = new TemperatureFormatter(
+					Locale.getDefault());
+			Double temp = tf.parse(input);
+			availableTypes.put(Type.TEMPERATURE, temp);
+		} catch (ParseException e) {
+			// do not add type in case of exception
+		}
+
+		if (input.matches(".*\\w\\w\\w.*"))
+			availableTypes.put(Type.DISEASE, input);
+
+	}
+
+	private void addDiseaseRecord(String value) throws SQLException {
+		Record r = new Record();
+		r.setPerson(person);
+		r.setTitle(value);
+		r.setType(Type.DISEASE);
+		r.setCategory(Category.STATE);
+
+		Field<Date> f = new Field<Date>();
+		f.setType(Type.BEGIN);
+		f.setName("start");
+		f.setRecord(r);
+
+		recordDao.create(r);
+		f.persist();
+	
+		f.setValue(Calendar.getInstance(Locale.getDefault()).getTime());
+		fieldDao.update(f);
+	}
+
+	private void addTemperatureRecord(String input) throws SQLException,
+			ParseException {
+		Record r = new Record();
+		r.setPerson(person);
+		r.setTitle("temperature");
+		r.setType(Type.TEMPERATURE);
+		r.setCategory(Category.MEASURE);
+
+		Field<Double> f = new Field<Double>();
+		f.setType(Type.TEMPERATURE);
+		f.setName("temperature");
+		f.setRecord(r);
+
+		recordDao.create(r);
+		f.persist();
+
+		TemperatureFormatter formatter = new TemperatureFormatter(
+				Locale.getDefault());
+		Double value = formatter.parse(input);
+		Unit unit = formatter.getUnit();
+
+		Log.d(this.getClass().getCanonicalName(), "Input: " + input
+				+ " value: " + value + " unit: " + unit);
+
+		f.setUnit(unit);
+		f.setValue(value);
+		fieldDao.update(f);
+	}
+
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		switch (id) {
@@ -400,16 +454,18 @@ public abstract class MedicompActivity extends Activity {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Pick a color");
 
-			String[] strings = new String[availableTypes.size()];
-			for (int i = 0; i < availableTypes.size(); i++) {
-				strings[i] = availableTypes.get(i).toString();
+			ArrayList<String> strings = new ArrayList<String>();
+
+			for (Type type : availableTypes.keySet()) {
+				strings.add(type.toString());
 			}
 
-			builder.setItems(strings, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {
-					choosedType = Type.values()[item];
-				}
-			});
+			builder.setItems(strings.toArray(new String[] {}),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int item) {
+							choosedType = Type.values()[item];
+						}
+					});
 			dialog = builder.create();
 			break;
 		default:

@@ -21,7 +21,7 @@ import com.j256.ormlite.table.TableUtils;
 
 public class MediCompDatabaseHelper extends SQLiteOpenHelper {
 
-	static final int DB_VERSION = 5;
+	static final int DB_VERSION = 6;
 	static final String DB_NAME = "MEDICOMP";
 	public static final String _ID = "id";
 	public static final String LOG_TABLE_NAME = "logs";
@@ -90,8 +90,11 @@ public class MediCompDatabaseHelper extends SQLiteOpenHelper {
 		try {
 			switch (oldVersion) {
 			case 0:
-
+			case 1:
+			case 2:
+			case 3:
 			case 4:
+			case 5:
 				db.execSQL("alter table FIELDS rename to FIELDS_OLD");
 				createTable(db, Field.class);
 				db.execSQL("INSERT INTO FIELDS ("
