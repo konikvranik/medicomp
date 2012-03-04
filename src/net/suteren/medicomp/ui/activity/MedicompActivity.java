@@ -17,8 +17,10 @@ import net.suteren.medicomp.domain.Type;
 import net.suteren.medicomp.domain.WithId;
 import net.suteren.medicomp.plugin.MediCompPluginManager;
 import net.suteren.medicomp.plugin.Plugin;
+import net.suteren.medicomp.plugin.PluginActivity;
 import net.suteren.medicomp.plugin.PluginManager;
 import net.suteren.medicomp.plugin.chart.ChartPlugin;
+import net.suteren.medicomp.plugin.illness.IllnessPlugin;
 import net.suteren.medicomp.plugin.person.PersonListActivity;
 import net.suteren.medicomp.plugin.person.PersonPlugin;
 import net.suteren.medicomp.plugin.person.PersonProfileActivity;
@@ -33,6 +35,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -80,7 +83,7 @@ public abstract class MedicompActivity extends Activity {
 	protected Dao<Record, Integer> recordDao;
 	@SuppressWarnings("rawtypes")
 	protected Dao<Field, Integer> fieldDao;
-	private EditText inputTextField;
+	private EditText smartInput;
 	private Type choosedType;
 	private ArrayList<Type> availableTypes;
 	protected NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
@@ -95,9 +98,6 @@ public abstract class MedicompActivity extends Activity {
 		pluginManager = new MediCompPluginManager(this);
 
 		registerCorePlugins(pluginManager);
-
-		Log.d(this.getClass().getCanonicalName(), "Activity: "
-				+ this.getClass().getName());
 
 		ApplicationContextHolder.setContext(this);
 		MediCompDatabaseFactory.init(this);
@@ -126,9 +126,10 @@ public abstract class MedicompActivity extends Activity {
 			listView.setFocusable(false);
 		}
 
-		inputTextField = (EditText) getWindow().findViewById(R.id.smart_input);
-		if (inputTextField != null)
-			inputTextField.setOnKeyListener(new OnKeyListener() {
+		smartInput = (EditText) getWindow().findViewById(R.id.smart_input);
+		if (smartInput != null) {
+			smartInput.setRawInputType(Configuration.KEYBOARD_QWERTY);
+			smartInput.setOnKeyListener(new OnKeyListener() {
 
 				public boolean onKey(View v, int keyCode, KeyEvent event) {
 
@@ -143,6 +144,7 @@ public abstract class MedicompActivity extends Activity {
 					return false;
 				}
 			});
+		}
 		ImageButton ib = (ImageButton) getWindow().findViewById(
 				R.id.smart_input_button);
 		if (ib != null)
@@ -158,6 +160,7 @@ public abstract class MedicompActivity extends Activity {
 		pluginManager2.registerPlugin(new PersonPlugin());
 		pluginManager2.registerPlugin(new TemperaturePlugin());
 		pluginManager2.registerPlugin(new ChartPlugin());
+		pluginManager2.registerPlugin(new IllnessPlugin());
 	}
 
 	protected abstract int getContentViewId();
@@ -174,10 +177,12 @@ public abstract class MedicompActivity extends Activity {
 		for (final Plugin plugin : getPluginManager().getActivePlugins()) {
 			if (plugin.hasActivity()) {
 				MenuItem menuItem = modulesMenu.add(plugin.getName());
+				final PluginActivity pluginActivity = plugin
+						.newActivityInstance(MedicompActivity.this);
+				menuItem.setIcon(pluginActivity.getIcon());
 				menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 					public boolean onMenuItemClick(MenuItem item) {
-						startActivity(plugin
-								.newActivityInstance(MedicompActivity.this));
+						startActivity(pluginActivity.newIntent());
 						return true;
 					}
 				});
@@ -226,11 +231,7 @@ public abstract class MedicompActivity extends Activity {
 	protected <T extends WithId> T setupObject(Dao<T, Integer> objectDao, int id) {
 		try {
 
-			Log.d(this.getClass().getCanonicalName(), "Object before: " + id);
 			T object = objectDao.queryForId(id);
-			if (object != null)
-				Log.d(this.getClass().getCanonicalName(), "Object after: "
-						+ object.getId() + ", ");
 			return object;
 		} catch (SQLException e) {
 			Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
@@ -323,17 +324,14 @@ public abstract class MedicompActivity extends Activity {
 		boolean isNumber = false;
 		Number n = null;
 		try {
-			n = nf.parse(inputTextField.getText().toString());
+			n = nf.parse(smartInput.getText().toString());
 			isNumber = true;
 		} catch (ParseException e) {
-			Log.d(this.getClass().getCanonicalName(), "Not a number");
+			Log.e(this.getClass().getCanonicalName(), "Not a number");
 		}
 
 		if (isNumber)
 			availableTypes.add(Type.TEMPERATURE);
-
-		Log.d(this.getClass().getCanonicalName(),
-				"Types: " + availableTypes.size());
 
 		if (availableTypes.size() > 1) {
 			showDialog(TYPE_CHOOSER_DIALOG);
@@ -381,7 +379,7 @@ public abstract class MedicompActivity extends Activity {
 			default:
 				break;
 			}
-		inputTextField.setText("");
+		smartInput.setText("");
 		if (listView != null) {
 			listView.invalidateViews();
 			listView.invalidate();

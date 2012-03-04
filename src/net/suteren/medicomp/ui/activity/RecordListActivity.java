@@ -36,7 +36,6 @@ public class RecordListActivity extends ListActivity {
 		try {
 			return new RecordListAdapter(this, person);
 		} catch (SQLException e) {
-			Log.d(this.getClass().getCanonicalName(), e.getMessage(), e);
 			return null;
 		}
 	}
@@ -48,7 +47,6 @@ public class RecordListActivity extends ListActivity {
 
 	@Override
 	public void edit(int id) {
-		Log.d(this.getClass().getCanonicalName(), "Edit " + id);
 		Intent intent = new Intent(this, RecordProfileActivity.class);
 		intent.putExtra(RECORD_ID_EXTRA, id);
 		this.startActivity(intent);

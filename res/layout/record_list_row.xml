@@ -7,22 +7,12 @@
 	android:paddingTop="14dip" >
 
 	<TextView
-		android:id="@+id/textView3"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentRight="true"
-		android:layout_alignParentTop="true"
-		android:text="Large Text"
-		android:textAppearance="?android:attr/textAppearanceLarge" />
-
-	<TextView
 		android:id="@+id/textView1"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true"
 		android:layout_alignParentTop="true"
-		android:layout_toLeftOf="@+id/textView3"
-		android:text="Small Text"
+		android:text="time"
 		android:textAppearance="?android:attr/textAppearanceSmall" />
 
 	<TextView
@@ -32,7 +22,26 @@
 		android:layout_alignParentLeft="true"
 		android:layout_alignRight="@+id/textView1"
 		android:layout_below="@+id/textView1"
-		android:text="Small Text"
+		android:text="type"
 		android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	<TextView
+		android:id="@+id/unit"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_alignTop="@+id/textView1"
+		android:layout_marginLeft="5dip"
+		android:text="unit"
+		android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<TextView
+		android:id="@+id/textView3"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignTop="@+id/unit"
+		android:layout_toLeftOf="@+id/unit"
+		android:text="value"
+		android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

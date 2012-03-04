@@ -1,6 +1,7 @@
 package net.suteren.medicomp.ui.widget;
 
 import net.suteren.medicomp.domain.WithId;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,6 +14,12 @@ public interface Widget extends WithId {
 	boolean showPreferencesPane();
 
 	String getName();
+
+	String getTitle();
+
+	String getSummary();
+
+	Drawable getIcon();
 
 	boolean onRegister(WidgetManager widgetManager);
 

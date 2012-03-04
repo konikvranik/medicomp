@@ -2,7 +2,7 @@ package net.suteren.medicomp.ui.widget;
 
 import net.suteren.medicomp.R;
 import android.content.Context;
-import android.util.Log;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,7 +14,6 @@ public class EmptyWidget extends AbstractWidget implements Widget {
 
 	public View getView(View convertView, ViewGroup parent) {
 		if (convertView == null || true) {
-			Log.d(this.getClass().getCanonicalName(), "convertView is null");
 			convertView = layoutInflater.inflate(R.layout.empty_widget, parent,
 					false);
 		}
@@ -27,7 +26,6 @@ public class EmptyWidget extends AbstractWidget implements Widget {
 
 	@Override
 	public boolean onRegister(WidgetManager widgetManager) {
-		Log.d(this.getClass().getCanonicalName(), "registering");
 		return super.onRegister(widgetManager);
 	}
 
@@ -39,6 +37,19 @@ public class EmptyWidget extends AbstractWidget implements Widget {
 	public boolean onClick(View view, long position, long id) {
 		view.showContextMenu();
 		return true;
+	}
+
+	public String getTitle() {
+		return context.getResources().getString(R.string.empty_widget);
+	}
+
+	public String getSummary() {
+		return context.getResources().getString(R.string.empty_widget);
+	}
+
+	public Drawable getIcon() {
+		// TODO - add an empty icon
+		return null;
 	}
 
 }

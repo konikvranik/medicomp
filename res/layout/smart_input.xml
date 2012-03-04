@@ -35,7 +35,7 @@
 		android:layout_alignParentTop="true"
 		android:layout_toLeftOf="@+id/smart_input_button"
 		android:hint="@string/smart_input_hint"
-		android:inputType="numberDecimal"
+		android:inputType="number|date|datetime|numberDecimal|numberSigned|text|textAutoComplete|textAutoCorrect|time"
 		android:singleLine="true" >
 	</EditText>
 

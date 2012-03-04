@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.suteren.android.app</groupId>
 	<artifactId>medicomp</artifactId>
-	<version>0.0.18-SNAPSHOT</version>
+	<version>0.0.20-SNAPSHOT</version>
 	<packaging>apk</packaging>
 	<name>MediComp</name>
 
@@ -31,6 +31,45 @@
 			<version>0.7.0</version>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+					<artifactId>android-maven-plugin</artifactId>
+					<version>3.0.2</version>
+					<configuration>
+						<sdk>
+							<platform>4</platform>
+						</sdk>
+						<sign>
+							<debug>false</debug>
+						</sign>
+					</configuration>
+					<extensions>true</extensions>
+					<executions>
+						<execution>
+							<id>update-manifest</id>
+							<goals>
+								<goal>manifest-update</goal>
+							</goals>
+							<configuration>
+								<manifest>
+									<versionName>${project.version}</versionName>
+									<!-- <versionCode>18</versionCode> -->
+									<!-- <versionCodeAutoIncrement>true</versionCodeAutoIncrement> -->
+									<versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>
+									<!-- <sharedUserId>anId</sharedUserId> -->
+									<!-- <debuggable>true|false</debuggable> -->
+								</manifest>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
 	<repositories>
 		<repository>

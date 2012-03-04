@@ -12,7 +12,6 @@ import net.suteren.medicomp.domain.IntegerValue;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.StringValue;
-import net.suteren.medicomp.ui.activity.MedicompActivity;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -22,7 +21,7 @@ import com.j256.ormlite.table.TableUtils;
 
 public class MediCompDatabaseHelper extends SQLiteOpenHelper {
 
-	static final int DB_VERSION = 1;
+	static final int DB_VERSION = 5;
 	static final String DB_NAME = "MEDICOMP";
 	public static final String _ID = "id";
 	public static final String LOG_TABLE_NAME = "logs";
@@ -39,6 +38,7 @@ public class MediCompDatabaseHelper extends SQLiteOpenHelper {
 		super(factory.getContext(), DB_NAME, null, DB_VERSION);
 		dbf = factory;
 		factory.getContext();
+
 	}
 
 	@Override
@@ -77,21 +77,41 @@ public class MediCompDatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
+
 		if (called)
 			return;
 		called = true;
+
 		if (newVersion != DB_VERSION)
 			throw new IllegalArgumentException(
 					"DB version mismatch. Requested " + newVersion
 							+ " but providing " + DB_VERSION);
-		switch (oldVersion) {
-		case 0:
+		db.beginTransaction();
+		try {
+			switch (oldVersion) {
+			case 0:
 
-		case 1:
+			case 4:
+				db.execSQL("alter table FIELDS rename to FIELDS_OLD");
+				createTable(db, Field.class);
+				db.execSQL("INSERT INTO FIELDS ("
+						+ "dateValue_id, doubleValue_id, "
+						+ "integerValue_id, name, "
+						+ "record, stringValue_id, type, id " + ") SELECT "
+						+ "dateValue_id, doubleValue_id, "
+						+ "integerValue_id, name, "
+						+ "record, stringValue_id, type, id "
+						+ "FROM FIELDS_OLD");
+				db.execSQL("drop table FIELDS_OLD");
+			}
 
+			db.setTransactionSuccessful();
+
+		} catch (SQLException e) {
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
+		} finally {
+			db.endTransaction();
 		}
-
 	}
 
 }

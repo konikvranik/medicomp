@@ -6,6 +6,7 @@ import net.suteren.medicomp.ui.widget.AbstractWidget;
 import net.suteren.medicomp.ui.widget.PluginWidget;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +30,12 @@ public class PersonWidget extends AbstractWidget implements PluginWidget {
 		if (convertView == null || true) {
 			convertView = layoutInflater.inflate(R.layout.dashboard_person,
 					parent, false);
+			TextView title = (TextView) convertView
+					.findViewById(R.id.widgetTitle);
+			title.setText(getTitle());
 		}
 		name = (TextView) convertView.findViewById(R.id.textView1);
 		name.setText(getPerson().getName());
-
-		Log.d(this.getClass().getCanonicalName(),
-				"Setting name: " + name.getText());
 
 		return convertView;
 	}
@@ -46,7 +47,7 @@ public class PersonWidget extends AbstractWidget implements PluginWidget {
 	}
 
 	public String getName() {
-		return getName(R.string.person_widget_name);
+		return getString(R.string.person_widget_name);
 	}
 
 	public int getType() {
@@ -59,6 +60,18 @@ public class PersonWidget extends AbstractWidget implements PluginWidget {
 
 	public void setPlugin(Plugin plugin) {
 		this.plugin = plugin;
+	}
+
+	public String getTitle() {
+		return getString(R.string.person_widget_title);
+	}
+
+	public String getSummary() {
+		return getString(R.string.person_widget_summary);
+	}
+
+	public Drawable getIcon() {
+		return getDrawable(R.drawable.ic_menu_ic_menu_patient);
 	}
 
 }

@@ -12,6 +12,8 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListAdapter;
 
 public abstract class AbstractListAdapter<T extends WithId> implements
@@ -36,22 +38,16 @@ public abstract class AbstractListAdapter<T extends WithId> implements
 	public abstract void update() throws SQLException;
 
 	public int getCount() {
-		Log.d(this.getClass().getCanonicalName(),
-				"getCount: " + collection.size());
 		return collection.size();
 	}
 
 	public T getItem(int position) {
 		T item = collection.get(position);
-		Log.d(this.getClass().getCanonicalName(), "getItem @" + position + "#"
-				+ item.getId());
 		return item;
 	}
 
 	public long getItemId(int position) {
 		int id = getItem(position).getId();
-		Log.d(this.getClass().getCanonicalName(), "getItemId @" + position
-				+ "#" + id);
 		return id;
 	}
 
@@ -72,15 +68,11 @@ public abstract class AbstractListAdapter<T extends WithId> implements
 	}
 
 	public void registerDataSetObserver(DataSetObserver observer) {
-		Log.d(this.getClass().getCanonicalName(), "registerDataSetObserver: "
-				+ observer.getClass().getCanonicalName());
 		observers.add(observer);
 
 	}
 
 	public void unregisterDataSetObserver(DataSetObserver observer) {
-		Log.d(this.getClass().getCanonicalName(), "unregisterDataSetObserver: "
-				+ observer.getClass().getCanonicalName());
 		observers.remove(observer);
 	}
 
@@ -93,7 +85,6 @@ public abstract class AbstractListAdapter<T extends WithId> implements
 	}
 
 	public T getItemById(int id) {
-		Log.d(this.getClass().getCanonicalName(), "getItemById #" + id);
 		for (T w : collection)
 			if (id == w.getId())
 				return w;
@@ -102,13 +93,10 @@ public abstract class AbstractListAdapter<T extends WithId> implements
 
 	public int getPosition(T object) throws SQLException {
 		int position = collection.indexOf(object);
-		Log.d(this.getClass().getCanonicalName(),
-				"getPosition #" + object.getId() + ": @" + position);
 		return position;
 	}
 
 	public int getPosition(int id) throws SQLException {
-		Log.d(this.getClass().getCanonicalName(), "getPosition #" + id);
 		for (int i = 0; i < collection.size(); i++) {
 			if (collection.get(i).getId() == id)
 				return i;
@@ -127,6 +115,10 @@ public abstract class AbstractListAdapter<T extends WithId> implements
 		for (DataSetObserver observer : observers) {
 			observer.onInvalidated();
 		}
+	}
+
+	protected View inflateView(int id, ViewGroup parent) {
+		return layoutInflater.inflate(id, parent, false);
 	}
 
 }

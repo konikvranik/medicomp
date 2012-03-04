@@ -2,19 +2,23 @@ package net.suteren.medicomp.plugin;
 
 import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 
 public abstract class AbstractPlugin implements Plugin {
 
 	private boolean active;
 	private SharedPreferences preferences;
 	private Context context;
+	protected Resources resources;
 
 	public boolean onRegister(PluginManager pluginManager) {
 		preferences = pluginManager.getPluginPreferences(this);
-		if (pluginManager instanceof MediCompPluginManager)
+		if (pluginManager instanceof MediCompPluginManager) {
 			context = ((MediCompPluginManager) pluginManager).getContext();
+			resources = context.getResources();
+		}
 		return true;
 	}
 
@@ -46,10 +50,6 @@ public abstract class AbstractPlugin implements Plugin {
 		return context;
 	}
 
-	public Intent newActivityInstance(Context context) {
-		return null;
-	}
-
 	public Widget newWidgetInstance(Context context) {
 		return null;
 	}
@@ -62,8 +62,12 @@ public abstract class AbstractPlugin implements Plugin {
 		return false;
 	}
 
-	protected String getName(int resourceId) {
+	protected String getString(int resourceId) {
 		return context.getResources().getString(resourceId);
+	}
+
+	protected Drawable getDrawable(int resourceId) {
+		return context.getResources().getDrawable(resourceId);
 	}
 
 	public String getId() {

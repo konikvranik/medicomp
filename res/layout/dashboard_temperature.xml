@@ -5,7 +5,7 @@
 	android:layout_height="wrap_content" >
 
 	<TextView
-		android:id="@+id/textView1"
+		android:id="@+id/widgetTitle"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true"
@@ -14,7 +14,7 @@
 		android:textAppearance="?android:attr/textAppearanceSmall" />
 
 	<TextView
-		android:id="@+id/textView2"
+		android:id="@+id/value"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
@@ -24,12 +24,13 @@
 		android:textSize="25pt" />
 
 	<TextView
-		android:id="@+id/textView3"
+		android:id="@+id/unit"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentRight="true"
 		android:layout_alignParentTop="true"
 		android:text="@string/celsius"
+		android:layout_marginLeft="8dip"
 		android:textAppearance="?android:attr/textAppearanceLarge"
 		android:textSize="25pt" />
 

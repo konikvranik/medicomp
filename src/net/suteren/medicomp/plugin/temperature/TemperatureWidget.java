@@ -14,22 +14,22 @@ import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Record;
 import net.suteren.medicomp.domain.Type;
 import net.suteren.medicomp.plugin.Plugin;
-import net.suteren.medicomp.ui.activity.RecordListActivity;
 import net.suteren.medicomp.ui.widget.AbstractWidget;
 import net.suteren.medicomp.ui.widget.PluginWidget;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 
 	private TextView temp;
 	private Plugin plugin;
+	private TextView unit;
 
 	public TemperatureWidget(Context context) {
 		super(context);
@@ -44,14 +44,13 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 		if (convertView == null || true) {
 			convertView = layoutInflater.inflate(
 					R.layout.dashboard_temperature, parent, false);
+			TextView title = (TextView) convertView
+					.findViewById(R.id.widgetTitle);
+			title.setText(getTitle());
 		}
 
-		temp = (TextView) convertView.findViewById(R.id.textView2);
-		Log.d(this.getClass().getCanonicalName(),
-				"TemperatureWidget Type: "
-						+ (((RelativeLayout) convertView).getId() == R.id.temperatureWidget));
-		Log.d(this.getClass().getCanonicalName(),
-				"Person in TemperatureWidget: " + getPerson().getId());
+		temp = (TextView) convertView.findViewById(R.id.value);
+		unit = (TextView) convertView.findViewById(R.id.unit);
 		Collection<Record> rs = getPerson().getRecords();
 		Double val = null;
 
@@ -76,6 +75,8 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 				if (f.getType() == Type.TEMPERATURE) {
 					ff = new FieldFormatter(f);
 					val = (Double) f.getValue();
+					unit.setText(f.getUnit() == null ? "" : f.getUnit()
+							.getUnit());
 					break;
 				}
 			}
@@ -116,12 +117,13 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 			}
 
 		}
+
 		return convertView;
 	}
 
 	@Override
 	public boolean onClick(View view, long position, long id) {
-		context.startActivity(new Intent(context, RecordListActivity.class));
+		context.startActivity(new Intent(context, TemperatureListActivity.class));
 		return true;
 	}
 
@@ -131,7 +133,7 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 	}
 
 	public String getName() {
-		return getName(R.string.temperature_widget_name);
+		return getString(R.string.temperature_widget_name);
 	}
 
 	public int getType() {
@@ -145,4 +147,17 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 	public void setPlugin(Plugin plugin) {
 		this.plugin = plugin;
 	}
+
+	public String getTitle() {
+		return getString(R.string.temperature_widget_title);
+	}
+
+	public String getSummary() {
+		return getString(R.string.temperature_widget_summary);
+	}
+
+	public Drawable getIcon() {
+		return getDrawable(R.drawable.ic_menu_ic_menu_thermomether);
+	}
+
 }

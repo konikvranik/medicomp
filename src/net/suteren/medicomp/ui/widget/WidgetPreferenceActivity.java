@@ -11,7 +11,6 @@ public abstract class WidgetPreferenceActivity extends PreferenceActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		String prefKey = getIntent().getStringExtra("preferences");
-		Log.d(this.getClass().getCanonicalName(), "preferences: " + prefKey);
 		PreferenceManager prefMgr = getPreferenceManager();
 		prefMgr.setSharedPreferencesName(prefKey);
 		prefMgr.setSharedPreferencesMode(MODE_PRIVATE);

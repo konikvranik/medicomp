@@ -21,7 +21,6 @@ public abstract class ListActivity extends MedicompActivity {
 			AdapterView.OnItemClickListener {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			Log.d(this.getClass().getCanonicalName(), "list item click " + id);
 			ListActivity.this.onItemClick(view, position, (int) id);
 		}
 	}

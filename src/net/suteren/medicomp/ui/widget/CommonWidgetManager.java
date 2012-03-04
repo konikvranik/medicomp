@@ -31,14 +31,12 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 
 		@Override
 		public void onChanged() {
-			Log.d(this.getClass().getCanonicalName(), "onChanged");
 			notifyOnChange();
 		}
 
 		private void notifyOnChange() {
 			CommonWidgetManager widgetManager = CommonWidgetManager.this;
 			if (widgetManager.isEmpty()) {
-				Log.d(this.getClass().getCanonicalName(), "is empty");
 				widgetManager
 						.registerWidget(new EmptyWidget(context), 0, false);
 			} else {
@@ -52,7 +50,6 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 
 		@Override
 		public void onInvalidated() {
-			Log.d(this.getClass().getCanonicalName(), "onInvalidated");
 			notifyOnChange();
 		}
 
@@ -69,7 +66,6 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 
 	private void loadWidgets() {
 
-		Log.d(this.getClass().getCanonicalName(), "Load widgets start...");
 		SharedPreferences prefs = getWidgetStore();
 
 		Map<Integer, Widget> w = new TreeMap<Integer, Widget>();
@@ -80,17 +76,12 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 			int widgetId = Integer.parseInt(pair[0]);
 			int widgetPos = Integer.parseInt(pair[1]);
 			String widgetClassName = prefs.getString(key, null);
-			Log.d(this.getClass().getCanonicalName(), "loadwidgets pahse 0 @"
-					+ widgetPos + "#" + widgetId + ": " + widgetClassName);
 			try {
 				@SuppressWarnings("unchecked")
 				Constructor<Widget> c = (Constructor<Widget>) Class.forName(
 						widgetClassName).getConstructor(Context.class);
 				Widget widget = c.newInstance(context);
 				widget.setId(widgetId);
-				Log.d(this.getClass().getCanonicalName(),
-						"loadwidgets pahse 1 @" + widgetPos + "#"
-								+ widget.getId() + ": " + widget.getName());
 				w.put(widgetPos, widget);
 			} catch (NoSuchMethodException e) {
 				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
@@ -112,17 +103,12 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 		}
 		for (Integer i : new TreeSet<Integer>(w.keySet())) {
 			Widget widget = w.get(i);
-			Log.d(this.getClass().getCanonicalName(), "loadwidgets pahse 2 @"
-					+ i + "#" + widget.getId() + ": " + widget.getName());
 
 			registerWidget(widget, i, false);
 		}
-		Log.d(this.getClass().getCanonicalName(), "Load widgets done...");
 	}
 
 	private boolean registerWidget(Widget widget, Integer position, boolean b) {
-		Log.d(this.getClass().getCanonicalName(), "Registering widget "
-				+ widget.getName() + ": " + widget.getId() + "@" + position);
 		typesCount = Math.max(typesCount, widget.getType());
 		if (widget.getId() < 1)
 			widget.setId(getNewId());
@@ -138,9 +124,6 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 			}
 			update(b);
 		}
-		Log.d(this.getClass().getCanonicalName(),
-				"Registered widget " + widget.getName() + ": #"
-						+ widget.getId() + "@" + position);
 		return true;
 	}
 
@@ -179,7 +162,6 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 			last = widgetId.getId();
 			newId = last + 1;
 		}
-		Log.d(this.getClass().getCanonicalName(), "New Id: " + newId);
 		return newId;
 	}
 
@@ -221,7 +203,6 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 
 	@Override
 	public void update() {
-		Log.d(this.getClass().getCanonicalName(), "update");
 		notifyDataSetChanged();
 		notifyDataSetInvalidated();
 
@@ -234,22 +215,17 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Log.d(this.getClass().getCanonicalName(), "get view @" + position);
 		View view = getItem(position).getView(convertView, parent);
 		return view;
 	}
 
 	@Override
 	public int getViewTypeCount() {
-		Log.d(this.getClass().getCanonicalName(), "getViewTypeCount: "
-				+ (typesCount + 1));
 		return typesCount + 1;
 	}
 
 	@Override
 	public int getItemViewType(int position) {
-		Log.d(this.getClass().getCanonicalName(), "getItemViewType @"
-				+ position + ": " + getItem(position).getType());
 		return getItem(position).getType();
 	}
 
@@ -260,8 +236,6 @@ public class CommonWidgetManager extends AbstractListAdapter<Widget> implements
 
 	public Widget getItem(int position) {
 		Widget item = collection.get(position);
-		Log.d(this.getClass().getCanonicalName(), "getItem @" + position + "#"
-				+ item.getId() + ": " + item.getName());
 		return item;
 	}
 

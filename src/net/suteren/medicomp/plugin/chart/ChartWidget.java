@@ -27,11 +27,13 @@ import org.achartengine.renderer.XYSeriesRenderer;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class ChartWidget extends AbstractWidget implements PluginWidget {
 
@@ -51,15 +53,13 @@ public class ChartWidget extends AbstractWidget implements PluginWidget {
 
 	public View getView(View convertView, ViewGroup parent) {
 
-		if (convertView == null || true)
+		if (convertView == null || true) {
 			convertView = layoutInflater.inflate(
 					R.layout.dashboard_temperature_graph, parent, false);
-
-		Log.d(this.getClass().getCanonicalName(),
-				"TemperatureGraph Type: "
-						+ (((RelativeLayout) convertView).getId() == R.id.temperatureGraphWidget));
-		Log.d(this.getClass().getCanonicalName(),
-				"Person in TemperatureGraphWidget: " + getPerson().getId());
+			TextView title = (TextView) convertView
+					.findViewById(R.id.widgetTitle);
+			title.setText(getTitle());
+		}
 
 		Collection<Record> rs = getRecords();
 		if (rs != null && rs.size() > 1) {
@@ -193,7 +193,7 @@ public class ChartWidget extends AbstractWidget implements PluginWidget {
 	}
 
 	public String getName() {
-		return getName(R.string.chart_widget_name);
+		return getString(R.string.chart_widget_name);
 	}
 
 	public int getType() {
@@ -206,6 +206,18 @@ public class ChartWidget extends AbstractWidget implements PluginWidget {
 
 	public void setPlugin(Plugin plugin) {
 		this.plugin = plugin;
+	}
+
+	public String getTitle() {
+		return getString(R.string.chart_widget_title);
+	}
+
+	public String getSummary() {
+		return getString(R.string.chart_widget_summary);
+	}
+
+	public Drawable getIcon() {
+		return getDrawable(R.drawable.ic_menu_ic_menu_cardiograph);
 	}
 
 }

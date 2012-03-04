@@ -18,9 +18,9 @@ import com.j256.ormlite.dao.Dao;
 
 public class RecordListAdapter extends AbstractListAdapter<Record> {
 
-	private Dao<Record, Integer> recordDao;
+	protected Dao<Record, Integer> recordDao;
 
-	private Person person;
+	protected Person person;
 
 	RecordListActivity recordListActivity;
 
@@ -30,21 +30,17 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 		this.recordListActivity = recordListActivity;
 		recordDao = MediCompDatabaseFactory.getInstance(recordListActivity)
 				.createDao(Record.class);
-		Log.d(this.getClass().getCanonicalName(),
-				"REcordListAdapter.............");
 		if (person == null)
 			throw new NullPointerException("Person == null!");
 		if (person.getId() < 1)
 			throw new IllegalArgumentException("Person has no valid ID");
-		Log.d(this.getClass().getCanonicalName(), "RecordDao: " + recordDao);
 		this.person = person;
 		update();
 	}
 
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = layoutInflater.inflate(R.layout.record_list_row,
-					parent, false);
+			convertView = inflateView(R.layout.record_list_row, parent);
 		}
 		DateFormat df = android.text.format.DateFormat.getDateFormat(context);
 		DateFormat tf = android.text.format.DateFormat.getTimeFormat(context);
@@ -76,8 +72,6 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 			return;
 		collection = recordDao.queryBuilder().where()
 				.eq(Record.COLUMN_NAME_PERSON, person).query();
-		Log.d(this.getClass().getCanonicalName(), "RecordListAdapter: "
-				+ collection.size());
 
 	}
 

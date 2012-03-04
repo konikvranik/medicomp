@@ -11,6 +11,7 @@ import net.suteren.medicomp.ui.activity.MedicompActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,9 +59,14 @@ public abstract class AbstractWidget implements Widget {
 		return false;
 	}
 
-	protected String getName(int resourceId) {
+	protected String getString(int resourceId) {
 		return context.getResources().getString(resourceId);
 	}
+	
+	protected Drawable getDrawable(int resourceId) {
+		return context.getResources().getDrawable(resourceId);
+	}
+
 
 	public boolean onRegister(WidgetManager widgetManager) {
 		return true;

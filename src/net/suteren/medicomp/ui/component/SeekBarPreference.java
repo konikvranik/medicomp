@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,7 @@ public class SeekBarPreference extends Preference implements
 	private NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale
 			.getDefault());
 	private int order = 0;
+	private SeekBar bar;
 
 	public SeekBarPreference(Context context) {
 		super(context);
@@ -73,7 +73,7 @@ public class SeekBarPreference extends Preference implements
 		view = (TextView) layout.findViewById(R.id.summary);
 		view.setText(getSummary());
 
-		SeekBar bar = (SeekBar) layout.findViewById(R.id.bar);
+		bar = (SeekBar) layout.findViewById(R.id.bar);
 		bar.setMax(Math.round((maximum - minimum) / interval));
 		bar.setProgress(getProgressOfValue(this.oldValue));
 		bar.setOnSeekBarChangeListener(this);
@@ -87,9 +87,6 @@ public class SeekBarPreference extends Preference implements
 
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
-
-		Log.d(this.getClass().getCanonicalName(), "progress changed: "
-				+ getKey());
 
 		if (!callChangeListener(getValueOfProgress(progress))) {
 			seekBar.setProgress(getProgressOfValue(this.oldValue));
@@ -130,6 +127,7 @@ public class SeekBarPreference extends Preference implements
 			persistFloat(temp);
 		}
 		this.oldValue = temp;
+		bar.setProgress(getProgressOfValue(temp));
 	}
 
 	private float validateValue(float value) {

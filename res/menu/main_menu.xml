@@ -2,12 +2,12 @@
 
 	<item
 		android:id="@+id/choosePerson"
-		android:icon="@android:drawable/ic_menu_edit"
+		android:icon="@drawable/ic_menu_ic_menu_patient"
 		android:title="@string/choosePerson">
 	</item>
 	<item
 		android:id="@+id/quit"
-		android:icon="@android:drawable/ic_menu_revert"
+		android:icon="@drawable/ic_menu_exit"
 		android:title="@string/quit">
 	</item>
 	<item
@@ -27,7 +27,7 @@
 	</item>
 	<item
 		android:id="@+id/modules"
-		android:icon="@android:drawable/ic_menu_directions"
+		android:icon="@drawable/ic_menu_plugins"
 		android:title="@string/modules_menu">
 		<menu>
 		</menu>

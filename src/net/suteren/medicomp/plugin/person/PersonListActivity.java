@@ -13,7 +13,6 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class PersonListActivity extends ListActivity {
@@ -75,8 +74,6 @@ public class PersonListActivity extends ListActivity {
 
 	@Override
 	protected void edit(int id) {
-		Log.d(this.getClass().getCanonicalName(), "Edit " + id);
-		// TODO Auto-generated method stub
 		Intent intent = new Intent(this, PersonProfileActivity.class);
 		intent.putExtra(PERSON_ID_EXTRA, id);
 		this.startActivity(intent);

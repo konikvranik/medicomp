@@ -16,6 +16,8 @@ public class Field<T> {
 
 	private static final String COLUMN_NAME_TYPE = "type";
 
+	private static final String COLUMN_NAME_UNIT = "unit";
+
 	private static final String COLUMN_NAME_RECORD = "record";
 
 	private static final String _ID = "id";
@@ -47,6 +49,9 @@ public class Field<T> {
 
 	@DatabaseField(canBeNull = false, columnName = COLUMN_NAME_TYPE)
 	private Type type;
+
+	@DatabaseField(canBeNull = true, columnName = COLUMN_NAME_UNIT)
+	private Unit unit;
 
 	@DatabaseField(canBeNull = false, columnName = COLUMN_NAME_RECORD, foreign = true)
 	private Record record;
@@ -138,6 +143,14 @@ public class Field<T> {
 
 	public void setRecord(Record record) {
 		this.record = record;
+	}
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	}
 
 	protected DateValue getDateValue() {

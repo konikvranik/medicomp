@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="0018" android:versionName="0.0.18-SNAPSHOT" package="net.suteren.medicomp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="0019" android:versionName="0.0.19-SNAPSHOT" package="net.suteren.medicomp">
 
 	<uses-sdk android:minSdkVersion="4"/>
 
@@ -26,6 +26,14 @@
 		</activity>
 		<activity android:name=".plugin.temperature.TemperatureWidgetPreferenceActivity"/>
 		<activity android:name=".ui.activity.MedicompPreferencesActivity"/>
+	
+		<activity android:name=".plugin.temperature.TemperatureListActivity">
+		</activity>
+		<activity android:name=".plugin.illness.IllnessListActivity">
+		</activity>
+		<activity android:name=".plugin.illness.IllnessWidgetPreferenceActivity">
+		</activity>
+	
 	</application>
 
 </manifest>

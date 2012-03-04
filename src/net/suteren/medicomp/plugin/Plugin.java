@@ -3,10 +3,17 @@ package net.suteren.medicomp.plugin;
 import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 
 public interface Plugin {
 
 	String getName();
+
+	String getTitle();
+
+	String getSummary();
+
+	Drawable getIcon();
 
 	boolean hasWidget();
 
@@ -22,7 +29,7 @@ public interface Plugin {
 
 	Widget newWidgetInstance(Context context);
 
-	Intent newActivityInstance(Context context);
+	PluginActivity newActivityInstance(Context context);
 
 	String getId();
 

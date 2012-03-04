@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class DashboardActivity extends ListActivity {
@@ -40,7 +39,7 @@ public class DashboardActivity extends ListActivity {
 			if (widgetManager.isEmpty())
 				widgetManager.registerWidget(new EmptyWidget(this), 0);
 		} catch (SQLException e) {
-			Log.d(this.getClass().getCanonicalName(), e.getMessage(), e);
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 		}
 	}
 
@@ -58,11 +57,6 @@ public class DashboardActivity extends ListActivity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			final ContextMenuInfo menuInfo) {
 
-		Log.d(this.getClass().getCanonicalName(),
-				"Creating dashboart context menu @"
-						+ ((AdapterContextMenuInfo) menuInfo).position + "#"
-						+ ((AdapterContextMenuInfo) menuInfo).id);
-
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.dashboard_contextmenu, menu);
 		SubMenu subMenu = menu.findItem(R.id.add_widget).getSubMenu();
@@ -70,11 +64,8 @@ public class DashboardActivity extends ListActivity {
 		for (Plugin plugin : getPluginManager().getActivePlugins()) {
 			if (plugin.hasWidget()) {
 				final Widget widget = plugin.newWidgetInstance(this);
-				Log.d(this.getClass().getCanonicalName(),
-						"plugin: " + plugin.getName());
-				Log.d(this.getClass().getCanonicalName(),
-						"widget: " + widget.getName() + ", " + widget.getId());
 				MenuItem item = subMenu.add(widget.getName());
+				item.setIcon(widget.getIcon());
 				item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 					public boolean onMenuItemClick(MenuItem menuitem) {
 						getWidgetManager().registerWidget(widget,
@@ -88,23 +79,15 @@ public class DashboardActivity extends ListActivity {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		Log.d(this.getClass().getCanonicalName(), "onContextItemSelected #"
-				+ item.getItemId() + ": " + item.getTitle());
 
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 				.getMenuInfo();
-
-		Log.d(this.getClass().getCanonicalName(),
-				"onContextItemSelected info: #" + info.id + "@" + info.position);
 
 		switch (item.getItemId()) {
 		case R.id.preferences:
 			return getWidgetManager().getItem((int) info.position)
 					.showPreferencesPane();
 		case R.id.remove:
-			Log.d(this.getClass().getCanonicalName(), "Removing widget "
-					+ getWidgetManager().getItemById((int) info.id).getName()
-					+ ", #" + info.id + "@" + info.position);
 			return getWidgetManager().unRegisterWidget((int) info.id);
 		default:
 			return super.onContextItemSelected(item);
@@ -128,8 +111,6 @@ public class DashboardActivity extends ListActivity {
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		Log.d(this.getClass().getCanonicalName(),
-				"New DashboardActivity intent");
 		super.onNewIntent(intent);
 		registerForContextMenu(listView);
 	}
