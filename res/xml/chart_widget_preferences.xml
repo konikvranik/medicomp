@@ -18,6 +18,7 @@
 		<net.suteren.medicomp.ui.component.SeekBarPreference
 			android:key="chartTemperaturePeriod"
 			android:defaultValue="2"
+			medicomp:minText="@string/all"
 			medicomp:minimum="0"
 			medicomp:maximum="10"
 			medicomp:interval="1"

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
@@ -42,6 +43,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -50,6 +52,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.Window;
@@ -62,6 +65,71 @@ import android.widget.Toast;
 import com.j256.ormlite.dao.Dao;
 
 public abstract class MedicompActivity extends Activity {
+
+	public class AvailableTypeListAdapter implements ListAdapter {
+
+		Set<DataSetObserver> observers;
+
+		public void registerDataSetObserver(DataSetObserver datasetobserver) {
+			observers.add(datasetobserver);
+		}
+
+		public void unregisterDataSetObserver(DataSetObserver datasetobserver) {
+			observers.remove(datasetobserver);
+
+		}
+
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public Object getItem(int i) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public long getItemId(int i) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public boolean hasStableIds() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public View getView(int i, View view, ViewGroup viewgroup) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public int getItemViewType(int i) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public int getViewTypeCount() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public boolean isEmpty() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public boolean areAllItemsEnabled() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public boolean isEnabled(int i) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+	}
 
 	private final class ChangeReceiver extends BroadcastReceiver {
 
@@ -94,6 +162,8 @@ public abstract class MedicompActivity extends Activity {
 	protected NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 	private PluginManager pluginManager;
 	private Map<Type, Object> availableTypes;
+	protected String smartInputValue;
+	private ListAdapter availableTypeListAdapter;
 	private static final int TYPE_CHOOSER_DIALOG = 1;
 	public static final String REGISTERED_PLUGINS_PREFS = "registered_plugins";
 
@@ -327,20 +397,40 @@ public abstract class MedicompActivity extends Activity {
 	private void processInput() {
 		choosedType = null;
 
-		String value = smartInput.getText().toString();
+		smartInputValue = smartInput.getText().toString();
 
-		determineAvaliableTypes(value);
+		determineAvaliableTypes(smartInputValue);
 
 		if (availableTypes.size() > 1) {
+			Log.d(this.getClass().getCanonicalName(), "Showing dialog: "
+					+ TYPE_CHOOSER_DIALOG);
 			showDialog(TYPE_CHOOSER_DIALOG);
+			Log.d(this.getClass().getCanonicalName(), "Dialog "
+					+ TYPE_CHOOSER_DIALOG + " done");
 		} else if (availableTypes.size() == 1) {
 			choosedType = availableTypes.keySet().iterator().next();
+			processChoosedType(smartInputValue);
 		} else {
 			Toast.makeText(MedicompActivity.this,
 					getResources().getString(R.string.noAvailableType),
 					Toast.LENGTH_SHORT).show();
 		}
 
+		smartInput.setText("");
+		if (listView != null) {
+			listView.invalidateViews();
+			listView.invalidate();
+			listView.forceLayout();
+			try {
+				((AbstractListAdapter<? extends WithId>) listView.getAdapter())
+						.update();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+	private void processChoosedType(String value) {
 		if (choosedType != null)
 			switch (choosedType) {
 			case DISEASE:
@@ -368,18 +458,6 @@ public abstract class MedicompActivity extends Activity {
 			default:
 				break;
 			}
-		smartInput.setText("");
-		if (listView != null) {
-			listView.invalidateViews();
-			listView.invalidate();
-			listView.forceLayout();
-			try {
-				((AbstractListAdapter<? extends WithId>) listView.getAdapter())
-						.update();
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
-		}
 	}
 
 	private void determineAvaliableTypes(String input) {
@@ -413,7 +491,7 @@ public abstract class MedicompActivity extends Activity {
 
 		recordDao.create(r);
 		f.persist();
-	
+
 		f.setValue(Calendar.getInstance(Locale.getDefault()).getTime());
 		fieldDao.update(f);
 	}
@@ -448,7 +526,10 @@ public abstract class MedicompActivity extends Activity {
 	}
 
 	@Override
-	protected void onPrepareDialog(int id, Dialog dialog) {
+	protected Dialog onCreateDialog(final int id) {
+
+		Log.d(this.getClass().getCanonicalName(), "Creating dialog: " + id);
+
 		switch (id) {
 		case TYPE_CHOOSER_DIALOG:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -460,14 +541,39 @@ public abstract class MedicompActivity extends Activity {
 				strings.add(type.toString());
 			}
 
+			builder.setCancelable(true);
+
+			availableTypeListAdapter = new AvailableTypeListAdapter();
+			builder.setAdapter(availableTypeListAdapter,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialoginterface,
+								int i) {
+							// TODO Auto-generated method stub
+
+						}
+					});
+
 			builder.setItems(strings.toArray(new String[] {}),
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int item) {
 							choosedType = Type.values()[item];
+							processChoosedType(smartInputValue);
+							removeDialog(id);
 						}
 					});
-			dialog = builder.create();
-			break;
+			return builder.create();
+		default:
+			return super.onCreateDialog(id);
+		}
+	}
+
+	@Override
+	protected void onPrepareDialog(final int id, Dialog dialog) {
+
+		Log.d(this.getClass().getCanonicalName(), "Preparing dialog: " + id);
+
+		switch (id) {
+		case TYPE_CHOOSER_DIALOG:
 		default:
 			super.onPrepareDialog(id, dialog);
 		}

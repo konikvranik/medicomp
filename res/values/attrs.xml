@@ -4,6 +4,8 @@
 	<declare-styleable name="SeekBarPreferenceAttrs">
 		<attr name="maximum" format="float" />
 		<attr name="minimum" format="float" />
+		<attr name="maxText" format="string" />
+		<attr name="minText" format="string" />
 		<attr name="interval" format="float" />
 	</declare-styleable>
 

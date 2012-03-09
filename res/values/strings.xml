@@ -104,6 +104,7 @@
 	<string name="illness_widget_name">Illness</string>
 	<string name="illness_widget_title">Illness</string>
 	<string name="illness_widget_summary">Summary of illnesses</string>
+	<string name="all">All</string>
 	<!-- Color Picker -->
 	<string name="dialog_color_picker">Color Picker</string>
 	<string name="press_color_to_apply">Press on Color to apply</string>

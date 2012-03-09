@@ -31,6 +31,9 @@ public class SeekBarPreference extends Preference implements
 	private int order = 0;
 	private SeekBar bar;
 
+	private String minText = null;
+	private String maxText = null;
+
 	public SeekBarPreference(Context context) {
 		super(context);
 	}
@@ -57,6 +60,10 @@ public class SeekBarPreference extends Preference implements
 				"minimum", minimum);
 		order = attrs.getAttributeIntValue(
 				"http://schemas.android.com/apk/res/android", "order", order);
+		minText = attrs.getAttributeValue(
+				"http://schemas.android.com/apk/res/android", "minimumText");
+		maxText = attrs.getAttributeValue(
+				"http://schemas.android.com/apk/res/android", "maximumText");
 	}
 
 	@Override
@@ -81,6 +88,8 @@ public class SeekBarPreference extends Preference implements
 		this.monitorBox = (TextView) layout.findViewById(R.id.value);
 		this.monitorBox.setText(numberFormat.format(getValueOfProgress(bar
 				.getProgress())));
+
+		bar.setProgress(getProgressOfValue(this.oldValue));
 
 		return layout;
 	}
@@ -127,7 +136,6 @@ public class SeekBarPreference extends Preference implements
 			persistFloat(temp);
 		}
 		this.oldValue = temp;
-		bar.setProgress(getProgressOfValue(temp));
 	}
 
 	private float validateValue(float value) {
@@ -145,7 +153,13 @@ public class SeekBarPreference extends Preference implements
 	private void updatePreference(float oldValue2) {
 
 		SharedPreferences.Editor editor = getEditor();
-		editor.putFloat(getKey(), oldValue2);
+		if (minText != null && oldValue2 <= minimum)
+			editor.putString(getKey(), minText);
+		else if (minText != null && oldValue2 <= minimum)
+			editor.putString(getKey(), maxText);
+		else
+			editor.putFloat(getKey(), oldValue2);
+
 		editor.commit();
 	}
 
