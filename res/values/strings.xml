@@ -104,7 +104,18 @@
 	<string name="illness_widget_name">Illness</string>
 	<string name="illness_widget_title">Illness</string>
 	<string name="illness_widget_summary">Summary of illnesses</string>
-	<string name="all">All</string>
+	<string name="all">all</string>
+	<string name="temperature_preference_title">Temperature</string>
+	<string name="temperature_preference_message">Choose unit for temperature</string>
+	<string name="temperature_preference_summary">Unit used for temperature</string>
+	<string name="units">Units</string>
+	<string name="length_preference_title">Length</string>
+	<string name="length_preference_message">Choose unit for length</string>
+	<string name="length_preference_summary">Unit used for length</string>
+	<string name="mass_preference_title">Mass</string>
+	<string name="mass_preference_message">Choose unit for mass</string>
+	<string name="mass_preference_summary">Unit used for mass</string>
+
 	<!-- Color Picker -->
 	<string name="dialog_color_picker">Color Picker</string>
 	<string name="press_color_to_apply">Press on Color to apply</string>

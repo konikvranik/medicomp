@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,10 +61,20 @@ public class SeekBarPreference extends Preference implements
 				"minimum", minimum);
 		order = attrs.getAttributeIntValue(
 				"http://schemas.android.com/apk/res/android", "order", order);
-		minText = attrs.getAttributeValue(
-				"http://schemas.android.com/apk/res/android", "minimumText");
-		maxText = attrs.getAttributeValue(
-				"http://schemas.android.com/apk/res/android", "maximumText");
+		minText = translateResource(attrs.getAttributeValue(
+				"http://schemas.android.com/apk/res/net.suteren.medicomp",
+				"minimumText"));
+		maxText = translateResource(attrs.getAttributeValue(
+				"http://schemas.android.com/apk/res/net.suteren.medicomp",
+				"maximumText"));
+	}
+
+	private String translateResource(String text) {
+		if (text != null && text.matches("@\\d+")) {
+			text = getContext().getResources().getString(
+					Integer.parseInt(text.substring(1)));
+		}
+		return text;
 	}
 
 	@Override
@@ -86,12 +97,25 @@ public class SeekBarPreference extends Preference implements
 		bar.setOnSeekBarChangeListener(this);
 
 		this.monitorBox = (TextView) layout.findViewById(R.id.value);
-		this.monitorBox.setText(numberFormat.format(getValueOfProgress(bar
-				.getProgress())));
+		setValueText(bar.getProgress());
 
 		bar.setProgress(getProgressOfValue(this.oldValue));
 
 		return layout;
+	}
+
+	private void setValueText(float value) {
+
+		Log.d(this.getClass().getCanonicalName(), "Value: " + value + ", min: "
+				+ minimum + ", minText: " + minText + ", max: " + maximum
+				+ ", maxText: " + maxText);
+
+		if (minText != null && value <= minimum)
+			this.monitorBox.setText(minText);
+		else if (maxText != null && value >= maximum)
+			this.monitorBox.setText(maxText);
+		else
+			this.monitorBox.setText(numberFormat.format(value));
 	}
 
 	public void onProgressChanged(SeekBar seekBar, int progress,
@@ -104,7 +128,7 @@ public class SeekBarPreference extends Preference implements
 
 		seekBar.setProgress(progress);
 		this.oldValue = getValueOfProgress(progress);
-		this.monitorBox.setText(numberFormat.format(this.oldValue));
+		setValueText(this.oldValue);
 		updatePreference(this.oldValue);
 
 	}
@@ -153,13 +177,7 @@ public class SeekBarPreference extends Preference implements
 	private void updatePreference(float oldValue2) {
 
 		SharedPreferences.Editor editor = getEditor();
-		if (minText != null && oldValue2 <= minimum)
-			editor.putString(getKey(), minText);
-		else if (minText != null && oldValue2 <= minimum)
-			editor.putString(getKey(), maxText);
-		else
-			editor.putFloat(getKey(), oldValue2);
-
+		editor.putFloat(getKey(), oldValue2);
 		editor.commit();
 	}
 

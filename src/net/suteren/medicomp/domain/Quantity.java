@@ -2,8 +2,9 @@ package net.suteren.medicomp.domain;
 
 public enum Quantity {
 	TEMPERATURE(new Unit[] { Unit.CELSIUS, Unit.FARENHEIT, Unit.KELVIN }), MASS(
-			new Unit[] { Unit.KILOGRAM }), LENGTH(new Unit[] { Unit.METER,
-			Unit.FEET, Unit.INCH, Unit.CENTIMETER });
+			new Unit[] { Unit.KILOGRAM, Unit.GRAM, Unit.POUND, Unit.STONE,
+					Unit.QUARTER, Unit.HUNDREDWEIGHT, Unit.OUNCE, Unit.DRACHM }), LENGTH(
+			new Unit[] { Unit.METER, Unit.FEET, Unit.INCH, Unit.CENTIMETER });
 
 	private Unit[] units;
 

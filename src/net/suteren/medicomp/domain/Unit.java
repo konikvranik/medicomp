@@ -5,7 +5,11 @@ public enum Unit {
 			"F", "f" }), KELVIN("K", null), METER("m", new String[] { "M" }), CENTIMETER(
 			"cm", new String[] { "CM" }), FEET("ft", new String[] { "FT",
 			"feet", "'" }), INCH("in", new String[] { "inch", "\"" }), KILOGRAM(
-			"kg", new String[] { "Kg", "KG" });
+			"kg", new String[] { "Kg", "KG" }), HUNDREDWEIGHT("cwt",
+			new String[] {}), QUARTER("qtr", new String[] {}), STONE("st",
+			new String[] {}), POUND("lb", new String[] {}), GRAM("g",
+			new String[] {}), OUNCE("oz", new String[] {}), DRACHM("drc",
+			new String[] {});
 
 	private String unit;
 	private String[] alternativeUnits;

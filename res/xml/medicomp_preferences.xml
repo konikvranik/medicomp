@@ -1,7 +1,28 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:medicomp="http://schemas.android.com/apk/res/net.suteren.medicomp" >
 
-	<PreferenceScreen android:title="@string/plugins" android:key="plugins" >
+	<PreferenceScreen
+		android:key="plugins"
+		android:title="@string/plugins" >
+	</PreferenceScreen>
+	<PreferenceScreen
+		android:key="units"
+		android:title="@string/units" >
+		<ListPreference
+			android:dialogTitle="@string/temperature_preference_title"
+			android:key="temperature_unit"
+			android:summary="@string/temperature_preference_summary"
+			android:title="@string/temperature_preference_title" />
+		<ListPreference
+			android:dialogTitle="@string/length_preference_title"
+			android:key="length_unit"
+			android:summary="@string/length_preference_summary"
+			android:title="@string/length_preference_title" />
+		<ListPreference
+			android:dialogTitle="@string/mass_preference_title"
+			android:key="mass_unit"
+			android:summary="@string/mass_preference_summary"
+			android:title="@string/mass_preference_title" />
 	</PreferenceScreen>
 
 </PreferenceScreen>

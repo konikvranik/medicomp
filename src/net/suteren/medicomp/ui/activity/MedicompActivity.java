@@ -41,6 +41,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.DataSetObserver;
@@ -52,9 +53,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -472,8 +473,8 @@ public abstract class MedicompActivity extends Activity {
 			// do not add type in case of exception
 		}
 
-		if (input.matches(".*\\w\\w\\w.*"))
-			availableTypes.put(Type.DISEASE, input);
+//		if (input.matches(".*\\w\\w\\w.*"))
+//			availableTypes.put(Type.DISEASE, input);
 
 	}
 
@@ -517,6 +518,12 @@ public abstract class MedicompActivity extends Activity {
 		Double value = formatter.parse(input);
 		Unit unit = formatter.getUnit();
 
+		Log.d(this.getClass().getCanonicalName(), "Unit: " + unit);
+		if (unit == null) {
+			SharedPreferences prefs = getSharedPreferences(MEDICOMP_PREFS,
+					Context.MODE_PRIVATE);
+			unit = Unit.valueOf(prefs.getString("temperature_unit", "CELSIUS"));
+		}
 		Log.d(this.getClass().getCanonicalName(), "Input: " + input
 				+ " value: " + value + " unit: " + unit);
 
