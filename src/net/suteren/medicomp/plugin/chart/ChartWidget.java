@@ -62,8 +62,7 @@ public class ChartWidget extends AbstractWidget implements PluginWidget {
 		Collection<Record> rs = getRecords();
 		if (rs != null && rs.size() > 1) {
 
-			FrameLayout rl = (FrameLayout) convertView
-					.findViewById(R.id.chart);
+			FrameLayout rl = (FrameLayout) convertView.findViewById(R.id.chart);
 
 			XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 			TimeSeries temperatureSeries = makeSeries(rs);
@@ -109,6 +108,7 @@ public class ChartWidget extends AbstractWidget implements PluginWidget {
 		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
 		renderer.setAntialiasing(true);
 		// renderer.setApplyBackgroundColor(true);
+		// renderer.setBackgroundColor(Color.TRANSPARENT);
 		renderer.setClickEnabled(true);
 		renderer.setExternalZoomEnabled(false);
 		// renderer.setInScroll(true);
