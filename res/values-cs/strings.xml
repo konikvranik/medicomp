@@ -21,7 +21,7 @@
 
 	<string name="none">nic</string>
 	<string name="last_measured_temperature">Teplota</string>
-	<string name="temperature_graph">Teplota</string>
+	<string name="temperature_graph">Graf</string>
 	<string name="choosePerson">Zvolte osobu</string>
 	<string name="quit">Konec</string>
 	<string name="celsius">°C</string>
@@ -74,8 +74,50 @@
 	<string name="plugins">Zásuvné moduly</string>
 	<string name="move_list_item_info">Klikněte na cílovou pozici</string>
 	<string name="smart_input_hint">Vložte hodnotu</string>
-<!-- Color Picker -->
+	<string name="chart_list_plugin_activity">Správce grafů</string>
+	<string name="chart_list_plugin_activity_title">Grafy</string>
+	<string name="chart_list_plugin_activity_summary">Grafy</string>
+	<string name="chart_plugin_title">Grafy</string>
+	<string name="chart_plugin_summary">Grafy</string>
+	<string name="chart_widget_title">Graf</string>
+	<string name="chart_widget_summary">Grafy</string>
+	<string name="illness_plugin_name">Nemoci</string>
+	<string name="illness_plugin_title">Nemoc</string>
+	<string name="illness_plugin_summary">Přehled nemocí</string>
+	<string name="illness_list_plugin_activity">Nemoci</string>
+	<string name="illness_list_plugin_activity_title">Nemoci</string>
+	<string name="illness_list_plugin_activity_summary">Přehled nemocí</string>
+	<string name="illness_widget_name">Nemoci</string>
+	<string name="illness_widget_title">Nemoci</string>
+	<string name="illness_widget_summary">Přehled nemocí</string>
+	<string name="length_preference_title">Délka</string>
+	<string name="length_preference_message">Zvolte jednotku délky</string>
+	<string name="length_preference_summary">Jednotka použitá pro délky</string>
+	<string name="mass_preference_title">Hmotnost</string>
+	<string name="mass_preference_message">Zvolte jednotku hmotnosti</string>
+	<string name="mass_preference_summary">Jednotka použitá pro hmotnosti</string>
+	<string name="person_list_plugin_activity">Správce osob</string>
+	<string name="person_list_plugin_activity_title">Osoby</string>
+	<string name="person_list_plugin_activity_summary">Správa osob</string>
+	<string name="person_plugin_title">Osoby</string>
+	<string name="person_plugin_summary">Správa osob</string>
+	<string name="person_widget_title">Osoba</string>
+	<string name="person_widget_summary">Správa osob</string>
+	<string name="temperature_plugin_title">Teploty</string>
+	<string name="temperature_plugin_summary">Záznamy tělesné teploty</string>
+	<string name="temperature_list_plugin_activity">Správa záznamů tělesné teploty</string>
+	<string name="temperature_list_plugin_activity_title">Teplota</string>
+	<string name="temperature_list_plugin_activity_summary">Správa záznamů tělesné teploty</string>
+	<string name="temperature_preference_title">Teplota</string>
+	<string name="temperature_preference_message">Zvolte jednotku teploty</string>
+	<string name="temperature_preference_summary">Jednotky použitá pro teploty</string>
+	<string name="units">Jednotky</string>
+	<string name="temperature_widget_title">Teplota</string>
+	<string name="temperature_widget_summary">Tělesná teplota</string>
+
+	<!-- Color Picker -->
 	<string name="dialog_color_picker">Výběr barvy</string>
 	<string name="press_color_to_apply">Zvolte barvu kliknutím na ni</string>
-	
+	<string name="all">vše</string>
+
 </resources>

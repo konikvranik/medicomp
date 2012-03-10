@@ -28,11 +28,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ChartWidget extends AbstractWidget implements PluginWidget {
@@ -65,7 +63,7 @@ public class ChartWidget extends AbstractWidget implements PluginWidget {
 		if (rs != null && rs.size() > 1) {
 
 			FrameLayout rl = (FrameLayout) convertView
-					.findViewById(R.id.frameLayout1);
+					.findViewById(R.id.chart);
 
 			XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 			TimeSeries temperatureSeries = makeSeries(rs);

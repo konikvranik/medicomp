@@ -14,11 +14,12 @@
 		android:textAppearance="?android:attr/textAppearanceSmall" />
 
 	<FrameLayout
-		android:id="@+id/frameLayout1"
+		android:id="@+id/chart"
 		android:layout_width="fill_parent"
 		android:layout_height="200dip"
 		android:layout_alignParentLeft="true"
-		android:layout_below="@+id/textView1" >
+		android:layout_below="@+id/widgetTitle" >
+
 	</FrameLayout>
 
 </RelativeLayout>
