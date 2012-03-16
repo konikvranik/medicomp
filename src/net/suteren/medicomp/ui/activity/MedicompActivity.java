@@ -3,13 +3,13 @@ package net.suteren.medicomp.ui.activity;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
@@ -32,6 +32,7 @@ import net.suteren.medicomp.plugin.person.PersonPlugin;
 import net.suteren.medicomp.plugin.person.PersonProfileActivity;
 import net.suteren.medicomp.plugin.temperature.TemperaturePlugin;
 import net.suteren.medicomp.ui.adapter.AbstractListAdapter;
+import net.suteren.medicomp.util.RecordFormat;
 import net.suteren.medicomp.util.TemperatureFormatter;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -44,10 +45,10 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -66,71 +67,6 @@ import android.widget.Toast;
 import com.j256.ormlite.dao.Dao;
 
 public abstract class MedicompActivity extends Activity {
-
-	public class AvailableTypeListAdapter implements ListAdapter {
-
-		Set<DataSetObserver> observers;
-
-		public void registerDataSetObserver(DataSetObserver datasetobserver) {
-			observers.add(datasetobserver);
-		}
-
-		public void unregisterDataSetObserver(DataSetObserver datasetobserver) {
-			observers.remove(datasetobserver);
-
-		}
-
-		public int getCount() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		public Object getItem(int i) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public long getItemId(int i) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		public boolean hasStableIds() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public View getView(int i, View view, ViewGroup viewgroup) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public int getItemViewType(int i) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		public int getViewTypeCount() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		public boolean isEmpty() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public boolean areAllItemsEnabled() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public boolean isEnabled(int i) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-	}
 
 	private final class ChangeReceiver extends BroadcastReceiver {
 
@@ -162,9 +98,11 @@ public abstract class MedicompActivity extends Activity {
 	private Type choosedType;
 	protected NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 	private PluginManager pluginManager;
-	private Map<Type, Object> availableTypes;
+	private Map<Type, Record> availableTypes;
 	protected String smartInputValue;
 	private ListAdapter availableTypeListAdapter;
+	private Record choosedRecord;
+	private LayoutInflater layoutInflater;
 	private static final int TYPE_CHOOSER_DIALOG = 1;
 	public static final String REGISTERED_PLUGINS_PREFS = "registered_plugins";
 
@@ -173,6 +111,8 @@ public abstract class MedicompActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		pluginManager = new MediCompPluginManager(this);
+
+		layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		registerCorePlugins(pluginManager);
 
@@ -213,7 +153,7 @@ public abstract class MedicompActivity extends Activity {
 					if (event.getAction() == KeyEvent.ACTION_DOWN)
 						switch (keyCode) {
 						case KeyEvent.KEYCODE_ENTER:
-							processInput();
+							processSmartInput();
 							break;
 						default:
 							break;
@@ -227,10 +167,14 @@ public abstract class MedicompActivity extends Activity {
 		if (ib != null)
 			ib.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
-					processInput();
+					processSmartInput();
 				}
 			});
 
+	}
+
+	protected View inflateView(int id, ViewGroup parent) {
+		return layoutInflater.inflate(id, parent, false);
 	}
 
 	private void registerCorePlugins(PluginManager pluginManager2) {
@@ -395,7 +339,7 @@ public abstract class MedicompActivity extends Activity {
 		}
 	}
 
-	private void processInput() {
+	private void processSmartInput() {
 		choosedType = null;
 
 		smartInputValue = smartInput.getText().toString();
@@ -410,7 +354,8 @@ public abstract class MedicompActivity extends Activity {
 					+ TYPE_CHOOSER_DIALOG + " done");
 		} else if (availableTypes.size() == 1) {
 			choosedType = availableTypes.keySet().iterator().next();
-			processChoosedType(smartInputValue);
+			choosedRecord = availableTypes.values().iterator().next();
+			processChoosedType();
 		} else {
 			Toast.makeText(MedicompActivity.this,
 					getResources().getString(R.string.noAvailableType),
@@ -431,70 +376,40 @@ public abstract class MedicompActivity extends Activity {
 		}
 	}
 
-	private void processChoosedType(String value) {
+	private void processChoosedType() {
 		if (choosedType != null)
-			switch (choosedType) {
-			case DISEASE:
-				try {
-					addDiseaseRecord(value);
-					listView.invalidateViews();
-				} catch (Exception e) {
-					Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
-					Toast.makeText(MedicompActivity.this,
-							R.string.failedToAddTemperature, Toast.LENGTH_SHORT);
-				}
-				break;
-			case TEMPERATURE:
-				try {
-					addTemperatureRecord(value);
-					listView.invalidateViews();
-				} catch (Exception e) {
-					Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
-					Toast.makeText(MedicompActivity.this,
-							R.string.failedToAddTemperature, Toast.LENGTH_SHORT);
-				}
-
-				break;
-
-			default:
-				break;
+			try {
+				addRecord(choosedRecord);
+				listView.invalidateViews();
+			} catch (Exception e) {
+				Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
+				Toast.makeText(MedicompActivity.this,
+						R.string.failedToAddTemperature, Toast.LENGTH_SHORT);
 			}
 	}
 
-	private void determineAvaliableTypes(String input) {
-		availableTypes = new HashMap<Type, Object>();
-
-		try {
-			TemperatureFormatter tf = new TemperatureFormatter(
-					Locale.getDefault());
-			Double temp = tf.parse(input);
-			availableTypes.put(Type.TEMPERATURE, temp);
-		} catch (ParseException e) {
-			// do not add type in case of exception
-		}
-
-//		if (input.matches(".*\\w\\w\\w.*"))
-//			availableTypes.put(Type.DISEASE, input);
-
+	private void addRecord(Record r) throws SQLException {
+		recordDao.create(r);
+		for (Field f : r.getFields())
+			f.persist();
 	}
 
-	private void addDiseaseRecord(String value) throws SQLException {
-		Record r = new Record();
-		r.setPerson(person);
-		r.setTitle(value);
-		r.setType(Type.DISEASE);
-		r.setCategory(Category.STATE);
+	private void determineAvaliableTypes(String input) {
+		availableTypes = new HashMap<Type, Record>();
+		RecordFormat rf = new RecordFormat(Locale.getDefault(), this, person);
+		for (Type type : Type.values()) {
+			try {
+				Record r;
+				r = rf.format(input, type);
+				Log.d(this.getClass().getCanonicalName(),
+						"Type " + r.getTitle());
+				if (r != null)
+					availableTypes.put(type, r);
+			} catch (ParseException e) {
+				// Don not add if ParseException
+			}
 
-		Field<Date> f = new Field<Date>();
-		f.setType(Type.BEGIN);
-		f.setName("start");
-		f.setRecord(r);
-
-		recordDao.create(r);
-		f.persist();
-
-		f.setValue(Calendar.getInstance(Locale.getDefault()).getTime());
-		fieldDao.update(f);
+		}
 	}
 
 	private void addTemperatureRecord(String input) throws SQLException,
@@ -537,37 +452,47 @@ public abstract class MedicompActivity extends Activity {
 
 		Log.d(this.getClass().getCanonicalName(), "Creating dialog: " + id);
 
+		int count;
 		switch (id) {
 		case TYPE_CHOOSER_DIALOG:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Pick a color");
 
-			ArrayList<String> strings = new ArrayList<String>();
+			SortedSet<Entry<Type, Record>> ss = new TreeSet<Map.Entry<Type, Record>>(
+					new Comparator<Map.Entry<Type, Record>>() {
+						public int compare(Entry<Type, Record> o1,
+								Entry<Type, Record> o2) {
+							if (o1 == null || o1.getKey() == null)
+								return -1;
+							if (o2 == null || o2.getKey() == null)
+								return 1;
+							Type k1 = o1.getKey();
+							Type k2 = o2.getKey();
+							return k1.ordinal() - k2.ordinal();
+						}
+					});
+			ss.addAll(availableTypes.entrySet());
+			final Entry<Type, Record>[] available = ss.toArray(new Entry[0]);
 
-			for (Type type : availableTypes.keySet()) {
-				strings.add(type.toString());
+			count = available.length;
+			String[] strings = new String[count];
+
+			for (int i = 0; i < count; i++) {
+				Log.d(this.getClass().getCanonicalName(), "Added type: "
+						+ available[i].getKey().name());
+				strings[i] = available[i].getKey().name();
 			}
 
 			builder.setCancelable(true);
 
-			availableTypeListAdapter = new AvailableTypeListAdapter();
-			builder.setAdapter(availableTypeListAdapter,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialoginterface,
-								int i) {
-							// TODO Auto-generated method stub
-
-						}
-					});
-
-			builder.setItems(strings.toArray(new String[] {}),
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int item) {
-							choosedType = Type.values()[item];
-							processChoosedType(smartInputValue);
-							removeDialog(id);
-						}
-					});
+			builder.setItems(strings, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int item) {
+					choosedType = available[item].getKey();
+					choosedRecord = available[item].getValue();
+					processChoosedType();
+					removeDialog(id);
+				}
+			});
 			return builder.create();
 		default:
 			return super.onCreateDialog(id);

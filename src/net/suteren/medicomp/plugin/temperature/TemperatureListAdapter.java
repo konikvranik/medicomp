@@ -37,6 +37,7 @@ public class TemperatureListAdapter extends RecordListAdapter {
 		TextView unitField = (TextView) convertView.findViewById(R.id.unit);
 		for (Field<?> f : record.getFields()) {
 			if (f.getType() == Type.TEMPERATURE) {
+				Log.d(this.getClass().getCanonicalName(),"Temperature: " + f.getValue());
 				valueField.setText(nf.format(f.getValue()));
 				if (f.getUnit() != null)
 					unitField.setText(f.getUnit().getUnit());

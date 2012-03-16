@@ -1,11 +1,14 @@
 package net.suteren.medicomp.domain;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -123,8 +126,8 @@ public class Field<T> {
 			} else if (value instanceof Date) {
 				this.value = (Value<T>) new DateValue();
 			}
-			this.value.setField(this);
 		}
+		this.value.setField(this);
 		this.value.setValue(value);
 		if (value instanceof String) {
 			setStringValue((StringValue) this.value);
@@ -142,6 +145,10 @@ public class Field<T> {
 	}
 
 	public void setRecord(Record record) {
+		Collection<Field> fields = record.getFields();
+		if (fields == null)
+			record.setFields(fields = new HashSet<Field>());
+		fields.add(this);
 		this.record = record;
 	}
 
@@ -158,9 +165,8 @@ public class Field<T> {
 	}
 
 	protected void setDateValue(DateValue value) throws SQLException {
+		value.setField((Field<Date>) this);
 		this.dateValue = value;
-		MediCompDatabaseFactory.getInstance().createDao(DateValue.class)
-				.createOrUpdate(value);
 	}
 
 	protected IntegerValue getIntegerValue() {
@@ -168,9 +174,8 @@ public class Field<T> {
 	}
 
 	protected void setIntegerValue(IntegerValue value) throws SQLException {
+		value.setField((Field<Integer>) this);
 		this.integerValue = value;
-		MediCompDatabaseFactory.getInstance().createDao(IntegerValue.class)
-				.createOrUpdate(value);
 	}
 
 	protected DoubleValue getDoubleValue() {
@@ -178,9 +183,8 @@ public class Field<T> {
 	}
 
 	protected void setDoubleValue(DoubleValue value) throws SQLException {
+		value.setField((Field<Double>) this);
 		this.doubleValue = value;
-		MediCompDatabaseFactory.getInstance().createDao(DoubleValue.class)
-				.createOrUpdate(value);
 	}
 
 	protected StringValue getStringValue() {
@@ -189,20 +193,43 @@ public class Field<T> {
 	}
 
 	protected void setStringValue(StringValue value) throws SQLException {
+		value.setField((Field<String>) this);
 		this.stringValue = value;
-		MediCompDatabaseFactory.getInstance().createDao(StringValue.class)
-				.createOrUpdate(value);
 	}
 
 	public void persist() throws SQLException {
 		fieldValueDao.createOrUpdate(this);
+		CreateOrUpdateStatus st = null;
 		if (this.stringValue != null)
-			stringValueDao.createOrUpdate(this.stringValue);
+			st = stringValueDao.createOrUpdate(this.stringValue);
 		if (this.integerValue != null)
-			integerValueDao.createOrUpdate(this.integerValue);
+			st = integerValueDao.createOrUpdate(this.integerValue);
 		if (this.dateValue != null)
-			dateValueDao.createOrUpdate(this.dateValue);
+			st = dateValueDao.createOrUpdate(this.dateValue);
 		if (this.doubleValue != null)
-			doubleValueDao.createOrUpdate(this.doubleValue);
+			st = doubleValueDao.createOrUpdate(this.doubleValue);
+		if (st != null && st.isCreated())
+			fieldValueDao.createOrUpdate(this);
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+
+		fieldValueDao.closeLastIterator();
+		fieldValueDao.clearObjectCache();
+
+		stringValueDao.closeLastIterator();
+		stringValueDao.clearObjectCache();
+
+		integerValueDao.closeLastIterator();
+		integerValueDao.clearObjectCache();
+
+		dateValueDao.closeLastIterator();
+		dateValueDao.clearObjectCache();
+
+		doubleValueDao.closeLastIterator();
+		doubleValueDao.clearObjectCache();
+
+		super.finalize();
 	}
 }
