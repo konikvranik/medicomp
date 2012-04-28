@@ -34,11 +34,9 @@ public class FieldMarshaller {
 			fieldNode.setAttribute(RECORD_ID_ATTRIBUTE_NAME,
 					Integer.toString(field.getRecord().getId()));
 		if (field.getType() != null)
-			fieldNode.setAttribute(TYPE_ATTRIBUTE_NAME, field.getType()
-					.toString());
+			fieldNode.setAttribute(TYPE_ATTRIBUTE_NAME, field.getType().name());
 		if (field.getUnit() != null)
-			fieldNode.setAttribute(UNIT_ATTRIBUTE_NAME, field.getUnit()
-					.toString());
+			fieldNode.setAttribute(UNIT_ATTRIBUTE_NAME, field.getUnit().name());
 		if (field.getValue() != null)
 			fieldNode.setAttribute(VALUE_ATTIRBUTE_NAME, field.getValue()
 					.toString());

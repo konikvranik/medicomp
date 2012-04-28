@@ -43,7 +43,7 @@ public class PersonMarshaller {
 					.newDocumentBuilder().newDocument();
 		rootElement = document.createElement(MEDICOMP_ROOT_ELEMENT);
 
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 		if (appVersion != null)
 			rootElement.setAttribute(APP_VERSION_ATTRIBUTE_NAME, appVersion);
 		if (appVersionName != null)
@@ -63,10 +63,10 @@ public class PersonMarshaller {
 				Integer.toString(person.getId()));
 		if (person.getGender() != null)
 			personNode.setAttribute(GENDER_ATTRIBUTE_NAME, person.getGender()
-					.toString());
+					.name());
 
 		personNode.setAttribute(NAME_ATTRIBUTE_NAME, person.getName());
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-ddZ");
 		if (person.getBirthDate() != null)
 			personNode.setAttribute(BIRTHDAY_ATTRIBUTE_NAME,
 					df.format(person.getBirthDate().getTime()));

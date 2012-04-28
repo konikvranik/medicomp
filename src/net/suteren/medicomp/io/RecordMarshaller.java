@@ -37,10 +37,9 @@ public class RecordMarshaller {
 		recordNode.setAttribute(ID_ATTRIBUTE_NAME,
 				Integer.toString(record.getId()));
 		recordNode.setAttribute(TITLE_ATTRIBUTE_NAME, record.getTitle());
-		recordNode.setAttribute(TYPE_ATTIRBUTE_NAME, record.getType()
-				.toString());
+		recordNode.setAttribute(TYPE_ATTIRBUTE_NAME, record.getType().name());
 
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 		if (record.getTimestamp() != null)
 			recordNode.setAttribute(TIMESTAMP_ARRTIBUTE_NAME,
 					df.format(record.getTimestamp().getTime()));
@@ -51,7 +50,7 @@ public class RecordMarshaller {
 
 		if (record.getCategory() != null)
 			recordNode.setAttribute(CATEGORY_ATTRIBUTE_NAME, record
-					.getCategory().toString());
+					.getCategory().name());
 
 		if (record.getPerson() != null)
 			recordNode.setAttribute(PERSON_ID_ATTRIBUTE_NAME,
