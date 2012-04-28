@@ -1,6 +1,6 @@
 package net.suteren.medicomp.plugin;
 
-import java.util.SortedSet;
+import java.util.Collection;
 import java.util.TreeSet;
 
 import net.suteren.medicomp.format.RecordFormatter;
@@ -80,7 +80,7 @@ public abstract class AbstractPlugin implements Plugin {
 		return this.getClass().getCanonicalName();
 	}
 
-	public SortedSet<RecordFormatter> getRecordFormatters() {
+	public Collection<RecordFormatter> getRecordFormatters() {
 		return new TreeSet<RecordFormatter>();
 	}
 }

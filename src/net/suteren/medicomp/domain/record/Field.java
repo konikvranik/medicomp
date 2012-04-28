@@ -31,6 +31,7 @@ public class Field<T> {
 	private Dao<DateValue, Integer> dateValueDao;
 	private Dao<DoubleValue, Integer> doubleValueDao;
 	private Dao<IntegerValue, Integer> integerValueDao;
+	@SuppressWarnings("rawtypes")
 	private Dao<Field, Integer> fieldValueDao;
 
 	public Field() throws SQLException {
@@ -146,6 +147,7 @@ public class Field<T> {
 		return record;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setRecord(Record record) {
 		Collection<Field> fields = record.getFields();
 		if (fields == null)
@@ -166,6 +168,7 @@ public class Field<T> {
 		return dateValue;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void setDateValue(DateValue value) throws SQLException {
 		value.setField((Field<Date>) this);
 		this.dateValue = value;
@@ -175,6 +178,7 @@ public class Field<T> {
 		return integerValue;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void setIntegerValue(IntegerValue value) throws SQLException {
 		value.setField((Field<Integer>) this);
 		this.integerValue = value;
@@ -184,6 +188,7 @@ public class Field<T> {
 		return doubleValue;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void setDoubleValue(DoubleValue value) throws SQLException {
 		value.setField((Field<Double>) this);
 		this.doubleValue = value;
@@ -194,6 +199,7 @@ public class Field<T> {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void setStringValue(StringValue value) throws SQLException {
 		value.setField((Field<String>) this);
 		this.stringValue = value;
@@ -234,4 +240,13 @@ public class Field<T> {
 
 		super.finalize();
 	}
+
+	@Override
+	public String toString() {
+
+		return "{id: " + getId() + ", name: '" + getName() + "', type: "
+				+ getType() + ", recordId: " + getRecord().getId()
+				+ ", value: " + getValue() + ", unit: " + getUnit() + " }";
+	}
+
 }

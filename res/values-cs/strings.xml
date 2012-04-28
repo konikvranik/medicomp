@@ -120,5 +120,11 @@
 	<string name="dialog_color_picker">Výběr barvy</string>
 	<string name="press_color_to_apply">Zvolte barvu kliknutím na ni</string>
 	<string name="all">vše</string>
+	<string name="disclaimerText">Autor aplikace není zodpovědný za jakékoli škody, ať již na zdraví nebo na majetku, které uživateli v souvislosti s použitím aplikace mohou nastat.</string>
+	<string name="disclaimerLabel">Vyrozumění</string>
+	<string name="usageLabel">Použití</string>
+	<string name="usage">Aplikace slouží k evidenci a agregování zdravotních dat uživatele. Umožňuje více profilů, např. pro různé členy domácnosti. Zadání údajů provedete pomocí vstupního pole nahoře. Pokud program rozpozná o jaký údaj se jedná, ihned jej vloží do databáze. Pokud si není jistý, požádá uživatele o upřesnění typu zadávaného údaje.</string>
+	<string name="versionLabel">Verze</string>
+	<string name="about">O aplikaci</string>
 
 </resources>

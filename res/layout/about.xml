@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" >
+
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:fadingEdge="vertical"
+		android:fillViewport="true" >
+
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="8sp" >
+
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/versionLabel"
+				android:textAppearance="?android:attr/textAppearanceMedium" />
+
+			<TextView
+				android:id="@+id/versionNameTextView"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:autoLink="all"
+				android:linksClickable="true"
+				android:padding="8sp"
+				android:text="@string/versionLabel"
+				android:textAppearance="?android:attr/textAppearanceSmall" />
+
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/disclaimerLabel"
+				android:textAppearance="?android:attr/textAppearanceMedium" />
+
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:autoLink="all"
+				android:linksClickable="true"
+				android:padding="8sp"
+				android:text="@string/disclaimerText"
+				android:textAppearance="?android:attr/textAppearanceSmall" />
+
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/usageLabel"
+				android:textAppearance="?android:attr/textAppearanceMedium" />
+
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:padding="8sp"
+				android:text="@string/usage"
+				android:textAppearance="?android:attr/textAppearanceSmall" />
+		</LinearLayout>
+	</ScrollView>
+
+</RelativeLayout>

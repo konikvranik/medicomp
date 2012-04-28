@@ -53,6 +53,7 @@
 <!-- 			android:readPermission="android.permission.READ_CALENDAR" -->
 <!-- 			android:syncable="true" > -->
 <!-- 		</provider> -->
+		<activity android:name=".ui.AboutActivity"></activity>
 	</application>
 
 </manifest>

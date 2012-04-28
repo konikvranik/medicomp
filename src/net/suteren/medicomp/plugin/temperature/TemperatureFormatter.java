@@ -1,15 +1,25 @@
-package net.suteren.medicomp.util;
+package net.suteren.medicomp.plugin.temperature;
 
+import java.sql.SQLException;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.Calendar;
 import java.util.Locale;
 
+import net.suteren.medicomp.domain.record.Record;
+import net.suteren.medicomp.enums.Category;
 import net.suteren.medicomp.enums.Quantity;
+import net.suteren.medicomp.enums.Type;
 import net.suteren.medicomp.enums.Unit;
+import net.suteren.medicomp.format.RecordFormatter;
+import net.suteren.medicomp.ui.activity.MedicompActivity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
-public class TemperatureFormatter extends Format {
+public class TemperatureFormatter extends Format implements RecordFormatter {
 
 	/**
 	 * 
@@ -18,9 +28,11 @@ public class TemperatureFormatter extends Format {
 	private Locale locale;
 	private ParsePosition parsePosition = new ParsePosition(0);
 	private Unit unit;
+	private Context context;
 
-	public TemperatureFormatter(Locale locale) {
+	public TemperatureFormatter(Context context, Locale locale) {
 		this.locale = locale;
+		this.context = context;
 	}
 
 	@Override
@@ -97,15 +109,42 @@ public class TemperatureFormatter extends Format {
 	}
 
 	public Unit getUnit() {
+		if (unit == null) {
+			SharedPreferences prefs = context.getSharedPreferences(
+					MedicompActivity.MEDICOMP_PREFS, Context.MODE_PRIVATE);
+			unit = Unit.valueOf(prefs.getString("temperature_unit", "CELSIUS"));
+		}
 		return unit;
 	}
 
-	public Double parse(String input) throws ParseException {
+	public Record parse(String input, boolean strict) throws ParseException {
 		parsePosition = new ParsePosition(0);
-		Double result = parseObject(input, parsePosition);
-
-		if (parsePosition.getErrorIndex() > -1)
+		Double numericValue = parseObject(input, parsePosition);
+		if (parsePosition.getErrorIndex() > -1 || (getUnit() == null && strict))
 			throw new ParseException(input, parsePosition.getErrorIndex());
-		return result;
+
+		Record r = new Record();
+		try {
+			r.setTitle("temperature");
+			r.setType(Type.TEMPERATURE);
+			r.setCategory(Category.MEASURE);
+			r.setTimestamp(Calendar.getInstance(locale).getTime());
+			net.suteren.medicomp.domain.record.Field<Double> f = new net.suteren.medicomp.domain.record.Field<Double>();
+			f.setType(Type.TEMPERATURE);
+			f.setName("temperature");
+			f.setRecord(r);
+			f.setUnit(getUnit());
+			f.setValue(numericValue);
+		} catch (SQLException e) {
+			throw new ParseException(input, parsePosition.getErrorIndex());
+		}
+		Log.d(getClass().getCanonicalName(), "Record: " + r.toString());
+		return r;
+
 	}
+
+	public Record parse(String input) throws ParseException {
+		return parse(input, false);
+	}
+
 }

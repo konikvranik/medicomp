@@ -22,6 +22,7 @@ import net.suteren.medicomp.plugin.person.PersonPlugin;
 import net.suteren.medicomp.plugin.person.PersonProfileActivity;
 import net.suteren.medicomp.plugin.temperature.TemperaturePlugin;
 import net.suteren.medicomp.smartinput.SmartInput;
+import net.suteren.medicomp.ui.AboutActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -93,7 +94,7 @@ public abstract class MedicompActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		pluginManager = new MediCompPluginManager(this);
+		pluginManager = MediCompPluginManager.getInstance(this);
 
 		layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -229,6 +230,11 @@ public abstract class MedicompActivity extends Activity {
 
 		case R.id.preferences:
 			startActivity(new Intent(this, MedicompPreferencesActivity.class));
+			break;
+
+
+		case R.id.about:
+			startActivity(new Intent(this, AboutActivity.class));
 			break;
 
 		default:

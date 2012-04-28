@@ -27,9 +27,8 @@ public class MedicompPreferencesActivity extends PreferenceActivity {
 		prefMgr.setSharedPreferencesMode(MODE_PRIVATE);
 
 		addPreferencesFromResource(R.xml.medicomp_preferences);
-		MediCompPluginManager pm = new MediCompPluginManager(this);
 		setupPlugins((PreferenceScreen) findPreference("plugins"),
-				new MediCompPluginManager(this));
+				MediCompPluginManager.getInstance(this));
 		setupUnits((PreferenceScreen) findPreference("units"));
 
 	}

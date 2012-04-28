@@ -14,11 +14,13 @@ import net.suteren.medicomp.domain.record.Record;
 import net.suteren.medicomp.enums.Category;
 import net.suteren.medicomp.enums.Type;
 import net.suteren.medicomp.enums.Unit;
+import net.suteren.medicomp.plugin.temperature.TemperatureFormatter;
 import net.suteren.medicomp.ui.activity.MedicompActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+@Deprecated
 public class RecordFormat extends Format {
 
 	private static final long serialVersionUID = 8879817995238793613L;
@@ -67,8 +69,9 @@ public class RecordFormat extends Format {
 	private Record formatMedication(String text, Type type, boolean strict)
 			throws ParseException {
 
-		TemperatureFormatter tf = new TemperatureFormatter(Locale.getDefault());
-		Double temp = tf.parse(text);
+		TemperatureFormatter tf = new TemperatureFormatter(context,
+				Locale.getDefault());
+		Double temp = tf.parseObject(text, new ParsePosition(0));
 
 		// TODO Auto-generated method stub
 		throw new ParseException("Unsupported type " + type, 0);
@@ -102,9 +105,9 @@ public class RecordFormat extends Format {
 		f.setName("temperature");
 		f.setRecord(r);
 
-		TemperatureFormatter formatter = new TemperatureFormatter(
+		TemperatureFormatter formatter = new TemperatureFormatter(context,
 				Locale.getDefault());
-		Double value = formatter.parse(text);
+		Double value = formatter.parseObject(text, new ParsePosition(0));
 		Unit unit = formatter.getUnit();
 
 		Log.d(this.getClass().getCanonicalName(), "Unit: " + unit);

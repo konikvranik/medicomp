@@ -1,5 +1,6 @@
 package net.suteren.medicomp.plugin;
 
+import java.util.Collection;
 import java.util.SortedSet;
 
 import net.suteren.medicomp.format.RecordFormatter;
@@ -33,7 +34,7 @@ public interface Plugin {
 
 	PluginActivity newActivityInstance(Context context);
 
-	SortedSet<RecordFormatter> getRecordFormatters();
+	Collection<RecordFormatter> getRecordFormatters();
 
 	String getId();
 

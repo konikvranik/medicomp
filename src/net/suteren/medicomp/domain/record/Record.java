@@ -51,6 +51,7 @@ public class Record implements WithId {
 	@DatabaseField(canBeNull = true, columnName = COLUMN_NAME_PARENT, foreign = true)
 	private Record parent;
 
+	@SuppressWarnings("rawtypes")
 	@ForeignCollectionField(eager = false)
 	private Collection<Field> fields;
 
@@ -106,11 +107,12 @@ public class Record implements WithId {
 		this.parent = parent;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection<Field> getFields() {
 		return fields;
 	}
 
-	public void setFields(Collection<Field> fields) {
+	public void setFields(@SuppressWarnings("rawtypes") Collection<Field> fields) {
 		this.fields = fields;
 	}
 
@@ -122,4 +124,18 @@ public class Record implements WithId {
 		this.person = person;
 	}
 
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for (@SuppressWarnings("rawtypes")
+		Field f : getFields()) {
+			sb.append(f.toString() + ",");
+		}
+		return "{ id: " + getId() + ", title: '" + getTitle()
+				+ "', timestamp: " + getTimestamp() + ", category: "
+				+ getCategory().toString() + ", person: " + getPerson()
+				+ ", fields: [" + sb.toString() + "], parent: " + getParent()
+				+ ", type: " + getType() + " }";
+
+	}
 }

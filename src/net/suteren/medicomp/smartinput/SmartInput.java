@@ -1,14 +1,17 @@
 package net.suteren.medicomp.smartinput;
 
+import static net.suteren.medicomp.ui.activity.MedicompActivity.TYPE_CHOOSER_DIALOG;
+
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Map.Entry;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
@@ -17,63 +20,70 @@ import net.suteren.medicomp.domain.WithId;
 import net.suteren.medicomp.domain.record.Field;
 import net.suteren.medicomp.domain.record.Record;
 import net.suteren.medicomp.enums.Type;
+import net.suteren.medicomp.format.RecordFormatter;
+import net.suteren.medicomp.plugin.MediCompPluginManager;
+import net.suteren.medicomp.plugin.PluginChangeObserver;
 import net.suteren.medicomp.ui.activity.MedicompActivity;
 import net.suteren.medicomp.ui.adapter.AbstractListAdapter;
-import net.suteren.medicomp.util.RecordFormat;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
 
-import static net.suteren.medicomp.ui.activity.MedicompActivity.TYPE_CHOOSER_DIALOG;
-
-public class SmartInput {
+public class SmartInput implements PluginChangeObserver {
 
 	private ListView listView;
 	private MedicompActivity context;
 	private Dao<Record, Integer> recordDao;
 	private HashMap<Type, Record> availableTypes;
 	private Entry<Type, Record>[] availableArray;
+	private Set<PluginChangeObserver> observers;
+	private Collection<RecordFormatter> formatters;
 
 	public SmartInput(MedicompActivity ma) throws SQLException {
 		context = ma;
 		listView = context.getListView();
-		recordDao = MediCompDatabaseFactory.getInstance().createDao(
+		this.recordDao = MediCompDatabaseFactory.getInstance().createDao(
 				Record.class);
+		MediCompPluginManager pm = MediCompPluginManager.getInstance(context);
+		pm.registerPluginChangeObserver(this);
+		setupFormatters();
+	}
+
+	private void setupFormatters() {
+		formatters = MediCompPluginManager.getInstance(context)
+				.getRecordFormatters();
 	}
 
 	private Map<Type, Record> determineAvaliableTypes(String input,
 			Person person) {
 		availableTypes = new HashMap<Type, Record>();
-		RecordFormat rf = new RecordFormat(Locale.getDefault(), context, person);
-		boolean smartInputStrictParse = true;
-		for (Type type : Type.values()) {
-			try {
-				Record r;
-				r = rf.format(input, type, smartInputStrictParse);
-				Log.d(this.getClass().getCanonicalName(),
-						"Type " + r.getTitle());
-				if (r != null)
-					availableTypes.put(type, r);
-			} catch (ParseException e) {
-				// Don not add if ParseException
-			}
 
+		Log.d(getClass().getCanonicalName(),
+				"SI formatters: " + formatters.size());
+		for (RecordFormatter f : formatters) {
+			try {
+				Record r = f.parse(input);
+				if (r != null) {
+					r.setPerson(person);
+					availableTypes.put(r.getType(), r);
+				}
+			} catch (ParseException e) {
+				// skip
+			}
 		}
 
-		if (availableTypes.size() == 0) {
-			smartInputStrictParse = false;
-			for (Type type : Type.values()) {
+		if (availableTypes.size() < 1) {
+			for (RecordFormatter f : formatters) {
 				try {
-					Record r;
-					r = rf.format(input, type, smartInputStrictParse);
-					Log.d(this.getClass().getCanonicalName(),
-							"Type " + r.getTitle());
-					if (r != null)
-						availableTypes.put(type, r);
+					Record r = f.parse(input, false);
+					if (r != null) {
+						r.setPerson(person);
+						availableTypes.put(r.getType(), r);
+					}
 				} catch (ParseException e) {
-					// Don not add if ParseException
+					// skip
 				}
 			}
 		}
@@ -165,5 +175,16 @@ public class SmartInput {
 			strings[i] = availableArray[i].getKey().name();
 		}
 		return strings;
+	}
+
+	public void pluginChangeNotify() {
+		setupFormatters();
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		MediCompPluginManager.getInstance(context)
+				.unregisterPluginChangeObserver(this);
+		super.finalize();
 	}
 }

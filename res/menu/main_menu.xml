@@ -32,5 +32,12 @@
 		<menu>
 		</menu>
 	</item>
+	<item
+		android:id="@+id/about"
+		android:icon="@android:drawable/ic_menu_help"
+		android:title="@string/about">
+		<menu>
+		</menu>
+	</item>
 
 </menu>

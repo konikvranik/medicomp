@@ -1,6 +1,10 @@
 package net.suteren.medicomp.plugin.temperature;
 
+import java.util.Collection;
+import java.util.Locale;
+
 import net.suteren.medicomp.R;
+import net.suteren.medicomp.format.RecordFormatter;
 import net.suteren.medicomp.plugin.AbstractPlugin;
 import net.suteren.medicomp.plugin.PluginActivity;
 import net.suteren.medicomp.ui.widget.Widget;
@@ -42,5 +46,12 @@ public class TemperaturePlugin extends AbstractPlugin {
 
 	public PluginActivity newActivityInstance(Context context) {
 		return new TemperaturePluginActivity(context);
+	}
+
+	@Override
+	public Collection<RecordFormatter> getRecordFormatters() {
+		Collection<RecordFormatter> result = super.getRecordFormatters();
+		result.add(new TemperatureFormatter(getContext(), Locale.getDefault()));
+		return result;
 	}
 }
