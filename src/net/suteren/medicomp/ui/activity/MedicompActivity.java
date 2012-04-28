@@ -2,12 +2,7 @@ package net.suteren.medicomp.ui.activity;
 
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.Comparator;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
@@ -16,7 +11,6 @@ import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.WithId;
 import net.suteren.medicomp.domain.record.Field;
 import net.suteren.medicomp.domain.record.Record;
-import net.suteren.medicomp.enums.Type;
 import net.suteren.medicomp.plugin.MediCompPluginManager;
 import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.plugin.PluginActivity;
@@ -90,7 +84,7 @@ public abstract class MedicompActivity extends Activity {
 	protected NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 	private PluginManager pluginManager;
 	private LayoutInflater layoutInflater;
-	private static final int TYPE_CHOOSER_DIALOG = 1;
+	public static final int TYPE_CHOOSER_DIALOG = 1;
 	public static final String REGISTERED_PLUGINS_PREFS = "registered_plugins";
 
 	public SmartInput si;
@@ -124,7 +118,7 @@ public abstract class MedicompActivity extends Activity {
 		listView = requestListView();
 
 		try {
-			si = new SmartInput(this, recordDao);
+			si = new SmartInput(this);
 		} catch (SQLException e) {
 			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
 			throw new Error(e.getMessage(), e);
@@ -241,7 +235,6 @@ public abstract class MedicompActivity extends Activity {
 			break;
 		}
 
-		// TODO Auto-generated method stub
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -340,45 +333,18 @@ public abstract class MedicompActivity extends Activity {
 
 		Log.d(this.getClass().getCanonicalName(), "Creating dialog: " + id);
 
-		int count;
 		switch (id) {
 		case TYPE_CHOOSER_DIALOG:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Pick a color");
-
-			SortedSet<Entry<Type, Record>> ss = new TreeSet<Map.Entry<Type, Record>>(
-					new Comparator<Map.Entry<Type, Record>>() {
-						public int compare(Entry<Type, Record> o1,
-								Entry<Type, Record> o2) {
-							if (o1 == null || o1.getKey() == null)
-								return -1;
-							if (o2 == null || o2.getKey() == null)
-								return 1;
-							Type k1 = o1.getKey();
-							Type k2 = o2.getKey();
-							return k1.ordinal() - k2.ordinal();
+			builder.setCancelable(true);
+			builder.setItems(si.getAvailableTypes(),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int item) {
+							si.processChoosedRecord(item);
+							removeDialog(id);
 						}
 					});
-			ss.addAll(si.getAvailableTypes().entrySet());
-			final Entry<Type, Record>[] available = ss.toArray(new Entry[0]);
-
-			count = available.length;
-			String[] strings = new String[count];
-
-			for (int i = 0; i < count; i++) {
-				Log.d(this.getClass().getCanonicalName(), "Added type: "
-						+ available[i].getKey().name());
-				strings[i] = available[i].getKey().name();
-			}
-
-			builder.setCancelable(true);
-
-			builder.setItems(strings, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {
-					si.processChoosedRecord(available[item].getValue());
-					removeDialog(id);
-				}
-			});
 			return builder.create();
 		default:
 			return super.onCreateDialog(id);
