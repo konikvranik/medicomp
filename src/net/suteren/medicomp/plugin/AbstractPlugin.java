@@ -1,5 +1,9 @@
 package net.suteren.medicomp.plugin;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import net.suteren.medicomp.format.RecordFormatter;
 import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,10 +31,12 @@ public abstract class AbstractPlugin implements Plugin {
 	}
 
 	public boolean onActivate(PluginManager pluginManager) {
+		pluginManager.registerRecordFormatters(this, getRecordFormatters());
 		return true;
 	}
 
 	public boolean onDeactivate(PluginManager pluginManager) {
+		pluginManager.unregisterRecordFormatters(this);
 		return true;
 	}
 
@@ -72,5 +78,9 @@ public abstract class AbstractPlugin implements Plugin {
 
 	public String getId() {
 		return this.getClass().getCanonicalName();
+	}
+
+	public SortedSet<RecordFormatter> getRecordFormatters() {
+		return new TreeSet<RecordFormatter>();
 	}
 }

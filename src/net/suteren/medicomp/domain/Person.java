@@ -5,6 +5,7 @@ import java.util.Date;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.SerialBitmap;
+import net.suteren.medicomp.domain.record.Record;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DataType;

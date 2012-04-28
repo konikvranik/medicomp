@@ -1,4 +1,4 @@
-package net.suteren.medicomp.domain;
+package net.suteren.medicomp.enums;
 
 public enum Unit {
 	CELSIUS("°C", new String[] { "c", "C" }), FARENHEIT("°F", new String[] {

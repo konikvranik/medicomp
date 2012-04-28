@@ -1,8 +1,8 @@
-package net.suteren.medicomp.domain;
+package net.suteren.medicomp.domain.record;
 
 import com.j256.ormlite.field.DatabaseField;
 
-public class IntegerValue implements Value<Integer> {
+public class DoubleValue implements Value<Double> {
 
 	private static final String COLUMN_NAME_VALUE = "value";
 
@@ -12,24 +12,25 @@ public class IntegerValue implements Value<Integer> {
 	private int id;
 
 	@DatabaseField(canBeNull = false, columnName = COLUMN_NAME_VALUE)
-	private Integer value;
+	private Double value;
 
 	@DatabaseField(canBeNull = false, columnName = COLUMN_NAME_FIELD, foreign = true)
-	private Field<Integer> field;
+	private Field<Double> field;
 
-	public IntegerValue() {
+	
+	public DoubleValue() {
 	}
-
-	public IntegerValue(Field<Integer> field, Integer value2) {
+	
+	public DoubleValue(Field<Double> field,Double value2) {
 		setValue(value2);
 		setField(field);
 	}
 
-	public Field<Integer> getField() {
+	public Field<Double> getField() {
 		return field;
 	}
 
-	public void setField(Field<Integer> field) {
+	public void setField(Field<Double> field) {
 		this.field = field;
 	}
 
@@ -41,11 +42,11 @@ public class IntegerValue implements Value<Integer> {
 		this.id = id;
 	}
 
-	public Integer getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(Integer value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 

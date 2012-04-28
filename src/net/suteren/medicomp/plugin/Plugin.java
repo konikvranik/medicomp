@@ -1,8 +1,10 @@
 package net.suteren.medicomp.plugin;
 
+import java.util.SortedSet;
+
+import net.suteren.medicomp.format.RecordFormatter;
 import net.suteren.medicomp.ui.widget.Widget;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 
 public interface Plugin {
@@ -30,6 +32,8 @@ public interface Plugin {
 	Widget newWidgetInstance(Context context);
 
 	PluginActivity newActivityInstance(Context context);
+
+	SortedSet<RecordFormatter> getRecordFormatters();
 
 	String getId();
 

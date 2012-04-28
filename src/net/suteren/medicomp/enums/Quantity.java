@@ -1,4 +1,4 @@
-package net.suteren.medicomp.domain;
+package net.suteren.medicomp.enums;
 
 public enum Quantity {
 	TEMPERATURE(new Unit[] { Unit.CELSIUS, Unit.FARENHEIT, Unit.KELVIN }), MASS(

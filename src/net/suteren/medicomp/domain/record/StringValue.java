@@ -1,4 +1,4 @@
-package net.suteren.medicomp.domain;
+package net.suteren.medicomp.domain.record;
 
 import com.j256.ormlite.field.DatabaseField;
 

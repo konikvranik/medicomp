@@ -3,8 +3,8 @@ package net.suteren.medicomp.ui.activity;
 import java.util.Arrays;
 
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.domain.Quantity;
-import net.suteren.medicomp.domain.Unit;
+import net.suteren.medicomp.enums.Quantity;
+import net.suteren.medicomp.enums.Unit;
 import net.suteren.medicomp.plugin.MediCompPluginManager;
 import net.suteren.medicomp.plugin.Plugin;
 import android.os.Bundle;

@@ -3,18 +3,22 @@ package net.suteren.medicomp.plugin.temperature;
 import java.sql.SQLException;
 import java.text.DateFormat;
 
+import net.suteren.medicomp.R;
+import net.suteren.medicomp.domain.Person;
+import net.suteren.medicomp.domain.record.Field;
+import net.suteren.medicomp.domain.record.Record;
+import net.suteren.medicomp.enums.Type;
+import net.suteren.medicomp.ui.activity.RecordListActivity;
+import net.suteren.medicomp.ui.adapter.RecordListAdapter;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.suteren.medicomp.R;
-import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.Person;
-import net.suteren.medicomp.domain.Record;
-import net.suteren.medicomp.domain.Type;
-import net.suteren.medicomp.ui.activity.RecordListActivity;
-import net.suteren.medicomp.ui.adapter.RecordListAdapter;
+import com.j256.ormlite.dao.CloseableIterable;
+import com.j256.ormlite.dao.CloseableIterator;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
 public class TemperatureListAdapter extends RecordListAdapter {
 
@@ -35,25 +39,37 @@ public class TemperatureListAdapter extends RecordListAdapter {
 				+ tf.format(record.getTimestamp()));
 		TextView valueField = (TextView) convertView.findViewById(R.id.value);
 		TextView unitField = (TextView) convertView.findViewById(R.id.unit);
-		for (Field<?> f : record.getFields()) {
+		CloseableIterator<Field> fields = ((CloseableIterable) record
+				.getFields()).closeableIterator();
+		while (fields.hasNext()) {
+			Field f = fields.next();
 			if (f.getType() == Type.TEMPERATURE) {
-				Log.d(this.getClass().getCanonicalName(),"Temperature: " + f.getValue());
+				Log.d(this.getClass().getCanonicalName(),
+						"Temperature: " + f.getValue());
 				valueField.setText(nf.format(f.getValue()));
 				if (f.getUnit() != null)
 					unitField.setText(f.getUnit().getUnit());
 				break;
 			}
 		}
+		try {
+			fields.close();
+		} catch (SQLException e) {
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
+		}
 		return convertView;
 	}
 
 	@Override
 	public void update() throws SQLException {
+
 		if (recordDao == null)
 			return;
-		collection = recordDao.queryBuilder().where()
-				.eq(Record.COLUMN_NAME_PERSON, person).and()
+
+		collection = recordDao.queryBuilder().orderBy("timestamp", false)
+				.where().eq(Record.COLUMN_NAME_PERSON, person).and()
 				.eq(Record.COLUMN_NAME_TYPE, Type.TEMPERATURE).query();
+		recordDao.closeLastIterator();
 	}
 
 	@Override

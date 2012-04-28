@@ -1,4 +1,4 @@
-package net.suteren.medicomp.domain;
+package net.suteren.medicomp.domain.record;
 
 public interface Value<T> {
 

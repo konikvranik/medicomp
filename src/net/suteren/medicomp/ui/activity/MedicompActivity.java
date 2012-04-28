@@ -2,9 +2,7 @@ package net.suteren.medicomp.ui.activity;
 
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,13 +12,11 @@ import java.util.TreeSet;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.ApplicationContextHolder;
-import net.suteren.medicomp.domain.Category;
-import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Person;
-import net.suteren.medicomp.domain.Record;
-import net.suteren.medicomp.domain.Type;
-import net.suteren.medicomp.domain.Unit;
 import net.suteren.medicomp.domain.WithId;
+import net.suteren.medicomp.domain.record.Field;
+import net.suteren.medicomp.domain.record.Record;
+import net.suteren.medicomp.enums.Type;
 import net.suteren.medicomp.plugin.MediCompPluginManager;
 import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.plugin.PluginActivity;
@@ -31,9 +27,7 @@ import net.suteren.medicomp.plugin.person.PersonListActivity;
 import net.suteren.medicomp.plugin.person.PersonPlugin;
 import net.suteren.medicomp.plugin.person.PersonProfileActivity;
 import net.suteren.medicomp.plugin.temperature.TemperaturePlugin;
-import net.suteren.medicomp.ui.adapter.AbstractListAdapter;
-import net.suteren.medicomp.util.RecordFormat;
-import net.suteren.medicomp.util.TemperatureFormatter;
+import net.suteren.medicomp.smartinput.SmartInput;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -42,7 +36,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -62,7 +55,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
 
@@ -95,16 +87,13 @@ public abstract class MedicompActivity extends Activity {
 	@SuppressWarnings("rawtypes")
 	protected Dao<Field, Integer> fieldDao;
 	private EditText smartInput;
-	private Type choosedType;
 	protected NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 	private PluginManager pluginManager;
-	private Map<Type, Record> availableTypes;
-	protected String smartInputValue;
-	private ListAdapter availableTypeListAdapter;
-	private Record choosedRecord;
 	private LayoutInflater layoutInflater;
 	private static final int TYPE_CHOOSER_DIALOG = 1;
 	public static final String REGISTERED_PLUGINS_PREFS = "registered_plugins";
+
+	public SmartInput si;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +123,13 @@ public abstract class MedicompActivity extends Activity {
 
 		listView = requestListView();
 
+		try {
+			si = new SmartInput(this, recordDao);
+		} catch (SQLException e) {
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
+			throw new Error(e.getMessage(), e);
+		}
+
 		if (listView != null) {
 			changeReceiver = new ChangeReceiver();
 			IntentFilter intFilter = new IntentFilter();
@@ -153,7 +149,7 @@ public abstract class MedicompActivity extends Activity {
 					if (event.getAction() == KeyEvent.ACTION_DOWN)
 						switch (keyCode) {
 						case KeyEvent.KEYCODE_ENTER:
-							processSmartInput();
+							si.processSmartInput();
 							break;
 						default:
 							break;
@@ -167,7 +163,7 @@ public abstract class MedicompActivity extends Activity {
 		if (ib != null)
 			ib.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
-					processSmartInput();
+					si.processSmartInput();
 				}
 			});
 
@@ -251,8 +247,8 @@ public abstract class MedicompActivity extends Activity {
 
 	protected <T extends WithId> T setupObject(Dao<T, Integer> objectDao, int id) {
 		try {
-
 			T object = objectDao.queryForId(id);
+			objectDao.closeLastIterator();
 			return object;
 		} catch (SQLException e) {
 			Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
@@ -339,114 +335,6 @@ public abstract class MedicompActivity extends Activity {
 		}
 	}
 
-	private void processSmartInput() {
-		choosedType = null;
-
-		smartInputValue = smartInput.getText().toString();
-
-		determineAvaliableTypes(smartInputValue);
-
-		if (availableTypes.size() > 1) {
-			Log.d(this.getClass().getCanonicalName(), "Showing dialog: "
-					+ TYPE_CHOOSER_DIALOG);
-			showDialog(TYPE_CHOOSER_DIALOG);
-			Log.d(this.getClass().getCanonicalName(), "Dialog "
-					+ TYPE_CHOOSER_DIALOG + " done");
-		} else if (availableTypes.size() == 1) {
-			choosedType = availableTypes.keySet().iterator().next();
-			choosedRecord = availableTypes.values().iterator().next();
-			processChoosedType();
-		} else {
-			Toast.makeText(MedicompActivity.this,
-					getResources().getString(R.string.noAvailableType),
-					Toast.LENGTH_SHORT).show();
-		}
-
-		smartInput.setText("");
-		if (listView != null) {
-			listView.invalidateViews();
-			listView.invalidate();
-			listView.forceLayout();
-			try {
-				((AbstractListAdapter<? extends WithId>) listView.getAdapter())
-						.update();
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
-		}
-	}
-
-	private void processChoosedType() {
-		if (choosedType != null)
-			try {
-				addRecord(choosedRecord);
-				listView.invalidateViews();
-			} catch (Exception e) {
-				Log.e(this.getClass().getCanonicalName(), "Failed: ", e);
-				Toast.makeText(MedicompActivity.this,
-						R.string.failedToAddTemperature, Toast.LENGTH_SHORT);
-			}
-	}
-
-	private void addRecord(Record r) throws SQLException {
-		recordDao.create(r);
-		for (Field f : r.getFields())
-			f.persist();
-	}
-
-	private void determineAvaliableTypes(String input) {
-		availableTypes = new HashMap<Type, Record>();
-		RecordFormat rf = new RecordFormat(Locale.getDefault(), this, person);
-		for (Type type : Type.values()) {
-			try {
-				Record r;
-				r = rf.format(input, type);
-				Log.d(this.getClass().getCanonicalName(),
-						"Type " + r.getTitle());
-				if (r != null)
-					availableTypes.put(type, r);
-			} catch (ParseException e) {
-				// Don not add if ParseException
-			}
-
-		}
-	}
-
-	private void addTemperatureRecord(String input) throws SQLException,
-			ParseException {
-		Record r = new Record();
-		r.setPerson(person);
-		r.setTitle("temperature");
-		r.setType(Type.TEMPERATURE);
-		r.setCategory(Category.MEASURE);
-
-		Field<Double> f = new Field<Double>();
-		f.setType(Type.TEMPERATURE);
-		f.setName("temperature");
-		f.setRecord(r);
-
-		recordDao.create(r);
-		f.persist();
-
-		TemperatureFormatter formatter = new TemperatureFormatter(
-				Locale.getDefault());
-		Double value = formatter.parse(input);
-		Unit unit = formatter.getUnit();
-
-		Log.d(this.getClass().getCanonicalName(), "Unit: " + unit);
-		if (unit == null) {
-			SharedPreferences prefs = getSharedPreferences(MEDICOMP_PREFS,
-					Context.MODE_PRIVATE);
-			unit = Unit.valueOf(prefs.getString("temperature_unit", "CELSIUS"));
-		}
-		Log.d(this.getClass().getCanonicalName(), "Input: " + input
-				+ " value: " + value + " unit: " + unit);
-
-		f.setUnit(unit);
-		f.setValue(value);
-		fieldDao.update(f);
-	}
-
 	@Override
 	protected Dialog onCreateDialog(final int id) {
 
@@ -471,7 +359,7 @@ public abstract class MedicompActivity extends Activity {
 							return k1.ordinal() - k2.ordinal();
 						}
 					});
-			ss.addAll(availableTypes.entrySet());
+			ss.addAll(si.getAvailableTypes().entrySet());
 			final Entry<Type, Record>[] available = ss.toArray(new Entry[0]);
 
 			count = available.length;
@@ -487,9 +375,7 @@ public abstract class MedicompActivity extends Activity {
 
 			builder.setItems(strings, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int item) {
-					choosedType = available[item].getKey();
-					choosedRecord = available[item].getValue();
-					processChoosedType();
+					si.processChoosedRecord(available[item].getValue());
 					removeDialog(id);
 				}
 			});
@@ -518,4 +404,21 @@ public abstract class MedicompActivity extends Activity {
 	public ListView getListView() {
 		return listView;
 	}
+
+	public String getSmartInputText() {
+		return smartInput.getText().toString();
+	}
+
+	public void setSmartInputText(String text) {
+		smartInput.setText(text);
+	}
+
+	public void clearSmartInputText() {
+		smartInput.setText("");
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
 }

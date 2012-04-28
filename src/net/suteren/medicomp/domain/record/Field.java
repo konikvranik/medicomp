@@ -1,4 +1,4 @@
-package net.suteren.medicomp.domain;
+package net.suteren.medicomp.domain.record;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashSet;
 
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
+import net.suteren.medicomp.enums.Type;
+import net.suteren.medicomp.enums.Unit;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;

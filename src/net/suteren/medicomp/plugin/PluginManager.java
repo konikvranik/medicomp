@@ -3,6 +3,7 @@ package net.suteren.medicomp.plugin;
 import java.util.Collection;
 import java.util.Set;
 
+import net.suteren.medicomp.format.RecordFormatter;
 import android.content.SharedPreferences;
 
 public interface PluginManager {
@@ -26,5 +27,12 @@ public interface PluginManager {
 	public Collection<Plugin> getRegisteredPlugins();
 
 	public boolean isActive(Plugin plugin);
-	
+
+	public Collection<RecordFormatter> getRecordFormatters();
+
+	void registerRecordFormatters(Plugin plugin,
+			Collection<RecordFormatter> formatters);
+
+	void unregisterRecordFormatters(Plugin abstractPlugin);
+
 }

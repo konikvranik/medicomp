@@ -5,8 +5,8 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
-import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.domain.record.Field;
+import net.suteren.medicomp.enums.Type;
 
 public class FieldFormatter {
 

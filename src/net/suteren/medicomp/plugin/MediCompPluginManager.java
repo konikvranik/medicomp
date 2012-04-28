@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.suteren.medicomp.format.RecordFormatter;
 import net.suteren.medicomp.ui.activity.MedicompActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ public class MediCompPluginManager implements PluginManager {
 	private Context context;
 	private SharedPreferences pluginStore;
 	private Map<String, Plugin> registeredPlugins = new HashMap<String, Plugin>();
+	private Map<Plugin, Collection<RecordFormatter>> recordFormatters = new HashMap<Plugin, Collection<RecordFormatter>>();
 
 	public MediCompPluginManager(Context context) {
 		this.context = context;
@@ -144,6 +146,24 @@ public class MediCompPluginManager implements PluginManager {
 
 	public boolean isActive(Plugin plugin) {
 		return getPluginStore().getBoolean(plugin.getId(), true);
+	}
+
+	public Collection<RecordFormatter> getRecordFormatters() {
+		Collection<RecordFormatter> rfs = new HashSet<RecordFormatter>();
+		for (Collection<RecordFormatter> c : recordFormatters.values()) {
+			rfs.addAll(c);
+		}
+		return rfs;
+	}
+
+	public void registerRecordFormatters(Plugin plugin,
+			Collection<RecordFormatter> formatters) {
+
+		recordFormatters.put(plugin, formatters);
+	}
+
+	public void unregisterRecordFormatters(Plugin plugin) {
+		recordFormatters.remove(plugin);
 	}
 
 }

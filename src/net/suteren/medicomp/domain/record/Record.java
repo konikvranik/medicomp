@@ -1,7 +1,12 @@
-package net.suteren.medicomp.domain;
+package net.suteren.medicomp.domain.record;
 
 import java.util.Collection;
 import java.util.Date;
+
+import net.suteren.medicomp.domain.Person;
+import net.suteren.medicomp.domain.WithId;
+import net.suteren.medicomp.enums.Category;
+import net.suteren.medicomp.enums.Type;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;

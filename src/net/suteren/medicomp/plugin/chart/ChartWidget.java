@@ -8,10 +8,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.domain.Category;
-import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.Record;
-import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.domain.record.Field;
+import net.suteren.medicomp.domain.record.Record;
+import net.suteren.medicomp.enums.Category;
+import net.suteren.medicomp.enums.Type;
 import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.ui.widget.AbstractWidget;
 import net.suteren.medicomp.ui.widget.PluginWidget;

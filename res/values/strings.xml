@@ -11,6 +11,7 @@
 	<string name="personDeleteFailed">Failed to remove person!</string>
 	<string name="noAvailableType">No available type!</string>
 	<string name="failedToAddTemperature">Failed to add temperature!</string>
+	<string name="failedToAddRecord">Failed to add record!</string>
 
 	<string-array name="genders">
 		<item>NONE</item>

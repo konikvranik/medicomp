@@ -11,6 +11,7 @@
 	<string name="personDeleteFailed">Nepodařilo se smazat záznam osoby!</string>
 	<string name="noAvailableType">Žádný typ k dispozici!</string>
 	<string name="failedToAddTemperature">NEpodařilo se přidat záznam o teplotě!</string>
+	<string name="failedToAddRecord">Nepodařilo se přidat záznam!</string>
 
 	<string-array name="genders">
 		<item>NIC</item>

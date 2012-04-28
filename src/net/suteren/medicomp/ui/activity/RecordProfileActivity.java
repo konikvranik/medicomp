@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.domain.Record;
+import net.suteren.medicomp.domain.record.Record;
 import net.suteren.medicomp.ui.adapter.RecordProfileAdapter;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -47,7 +47,6 @@ public class RecordProfileActivity extends ProfileActivity {
 	}
 
 	protected boolean setupRecord() {
-		Record recordQuery = new Record();
 		Integer recordId = determineRecordId();
 		if (recordId == null)
 			return false;

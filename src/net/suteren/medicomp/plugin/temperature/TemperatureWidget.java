@@ -3,16 +3,13 @@ package net.suteren.medicomp.plugin.temperature;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import net.suteren.medicomp.FieldFormatter;
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.dao.MediCompDatabaseFactory;
-import net.suteren.medicomp.domain.Category;
-import net.suteren.medicomp.domain.DoubleValue;
-import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.Record;
-import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.domain.record.Field;
+import net.suteren.medicomp.domain.record.Record;
+import net.suteren.medicomp.enums.Category;
+import net.suteren.medicomp.enums.Type;
 import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.ui.widget.AbstractWidget;
 import net.suteren.medicomp.ui.widget.PluginWidget;
@@ -24,6 +21,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.j256.ormlite.dao.CloseableIterator;
 
 public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 
@@ -80,13 +79,12 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 					break;
 				}
 			}
-			try {
-				List<DoubleValue> dv = MediCompDatabaseFactory.getInstance()
-						.createDao(DoubleValue.class).queryForAll();
-			} catch (SQLException e) {
-				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
-			}
-
+			if (fi instanceof CloseableIterator)
+				try {
+					((CloseableIterator) fi).close();
+				} catch (SQLException e) {
+					Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
+				}
 		}
 
 		if (val != null) {

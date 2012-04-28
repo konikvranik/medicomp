@@ -6,8 +6,8 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import net.suteren.medicomp.domain.Quantity;
-import net.suteren.medicomp.domain.Unit;
+import net.suteren.medicomp.enums.Quantity;
+import net.suteren.medicomp.enums.Unit;
 
 public class TemperatureFormatter extends Format {
 

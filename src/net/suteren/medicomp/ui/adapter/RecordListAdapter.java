@@ -5,9 +5,9 @@ import java.text.DateFormat;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
-import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Person;
-import net.suteren.medicomp.domain.Record;
+import net.suteren.medicomp.domain.record.Field;
+import net.suteren.medicomp.domain.record.Record;
 import net.suteren.medicomp.ui.activity.RecordListActivity;
 import android.util.Log;
 import android.view.View;
@@ -74,8 +74,10 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 	public void update() throws SQLException {
 		if (recordDao == null)
 			return;
+
 		collection = recordDao.queryBuilder().where()
 				.eq(Record.COLUMN_NAME_PERSON, person).query();
+		recordDao.closeLastIterator();
 
 	}
 
@@ -85,6 +87,12 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 			return recordDao.queryForId(id);
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
+		} finally {
+			try {
+				recordDao.closeLastIterator();
+			} catch (SQLException e) {
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
+			}
 		}
 	}
 

@@ -7,6 +7,7 @@ import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.plugin.person.PersonListActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ public class PersonListAdapter extends AbstractListAdapter<Person> {
 	@Override
 	public void update() throws SQLException {
 		collection = personDao.queryForAll();
+		personDao.closeLastIterator();
 	}
 
 	public View getView(final int position, View convertView, ViewGroup parent) {
@@ -55,6 +57,12 @@ public class PersonListAdapter extends AbstractListAdapter<Person> {
 			return personDao.queryForId(id);
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
+		} finally {
+			try {
+				personDao.closeLastIterator();
+			} catch (SQLException e) {
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
+			}
 		}
 	}
 

@@ -8,11 +8,11 @@ import java.util.List;
 import net.suteren.medicomp.FieldFormatter;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
-import net.suteren.medicomp.domain.Category;
-import net.suteren.medicomp.domain.DoubleValue;
-import net.suteren.medicomp.domain.Field;
-import net.suteren.medicomp.domain.Record;
-import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.domain.record.DoubleValue;
+import net.suteren.medicomp.domain.record.Field;
+import net.suteren.medicomp.domain.record.Record;
+import net.suteren.medicomp.enums.Category;
+import net.suteren.medicomp.enums.Type;
 import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.ui.activity.RecordListActivity;
 import net.suteren.medicomp.ui.widget.AbstractWidget;
@@ -50,7 +50,7 @@ public class IllnessWidget extends AbstractWidget implements PluginWidget {
 			title.setText(getTitle());
 		}
 
-		temp = (TextView) convertView.findViewById(R.id.textView2);
+		temp = (TextView) convertView.findViewById(R.id.illness);
 		Collection<Record> rs = getPerson().getRecords();
 		Double val = null;
 
@@ -60,32 +60,12 @@ public class IllnessWidget extends AbstractWidget implements PluginWidget {
 			Record rx = ri.next();
 
 			if (rx.getType() == Type.DISEASE
-					&& rx.getCategory() == Category.MEASURE
+					&& rx.getCategory() == Category.STATE
 					&& (r == null || r.getTimestamp().compareTo(
 							rx.getTimestamp()) < 0))
 				r = rx;
 		}
-
-		FieldFormatter ff = null;
-		if (r != null) {
-			Collection<Field> fs = r.getFields();
-			Iterator<Field> fi = fs.iterator();
-			while (fi.hasNext()) {
-				Field<?> f = fi.next();
-				if (f.getType() == Type.DISEASE) {
-					ff = new FieldFormatter(f);
-					val = (Double) f.getValue();
-					break;
-				}
-			}
-			try {
-				List<DoubleValue> dv = MediCompDatabaseFactory.getInstance()
-						.createDao(DoubleValue.class).queryForAll();
-			} catch (SQLException e) {
-				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
-			}
-
-		}
+		temp.setText(r.getTitle());
 
 		return convertView;
 	}

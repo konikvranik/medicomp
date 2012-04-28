@@ -8,10 +8,10 @@ import java.util.Locale;
 
 import net.suteren.medicomp.FieldFormatter;
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.domain.Field;
 import net.suteren.medicomp.domain.Person;
-import net.suteren.medicomp.domain.Record;
-import net.suteren.medicomp.domain.Type;
+import net.suteren.medicomp.domain.record.Field;
+import net.suteren.medicomp.domain.record.Record;
+import net.suteren.medicomp.enums.Type;
 import net.suteren.medicomp.ui.adapter.RecordProfileAdapter;
 import android.content.Context;
 import android.view.LayoutInflater;

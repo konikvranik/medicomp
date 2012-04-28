@@ -1,4 +1,4 @@
-package net.suteren.medicomp.domain;
+package net.suteren.medicomp.enums;
 
 public enum Type {
 	TEMPERATURE, DIOPTRY, BLOOD_GROUP, ALLERGY, CONTRAINDICATION, WEIGHT, HEIGHT, HEARTBEAT, PRESSURE, MEDICATION, INTERVENTION, ACCIDENT, DISEASE, FEELING, BEGIN, END;

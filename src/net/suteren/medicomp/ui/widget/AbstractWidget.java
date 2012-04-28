@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -62,11 +63,10 @@ public abstract class AbstractWidget implements Widget {
 	protected String getString(int resourceId) {
 		return context.getResources().getString(resourceId);
 	}
-	
+
 	protected Drawable getDrawable(int resourceId) {
 		return context.getResources().getDrawable(resourceId);
 	}
-
 
 	public boolean onRegister(WidgetManager widgetManager) {
 		return true;
@@ -82,7 +82,7 @@ public abstract class AbstractWidget implements Widget {
 	}
 
 	protected Person getPerson() {
-		Dao<Person, Integer> personDao;
+		Dao<Person, Integer> personDao = null;
 
 		MediCompDatabaseFactory dbf = MediCompDatabaseFactory.getInstance();
 		try {
@@ -92,6 +92,14 @@ public abstract class AbstractWidget implements Widget {
 					MedicompActivity.MEDICOMP_PREFS, Context.MODE_PRIVATE)
 					.getInt(MedicompActivity.PERSON_ID_EXTRA, 0));
 		} catch (SQLException e) {
+			Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
+		} finally {
+			try {
+				if (personDao != null)
+					personDao.closeLastIterator();
+			} catch (SQLException e) {
+				Log.e(this.getClass().getCanonicalName(), e.getMessage(), e);
+			}
 		}
 
 		return null;
