@@ -41,7 +41,7 @@
 					<version>3.0.2</version>
 					<configuration>
 						<sdk>
-							<platform>4</platform>
+							<platform>8</platform>
 						</sdk>
 						<sign>
 							<debug>false</debug>

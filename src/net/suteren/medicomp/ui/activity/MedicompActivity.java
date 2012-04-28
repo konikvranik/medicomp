@@ -1,8 +1,16 @@
 package net.suteren.medicomp.ui.activity;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Locale;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
@@ -11,18 +19,21 @@ import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.WithId;
 import net.suteren.medicomp.domain.record.Field;
 import net.suteren.medicomp.domain.record.Record;
+import net.suteren.medicomp.io.PersonMarshaller;
 import net.suteren.medicomp.plugin.MediCompPluginManager;
 import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.plugin.PluginActivity;
 import net.suteren.medicomp.plugin.PluginManager;
 import net.suteren.medicomp.plugin.chart.ChartPlugin;
-import net.suteren.medicomp.plugin.illness.IllnessPlugin;
 import net.suteren.medicomp.plugin.person.PersonListActivity;
 import net.suteren.medicomp.plugin.person.PersonPlugin;
 import net.suteren.medicomp.plugin.person.PersonProfileActivity;
 import net.suteren.medicomp.plugin.temperature.TemperaturePlugin;
 import net.suteren.medicomp.smartinput.SmartInput;
 import net.suteren.medicomp.ui.AboutActivity;
+
+import org.w3c.dom.Document;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -32,8 +43,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -50,6 +63,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
 
@@ -172,7 +186,7 @@ public abstract class MedicompActivity extends Activity {
 		pluginManager2.registerPlugin(new PersonPlugin());
 		pluginManager2.registerPlugin(new TemperaturePlugin());
 		pluginManager2.registerPlugin(new ChartPlugin());
-		pluginManager2.registerPlugin(new IllnessPlugin());
+		// pluginManager2.registerPlugin(new IllnessPlugin());
 	}
 
 	protected abstract int getContentViewId();
@@ -232,6 +246,47 @@ public abstract class MedicompActivity extends Activity {
 			startActivity(new Intent(this, MedicompPreferencesActivity.class));
 			break;
 
+		case R.id.export:
+			try {
+				PackageInfo packageInfo = getPackageManager().getPackageInfo(
+						getPackageName(), 0);
+				Document doc = DocumentBuilderFactory.newInstance()
+						.newDocumentBuilder().newDocument();
+				PersonMarshaller mrsh = new PersonMarshaller(doc,
+						Integer.toString(packageInfo.versionCode),
+						packageInfo.versionName,
+						Integer.toString(MediCompDatabaseFactory.getInstance()
+								.getHelper().getVersion()));
+				for (Person p : personDao.queryForAll()) {
+					mrsh.marshall(p);
+				}
+
+				boolean mExternalStorageAvailable = false;
+				boolean mExternalStorageWriteable = false;
+				String state = Environment.getExternalStorageState();
+
+				Result stre;
+				if (Environment.MEDIA_MOUNTED.equals(state)) {
+
+					File path = Environment
+							.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+					File file = new File(path.getParentFile(), "MediComp.xml");
+
+					stre = new StreamResult(file);
+				} else {
+					stre = new StreamResult(openFileOutput(getPackageName(),
+							Context.MODE_WORLD_READABLE));
+				}
+				Transformer trsf = TransformerFactory.newInstance()
+						.newTransformer();
+				trsf.transform(new DOMSource(doc), stre);
+
+			} catch (Exception e) {
+				Log.e(getClass().getCanonicalName(), e.getMessage(), e);
+				Toast.makeText(context, R.string.failedToExport,
+						Toast.LENGTH_LONG);
+			}
+			break;
 
 		case R.id.about:
 			startActivity(new Intent(this, AboutActivity.class));

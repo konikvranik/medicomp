@@ -117,4 +117,7 @@ public class MediCompDatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 
+	public int getVersion() {
+		return DB_VERSION;
+	}
 }

@@ -4,7 +4,9 @@
 	android:versionCode="0024"
 	android:versionName="0.0.24-SNAPSHOT" >
 
-	<uses-sdk android:minSdkVersion="4" />
+	<uses-sdk android:minSdkVersion="8" />
+
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 	<application
 		android:name=".MediComp"
@@ -45,15 +47,16 @@
 		<activity android:name=".plugin.illness.IllnessWidgetPreferenceActivity" >
 		</activity>
 
-<!-- 		<provider -->
-<!-- 			android:name=".provider.MediCompCalendar" -->
-<!-- 			android:authorities="com.android.calendar;calendar" -->
-<!-- 			android:enabled="true" -->
-<!-- 			android:exported="true" -->
-<!-- 			android:readPermission="android.permission.READ_CALENDAR" -->
-<!-- 			android:syncable="true" > -->
-<!-- 		</provider> -->
-		<activity android:name=".ui.AboutActivity"></activity>
+		<!-- <provider -->
+		<!-- android:name=".provider.MediCompCalendar" -->
+		<!-- android:authorities="com.android.calendar;calendar" -->
+		<!-- android:enabled="true" -->
+		<!-- android:exported="true" -->
+		<!-- android:readPermission="android.permission.READ_CALENDAR" -->
+		<!-- android:syncable="true" > -->
+		<!-- </provider> -->
+		<activity android:name=".ui.AboutActivity" >
+		</activity>
 	</application>
 
 </manifest>

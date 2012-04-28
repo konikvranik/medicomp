@@ -33,11 +33,24 @@
 		</menu>
 	</item>
 	<item
+		android:id="@+id/other"
+		android:icon="@android:drawable/ic_menu_manage"
+		android:title="@string/other">
+		<menu>
+			<item
+				android:id="@+id/export"
+				android:icon="@android:drawable/ic_popup_sync"
+				android:title="@string/export"/>
+			<item
+				android:id="@+id/imp"
+				android:icon="@android:drawable/ic_popup_sync"
+				android:title="@string/imp"/>
+		</menu>
+	</item>
+	<item
 		android:id="@+id/about"
 		android:icon="@android:drawable/ic_menu_help"
 		android:title="@string/about">
-		<menu>
-		</menu>
 	</item>
 
 </menu>
