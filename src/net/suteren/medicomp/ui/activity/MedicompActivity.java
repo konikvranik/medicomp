@@ -8,7 +8,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
-import net.suteren.medicomp.dao.MediCompDatabaseHelper;
 import net.suteren.medicomp.domain.ApplicationContextHolder;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.WithId;
@@ -57,7 +56,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.DeleteBuilder;
 
 public abstract class MedicompActivity extends Activity {
 

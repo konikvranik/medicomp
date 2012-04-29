@@ -1,7 +1,7 @@
 package net.suteren.medicomp.plugin;
 
 import java.util.Collection;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 import net.suteren.medicomp.format.RecordFormatter;
 import net.suteren.medicomp.ui.widget.Widget;
@@ -14,7 +14,7 @@ public abstract class AbstractPlugin implements Plugin {
 
 	private boolean active;
 	private SharedPreferences preferences;
-	private Context context;
+	protected Context context;
 	protected Resources resources;
 
 	public boolean onRegister(PluginManager pluginManager) {
@@ -81,6 +81,6 @@ public abstract class AbstractPlugin implements Plugin {
 	}
 
 	public Collection<RecordFormatter> getRecordFormatters() {
-		return new TreeSet<RecordFormatter>();
+		return new HashSet<RecordFormatter>();
 	}
 }

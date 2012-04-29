@@ -54,4 +54,5 @@ public class TemperaturePlugin extends AbstractPlugin {
 		result.add(new TemperatureFormatter(getContext(), Locale.getDefault()));
 		return result;
 	}
+
 }

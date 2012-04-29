@@ -52,18 +52,19 @@ public class MediCompPluginManager implements PluginManager {
 					success = true;
 				} catch (ClassNotFoundException e) {
 					Log.e(this.getClass().getCanonicalName(), "Plugin "
-							+ className + " not found => unregistering.");
+							+ className + " not found => unregistering.", e);
 				} catch (InstantiationException e) {
 					Log.e(this.getClass().getCanonicalName(), "Plugin "
 							+ className
-							+ " can not be instantiated => unregistering.");
+							+ " can not be instantiated => unregistering.", e);
 				} catch (IllegalAccessException e) {
 					Log.e(this.getClass().getCanonicalName(), "Plugin "
 							+ className
-							+ " has no permissions => unregistering.");
+							+ " has no permissions => unregistering.", e);
 				} catch (ClassCastException e) {
 					Log.e(this.getClass().getCanonicalName(), "Class"
-							+ className + " is not a plugin=> unregistering.");
+							+ className + " is not a plugin=> unregistering.",
+							e);
 				}
 				if (!success) {
 					unregisterPlugin(className);
