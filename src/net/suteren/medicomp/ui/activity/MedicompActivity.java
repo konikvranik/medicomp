@@ -23,6 +23,7 @@ import net.suteren.medicomp.plugin.chart.ChartPlugin;
 import net.suteren.medicomp.plugin.person.PersonListActivity;
 import net.suteren.medicomp.plugin.person.PersonPlugin;
 import net.suteren.medicomp.plugin.person.PersonProfileActivity;
+import net.suteren.medicomp.plugin.temperature.TemperatureListActivity;
 import net.suteren.medicomp.plugin.temperature.TemperaturePlugin;
 import net.suteren.medicomp.smartinput.SmartInput;
 import net.suteren.medicomp.ui.AboutActivity;
@@ -226,7 +227,7 @@ public abstract class MedicompActivity extends Activity {
 			break;
 
 		case R.id.showRecords:
-			startActivity(new Intent(this, RecordListActivity.class));
+			startActivity(new Intent(this, TemperatureListActivity.class));
 			break;
 
 		case R.id.quit:

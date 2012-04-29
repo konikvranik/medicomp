@@ -75,8 +75,8 @@ public class RecordListAdapter extends AbstractListAdapter<Record> {
 		if (recordDao == null)
 			return;
 
-		collection = recordDao.queryBuilder().where()
-				.eq(Record.COLUMN_NAME_PERSON, person).query();
+		collection = recordDao.queryBuilder().orderBy("timestamp", false)
+				.where().eq(Record.COLUMN_NAME_PERSON, person).query();
 		recordDao.closeLastIterator();
 
 	}
