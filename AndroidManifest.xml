@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="0025" android:versionName="0.0.25-SNAPSHOT" package="net.suteren.medicomp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="0026" android:versionName="0.0.26-SNAPSHOT" package="net.suteren.medicomp">
 
 	<uses-sdk android:minSdkVersion="8"/>
 
