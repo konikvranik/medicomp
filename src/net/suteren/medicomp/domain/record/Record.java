@@ -52,7 +52,7 @@ public class Record implements WithId {
 	private Record parent;
 
 	@SuppressWarnings("rawtypes")
-	@ForeignCollectionField(eager = false)
+	@ForeignCollectionField(eager = true)
 	private Collection<Field> fields;
 
 	public Record() {

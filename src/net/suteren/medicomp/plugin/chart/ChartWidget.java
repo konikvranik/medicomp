@@ -148,7 +148,8 @@ public class ChartWidget extends AbstractWidget implements PluginWidget {
 			@SuppressWarnings("rawtypes")
 			Iterator<Field> fit = record.getFields().iterator();
 			while (fit.hasNext()) {
-				Field<?> f = fit.next();
+				@SuppressWarnings("rawtypes")
+				Field f = fit.next();
 				if (f.getType() == Type.TEMPERATURE) {
 					t = (Double) f.getValue();
 					break;
