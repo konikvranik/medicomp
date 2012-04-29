@@ -6,8 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.management.modelmbean.XMLParseException;
-
 import net.suteren.medicomp.domain.record.Field;
 import net.suteren.medicomp.domain.record.Record;
 import net.suteren.medicomp.enums.Type;
@@ -65,14 +63,14 @@ public class FieldMarshaller {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Field unmarshall(Element fieldElement) throws XMLParseException,
+	public Field unmarshall(Element fieldElement) throws Exception,
 			SQLException {
 
 		if (fieldElement == null)
 			return null;
 
-		if (FIELD_ELEMENT_NAME.equals(fieldElement.getNodeName()))
-			throw new XMLParseException("Not a Field element");
+		if (!FIELD_ELEMENT_NAME.equals(fieldElement.getNodeName()))
+			throw new Exception("Not a Field element");
 
 		Field field = new Field();
 

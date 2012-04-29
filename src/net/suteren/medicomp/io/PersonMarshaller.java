@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.management.modelmbean.XMLParseException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -86,10 +85,10 @@ public class PersonMarshaller {
 		return personNode;
 	}
 
-	public Person unmarshall(Element personElement) throws XMLParseException {
+	public Person unmarshall(Element personElement) throws Exception {
 
-		if (PERSON_ELEMENT_NAME.equals(personElement.getNodeName()))
-			throw new XMLParseException("Not a Person element");
+		if (!PERSON_ELEMENT_NAME.equals(personElement.getNodeName()))
+			throw new Exception("Not a Person element");
 
 		Person person = new Person();
 

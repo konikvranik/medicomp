@@ -52,12 +52,15 @@ public class XML {
 			.newInstance().newDocumentBuilder();
 	private Version xmlVersion;
 	private Dao<Record, Integer> recordDao;
+	SimpleDateFormat dateTimeformat = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss.SSSZ");
 
 	public XML(Context context, Dao<Person, Integer> personDao,
 			Dao<Record, Integer> recordDao) throws ParserConfigurationException {
 		this.context = context;
 		this.personDao = personDao;
 		this.recordDao = recordDao;
+		appVersion = new Version();
 	}
 
 	public void exportData() {
@@ -133,9 +136,9 @@ public class XML {
 						&& PERSON_ELEMENT_NAME.equals(child.getNodeName())) {
 					try {
 						Person p = pmrsh.unmarshall((Element) child);
-						personDao.create(p);
+						personDao.createOrUpdate(p);
 						for (Record r : p.getRecords()) {
-							recordDao.create(r);
+							recordDao.createOrUpdate(r);
 							for (@SuppressWarnings("rawtypes")
 							Field f : r.getFields()) {
 								f.persist();
@@ -171,18 +174,20 @@ public class XML {
 	private Node makeRoot(Document document) {
 		Element rootElement = document.createElement(MEDICOMP_ROOT_ELEMENT);
 
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
-		if (appVersion.getAppVersionCode() != null)
-			rootElement.setAttribute(APP_VERSION_ATTRIBUTE_NAME, appVersion
-					.getAppVersionCode().toString());
-		if (appVersion.getAppVersionName() != null)
-			rootElement.setAttribute(APP_CODE_ATTRIBUTE_NAME,
-					appVersion.getAppVersionName());
-		if (appVersion.getDbVersion() != null)
-			rootElement.setAttribute(DB_VERSION_ATTRIBUTE_NAME, appVersion
-					.getDbVersion().toString());
+		if (appVersion != null) {
+			if (appVersion.getAppVersionCode() != null)
+				rootElement.setAttribute(APP_VERSION_ATTRIBUTE_NAME, appVersion
+						.getAppVersionCode().toString());
+			if (appVersion.getAppVersionName() != null)
+				rootElement.setAttribute(APP_CODE_ATTRIBUTE_NAME,
+						appVersion.getAppVersionName());
+			if (appVersion.getDbVersion() != null)
+				rootElement.setAttribute(DB_VERSION_ATTRIBUTE_NAME, appVersion
+						.getDbVersion().toString());
+		}
+
 		rootElement.setAttribute(TIMESTAMP_ATTRIBUTE_NAME,
-				df.format(new Date()));
+				dateTimeformat.format(new Date()));
 
 		document.appendChild(rootElement);
 

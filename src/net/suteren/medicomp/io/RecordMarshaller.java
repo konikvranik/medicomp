@@ -7,8 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.management.modelmbean.XMLParseException;
-
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.record.Field;
 import net.suteren.medicomp.domain.record.Record;
@@ -32,20 +30,20 @@ public class RecordMarshaller {
 	private static final String CATEGORY_ATTRIBUTE_NAME = "category";
 	private static final String PERSON_ID_ATTRIBUTE_NAME = "personId";
 
-	private Node recordNode;
+	private Node recordsNode;
 	private DateFormat dateFormat = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss.SSSZ");
 
 	RecordMarshaller(Node parent) {
-		this.recordNode = parent;
+		this.recordsNode = parent;
 	}
 
 	public void setParent(Node parent) {
-		this.recordNode = parent;
+		this.recordsNode = parent;
 	}
 
 	public Node marshall(Record record) {
-		Document doc = recordNode.getOwnerDocument();
+		Document doc = recordsNode.getOwnerDocument();
 
 		Element recordNode = doc.createElement(RECORD_ELEMENT_NAME);
 		recordNode.setAttribute(ID_ATTRIBUTE_NAME,
@@ -75,17 +73,17 @@ public class RecordMarshaller {
 			fldmrs.marshall(f);
 		}
 
-		recordNode.appendChild(recordNode);
+		this.recordsNode.appendChild(recordNode);
 		return recordNode;
 	}
 
-	public Record unmarshall(Element recordElement) throws XMLParseException {
+	public Record unmarshall(Element recordElement) throws Exception {
 
 		if (recordElement == null)
 			return null;
 
-		if (RECORD_ELEMENT_NAME.equals(recordElement.getNodeName()))
-			throw new XMLParseException("Not a Record element");
+		if (!RECORD_ELEMENT_NAME.equals(recordElement.getNodeName()))
+			throw new Exception("Not a Record element");
 
 		Record record = new Record();
 
@@ -102,28 +100,33 @@ public class RecordMarshaller {
 		record.setType(Type.valueOf(recordElement
 				.getAttribute(TYPE_ATTIRBUTE_NAME)));
 
-		Integer parentId = new Integer(
-				recordElement.getAttribute(PARENT_ID_ATTRIBUTE_NAME));
-		if (parentId != null) {
-			Record parentRecord = new Record();
-			parentRecord.setId(parentId);
-			record.setParent(parentRecord);
+		try {
+			Integer parentId = new Integer(
+					recordElement.getAttribute(PARENT_ID_ATTRIBUTE_NAME));
+			if (parentId != null) {
+				Record parentRecord = new Record();
+				parentRecord.setId(parentId);
+				record.setParent(parentRecord);
+			}
+		} catch (NumberFormatException e) {
 		}
-
-		Integer personId = new Integer(
-				recordElement.getAttribute(PERSON_ID_ATTRIBUTE_NAME));
-		if (personId != null) {
-			Person person = new Person();
-			person.setId(personId);
-			record.setPerson(person);
+		try {
+			Integer personId = new Integer(
+					recordElement.getAttribute(PERSON_ID_ATTRIBUTE_NAME));
+			if (personId != null) {
+				Person person = new Person();
+				person.setId(personId);
+				record.setPerson(person);
+			}
+		} catch (NumberFormatException e) {
 		}
 
 		@SuppressWarnings("rawtypes")
 		Collection<Field> fields = new ArrayList<Field>();
 
-		FieldMarshaller fldmrs = new FieldMarshaller(recordNode);
+		FieldMarshaller fldmrs = new FieldMarshaller(recordElement);
 
-		Node child = recordNode.getFirstChild();
+		Node child = recordElement.getFirstChild();
 		for (; child != null; child = child.getNextSibling()) {
 			if (child.getNodeType() != Node.ELEMENT_NODE)
 				continue;

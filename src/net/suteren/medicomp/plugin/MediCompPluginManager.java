@@ -209,7 +209,6 @@ public class MediCompPluginManager implements PluginManager {
 
 	public void registerRecordFormatters(Plugin plugin,
 			Collection<RecordFormatter> formatters) {
-
 		recordFormatters.put(plugin, formatters);
 	}
 

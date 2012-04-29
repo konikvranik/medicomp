@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
+import net.suteren.medicomp.dao.MediCompDatabaseHelper;
 import net.suteren.medicomp.domain.ApplicationContextHolder;
 import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.WithId;
@@ -55,6 +56,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 
 public abstract class MedicompActivity extends Activity {
 
@@ -248,15 +250,15 @@ public abstract class MedicompActivity extends Activity {
 			break;
 
 		case R.id.imp:
-			XML xmlImport;
 			try {
-				xmlImport = new XML(this, personDao, recordDao);
+				XML xmlImport = new XML(this, personDao, recordDao);
 				xmlImport.importData();
 			} catch (ParserConfigurationException e) {
 				Log.e(getClass().getCanonicalName(), e.getMessage(), e);
 				Toast.makeText(context, R.string.failedToImortData,
 						Toast.LENGTH_LONG);
 			}
+			actualizeList();
 			break;
 
 		case R.id.about:
