@@ -1,50 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="net.suteren.medicomp"
-	android:versionCode="0024"
-	android:versionName="0.0.24-SNAPSHOT" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="0025" android:versionName="0.0.25-SNAPSHOT" package="net.suteren.medicomp">
 
-	<uses-sdk android:minSdkVersion="8" />
+	<uses-sdk android:minSdkVersion="8"/>
 
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-	<application
-		android:name=".MediComp"
-		android:debuggable="true"
-		android:icon="@drawable/medicomp"
-		android:label="@string/app_name" >
-		<activity
-			android:name=".ui.activity.DashboardActivity"
-			android:launchMode="singleTask" >
+	<application android:debuggable="true" android:icon="@drawable/medicomp" android:label="@string/app_name" android:name=".MediComp">
+		<activity android:launchMode="singleTask" android:name=".ui.activity.DashboardActivity">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
+				<action android:name="android.intent.action.MAIN"/>
 
-				<category android:name="android.intent.category.LAUNCHER" />
+				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity
-			android:name=".plugin.person.PersonListActivity"
-			android:label="@string/app_name"
-			android:launchMode="singleTask" >
+		<activity android:label="@string/app_name" android:launchMode="singleTask" android:name=".plugin.person.PersonListActivity">
 			<intent-filter>
-				<category android:name="net.suteren.medicomp.PERSON" />
+				<category android:name="net.suteren.medicomp.PERSON"/>
 			</intent-filter>
 		</activity>
-		<activity android:name=".plugin.person.PersonProfileActivity" >
+		<activity android:name=".plugin.person.PersonProfileActivity">
 		</activity>
-		<activity android:name=".ui.activity.RecordListActivity" >
+		<activity android:name=".ui.activity.RecordListActivity">
 		</activity>
-		<activity android:name=".ui.activity.RecordProfileActivity" >
+		<activity android:name=".ui.activity.RecordProfileActivity">
 		</activity>
-		<activity android:name=".plugin.chart.ChartWidgetPreferenceActivity" >
+		<activity android:name=".plugin.chart.ChartWidgetPreferenceActivity">
 		</activity>
-		<activity android:name=".plugin.temperature.TemperatureWidgetPreferenceActivity" />
-		<activity android:name=".ui.activity.MedicompPreferencesActivity" />
-		<activity android:name=".plugin.temperature.TemperatureListActivity" >
+		<activity android:name=".plugin.temperature.TemperatureWidgetPreferenceActivity"/>
+		<activity android:name=".ui.activity.MedicompPreferencesActivity"/>
+		<activity android:name=".plugin.temperature.TemperatureListActivity">
 		</activity>
-		<activity android:name=".plugin.illness.IllnessListActivity" >
+		<activity android:name=".plugin.illness.IllnessListActivity">
 		</activity>
-		<activity android:name=".plugin.illness.IllnessWidgetPreferenceActivity" >
+		<activity android:name=".plugin.illness.IllnessWidgetPreferenceActivity">
 		</activity>
 
 		<!-- <provider -->
@@ -55,7 +43,7 @@
 		<!-- android:readPermission="android.permission.READ_CALENDAR" -->
 		<!-- android:syncable="true" > -->
 		<!-- </provider> -->
-		<activity android:name=".ui.AboutActivity" >
+		<activity android:name=".ui.AboutActivity">
 		</activity>
 	</application>
 

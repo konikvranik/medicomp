@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,43 +19,23 @@ import android.util.Base64;
 
 public class PersonMarshaller {
 
-	private static final String MEDICOMP_ROOT_ELEMENT = "MediComp";
 	private static final String PERSON_ELEMENT_NAME = "Person";
 	private static final String ID_ATTRIBUTE_NAME = "id";
 	private static final String GENDER_ATTRIBUTE_NAME = "gender";
 	private static final String NAME_ATTRIBUTE_NAME = "name";
 	private static final String BIRTHDAY_ATTRIBUTE_NAME = "birthday";
 	private static final String PICTURE_ELEMENT_NAME = "Picture";
-	private static final String APP_VERSION_ATTRIBUTE_NAME = "applicationVersion";
-	private static final String DB_VERSION_ATTRIBUTE_NAME = "databaseVersion";
-	private static final String TIMESTAMP_ATTRIBUTE_NAME = "timestamp";
-	private static final String APP_CODE_ATTRIBUTE_NAME = "applicationCode";
 	private Document document;
-	private Element rootElement;
 
-	public PersonMarshaller(Document doc, String appVersion,
-			String appVersionName, String dbVersion)
+	public PersonMarshaller(Document doc)
 			throws ParserConfigurationException {
 		document = doc;
 		if (doc == null)
 			document = DocumentBuilderFactory.newInstance()
 					.newDocumentBuilder().newDocument();
-		rootElement = document.createElement(MEDICOMP_ROOT_ELEMENT);
-
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
-		if (appVersion != null)
-			rootElement.setAttribute(APP_VERSION_ATTRIBUTE_NAME, appVersion);
-		if (appVersionName != null)
-			rootElement.setAttribute(APP_CODE_ATTRIBUTE_NAME, appVersionName);
-		if (dbVersion != null)
-			rootElement.setAttribute(DB_VERSION_ATTRIBUTE_NAME, dbVersion);
-		rootElement.setAttribute(TIMESTAMP_ATTRIBUTE_NAME,
-				df.format(new Date()));
-
-		document.appendChild(rootElement);
 	}
 
-	public Node marshall(Person person) throws IOException {
+	public Node marshall(Node parent, Person person) throws IOException {
 
 		Element personNode = document.createElement(PERSON_ELEMENT_NAME);
 		personNode.setAttribute(ID_ATTRIBUTE_NAME,
@@ -89,7 +68,7 @@ public class PersonMarshaller {
 		person.getStatutoryInsurance();
 		person.getAlergies();
 
-		rootElement.appendChild(personNode);
+		parent.appendChild(personNode);
 		return personNode;
 	}
 

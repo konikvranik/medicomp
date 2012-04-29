@@ -6,6 +6,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -20,6 +21,7 @@ import net.suteren.medicomp.domain.WithId;
 import net.suteren.medicomp.domain.record.Field;
 import net.suteren.medicomp.domain.record.Record;
 import net.suteren.medicomp.io.PersonMarshaller;
+import net.suteren.medicomp.io.XML;
 import net.suteren.medicomp.plugin.MediCompPluginManager;
 import net.suteren.medicomp.plugin.Plugin;
 import net.suteren.medicomp.plugin.PluginActivity;
@@ -247,43 +249,25 @@ public abstract class MedicompActivity extends Activity {
 			break;
 
 		case R.id.export:
+			XML xmlExport;
 			try {
-				PackageInfo packageInfo = getPackageManager().getPackageInfo(
-						getPackageName(), 0);
-				Document doc = DocumentBuilderFactory.newInstance()
-						.newDocumentBuilder().newDocument();
-				PersonMarshaller mrsh = new PersonMarshaller(doc,
-						Integer.toString(packageInfo.versionCode),
-						packageInfo.versionName,
-						Integer.toString(MediCompDatabaseFactory.getInstance()
-								.getHelper().getVersion()));
-				for (Person p : personDao.queryForAll()) {
-					mrsh.marshall(p);
-				}
-
-				boolean mExternalStorageAvailable = false;
-				boolean mExternalStorageWriteable = false;
-				String state = Environment.getExternalStorageState();
-
-				Result stre;
-				if (Environment.MEDIA_MOUNTED.equals(state)) {
-
-					File path = Environment
-							.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-					File file = new File(path.getParentFile(), "MediComp.xml");
-
-					stre = new StreamResult(file);
-				} else {
-					stre = new StreamResult(openFileOutput(getPackageName(),
-							Context.MODE_WORLD_READABLE));
-				}
-				Transformer trsf = TransformerFactory.newInstance()
-						.newTransformer();
-				trsf.transform(new DOMSource(doc), stre);
-
-			} catch (Exception e) {
+				xmlExport = new XML(this, personDao);
+				xmlExport.exportData();
+			} catch (ParserConfigurationException e) {
 				Log.e(getClass().getCanonicalName(), e.getMessage(), e);
 				Toast.makeText(context, R.string.failedToExport,
+						Toast.LENGTH_LONG);
+			}
+			break;
+
+		case R.id.imp:
+			XML xmlImport;
+			try {
+				xmlImport = new XML(this, personDao);
+				xmlImport.importData();
+			} catch (ParserConfigurationException e) {
+				Log.e(getClass().getCanonicalName(), e.getMessage(), e);
+				Toast.makeText(context, R.string.failedToImortData,
 						Toast.LENGTH_LONG);
 			}
 			break;

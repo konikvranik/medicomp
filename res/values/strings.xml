@@ -130,5 +130,7 @@
 	<string name="imp">Import</string>
 	<string name="export">Export</string>
 	<string name="failedToExport">Failed to export!</string>
+	<string name="failedToGetAppVersion">Failed to get application version!</string>
+	<string name="failedToImortData">Failed to import data!</string>
 
 </resources>
