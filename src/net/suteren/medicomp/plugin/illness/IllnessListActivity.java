@@ -2,7 +2,6 @@ package net.suteren.medicomp.plugin.illness;
 
 import java.sql.SQLException;
 
-import android.util.Log;
 import net.suteren.medicomp.ui.activity.RecordListActivity;
 import net.suteren.medicomp.ui.adapter.RecordListAdapter;
 

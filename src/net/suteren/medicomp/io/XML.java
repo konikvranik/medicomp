@@ -1,5 +1,7 @@
 package net.suteren.medicomp.io;
 
+import static net.suteren.medicomp.io.PersonMarshaller.PERSON_ELEMENT_NAME;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -19,6 +21,8 @@ import javax.xml.transform.stream.StreamResult;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
 import net.suteren.medicomp.domain.Person;
+import net.suteren.medicomp.domain.record.Field;
+import net.suteren.medicomp.domain.record.Record;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -43,14 +47,17 @@ public class XML {
 
 	private Context context;
 	private Dao<Person, Integer> personDao;
-	private Version version;
+	private Version appVersion;
 	private DocumentBuilder documentBuilder = DocumentBuilderFactory
 			.newInstance().newDocumentBuilder();
+	private Version xmlVersion;
+	private Dao<Record, Integer> recordDao;
 
-	public XML(Context context, Dao<Person, Integer> personDao)
-			throws ParserConfigurationException {
+	public XML(Context context, Dao<Person, Integer> personDao,
+			Dao<Record, Integer> recordDao) throws ParserConfigurationException {
 		this.context = context;
 		this.personDao = personDao;
+		this.recordDao = recordDao;
 	}
 
 	public void exportData() {
@@ -120,10 +127,28 @@ public class XML {
 
 			Element root = getRoot(doc);
 
-			pmrsh.unmarshall(doc);
-
-			// TODO Auto-generated method stub
-
+			Node child = root.getFirstChild();
+			for (; child != null; child = child.getNextSibling()) {
+				if (child.getNodeType() == Node.ELEMENT_NODE
+						&& PERSON_ELEMENT_NAME.equals(child.getNodeName())) {
+					try {
+						Person p = pmrsh.unmarshall((Element) child);
+						personDao.create(p);
+						for (Record r : p.getRecords()) {
+							recordDao.create(r);
+							for (@SuppressWarnings("rawtypes")
+							Field f : r.getFields()) {
+								f.persist();
+							}
+						}
+						p.getStatutoryInsurance();
+						p.getAlergies();
+						p.getOtherInsurances();
+					} catch (ClassCastException e) {
+						Log.e(getClass().getCanonicalName(), e.getMessage(), e);
+					}
+				}
+			}
 		} catch (Exception e) {
 			Log.e(getClass().getCanonicalName(), e.getMessage(), e);
 			Toast.makeText(context, R.string.failedToImortData,
@@ -133,21 +158,28 @@ public class XML {
 
 	private Element getRoot(Document doc) {
 		Element rootElement = doc.getDocumentElement();
+		xmlVersion = new Version(rootElement);
+		checkVersion(appVersion, xmlVersion);
 		return rootElement;
+	}
+
+	private boolean checkVersion(Version appVersion2, Version xmlVersion2) {
+		// TODO
+		return true;
 	}
 
 	private Node makeRoot(Document document) {
 		Element rootElement = document.createElement(MEDICOMP_ROOT_ELEMENT);
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
-		if (version.getAppVersionCode() != null)
-			rootElement.setAttribute(APP_VERSION_ATTRIBUTE_NAME, version
+		if (appVersion.getAppVersionCode() != null)
+			rootElement.setAttribute(APP_VERSION_ATTRIBUTE_NAME, appVersion
 					.getAppVersionCode().toString());
-		if (version.getAppVersionName() != null)
+		if (appVersion.getAppVersionName() != null)
 			rootElement.setAttribute(APP_CODE_ATTRIBUTE_NAME,
-					version.getAppVersionName());
-		if (version.getDbVersion() != null)
-			rootElement.setAttribute(DB_VERSION_ATTRIBUTE_NAME, version
+					appVersion.getAppVersionName());
+		if (appVersion.getDbVersion() != null)
+			rootElement.setAttribute(DB_VERSION_ATTRIBUTE_NAME, appVersion
 					.getDbVersion().toString());
 		rootElement.setAttribute(TIMESTAMP_ATTRIBUTE_NAME,
 				df.format(new Date()));

@@ -39,6 +39,7 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 		this.plugin = plugin;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public View getView(View convertView, ViewGroup parent) {
 		if (convertView == null || true) {
 			convertView = layoutInflater.inflate(

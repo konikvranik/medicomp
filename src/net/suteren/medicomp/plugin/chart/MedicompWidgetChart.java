@@ -38,7 +38,7 @@ public class MedicompWidgetChart extends CubicLineChart {
 		mDateFormat = s;
 	}
 
-	protected void drawXLabels(List list, Double adouble[], Canvas canvas,
+	protected void drawXLabels(@SuppressWarnings("rawtypes") List list, Double adouble[], Canvas canvas,
 			Paint paint, int i, int j, int k, double d, double d1, double d2) {
 		int l = list.size();
 		if (l > 0) {

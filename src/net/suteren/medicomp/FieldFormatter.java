@@ -10,12 +10,14 @@ import net.suteren.medicomp.enums.Type;
 
 public class FieldFormatter {
 
+	@SuppressWarnings("rawtypes")
 	private Field field;
 
 	public FieldFormatter(Field<?> field) {
 		this.field = field;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setValue(String value) throws ParseException, SQLException {
 		Type type = field.getType();
 		Format formatter = getFormatter(type);

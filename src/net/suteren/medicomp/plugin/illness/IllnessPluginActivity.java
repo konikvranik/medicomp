@@ -3,7 +3,6 @@ package net.suteren.medicomp.plugin.illness;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.plugin.AbstractPluginActivity;
 import net.suteren.medicomp.plugin.PluginActivity;
-import net.suteren.medicomp.ui.activity.RecordListActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;

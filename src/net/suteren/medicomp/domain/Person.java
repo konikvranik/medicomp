@@ -7,7 +7,6 @@ import net.suteren.medicomp.R;
 import net.suteren.medicomp.SerialBitmap;
 import net.suteren.medicomp.domain.record.Record;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -40,10 +39,10 @@ public class Person implements WithId {
 	private Insurance statutoryInsurance;
 
 	@ForeignCollectionField(eager = false)
-	private ForeignCollection<Insurance> otherInsurances;
+	private Collection<Insurance> otherInsurances;
 
 	@ForeignCollectionField(eager = false)
-	private ForeignCollection<Alergie> alergies;
+	private Collection<Alergie> alergies;
 
 	@DatabaseField(canBeNull = true, columnName = Person.COLUMN_NAME_GENDER)
 	private Gender gender;
@@ -101,22 +100,29 @@ public class Person implements WithId {
 
 	public void setStatutoryInsurance(Insurance statutoryInsurance) {
 		this.statutoryInsurance = statutoryInsurance;
+		this.statutoryInsurance.setPerson(this);
 	}
 
-	public ForeignCollection<Insurance> getOtherInsurances() {
+	public Collection<Insurance> getOtherInsurances() {
 		return otherInsurances;
 	}
 
-	public void setOtherInsurances(ForeignCollection<Insurance> otherInsurances) {
+	public void setOtherInsurances(Collection<Insurance> otherInsurances) {
 		this.otherInsurances = otherInsurances;
+		if (this.otherInsurances != null)
+			for (Insurance i : this.otherInsurances)
+				i.setPerson(this);
 	}
 
-	public ForeignCollection<Alergie> getAlergies() {
+	public Collection<Alergie> getAlergies() {
 		return alergies;
 	}
 
-	public void setAlergies(ForeignCollection<Alergie> alergies) {
+	public void setAlergies(Collection<Alergie> alergies) {
 		this.alergies = alergies;
+		if (this.alergies != null)
+			for (Alergie a : this.alergies)
+				a.setPerson(this);
 	}
 
 	public Gender getGender() {
@@ -133,6 +139,9 @@ public class Person implements WithId {
 
 	public void setRecords(Collection<Record> records) {
 		this.records = records;
+		if (this.records != null)
+			for (Record r : this.records)
+				r.setPerson(this);
 	}
 
 }

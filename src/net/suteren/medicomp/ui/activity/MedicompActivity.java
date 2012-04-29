@@ -1,17 +1,10 @@
 package net.suteren.medicomp.ui.activity;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Result;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.dao.MediCompDatabaseFactory;
@@ -20,7 +13,6 @@ import net.suteren.medicomp.domain.Person;
 import net.suteren.medicomp.domain.WithId;
 import net.suteren.medicomp.domain.record.Field;
 import net.suteren.medicomp.domain.record.Record;
-import net.suteren.medicomp.io.PersonMarshaller;
 import net.suteren.medicomp.io.XML;
 import net.suteren.medicomp.plugin.MediCompPluginManager;
 import net.suteren.medicomp.plugin.Plugin;
@@ -33,9 +25,6 @@ import net.suteren.medicomp.plugin.person.PersonProfileActivity;
 import net.suteren.medicomp.plugin.temperature.TemperaturePlugin;
 import net.suteren.medicomp.smartinput.SmartInput;
 import net.suteren.medicomp.ui.AboutActivity;
-
-import org.w3c.dom.Document;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -45,10 +34,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -251,7 +238,7 @@ public abstract class MedicompActivity extends Activity {
 		case R.id.export:
 			XML xmlExport;
 			try {
-				xmlExport = new XML(this, personDao);
+				xmlExport = new XML(this, personDao, recordDao);
 				xmlExport.exportData();
 			} catch (ParserConfigurationException e) {
 				Log.e(getClass().getCanonicalName(), e.getMessage(), e);
@@ -263,7 +250,7 @@ public abstract class MedicompActivity extends Activity {
 		case R.id.imp:
 			XML xmlImport;
 			try {
-				xmlImport = new XML(this, personDao);
+				xmlImport = new XML(this, personDao, recordDao);
 				xmlImport.importData();
 			} catch (ParserConfigurationException e) {
 				Log.e(getClass().getCanonicalName(), e.getMessage(), e);

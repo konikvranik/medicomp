@@ -17,8 +17,6 @@ import android.widget.TextView;
 
 import com.j256.ormlite.dao.CloseableIterable;
 import com.j256.ormlite.dao.CloseableIterator;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.Where;
 
 public class TemperatureListAdapter extends RecordListAdapter {
 
@@ -39,9 +37,11 @@ public class TemperatureListAdapter extends RecordListAdapter {
 				+ tf.format(record.getTimestamp()));
 		TextView valueField = (TextView) convertView.findViewById(R.id.value);
 		TextView unitField = (TextView) convertView.findViewById(R.id.unit);
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		CloseableIterator<Field> fields = ((CloseableIterable) record
 				.getFields()).closeableIterator();
 		while (fields.hasNext()) {
+			@SuppressWarnings("rawtypes")
 			Field f = fields.next();
 			if (f.getType() == Type.TEMPERATURE) {
 				Log.d(this.getClass().getCanonicalName(),

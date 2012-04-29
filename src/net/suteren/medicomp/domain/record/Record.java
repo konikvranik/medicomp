@@ -114,6 +114,10 @@ public class Record implements WithId {
 
 	public void setFields(@SuppressWarnings("rawtypes") Collection<Field> fields) {
 		this.fields = fields;
+		if (this.fields != null)
+			for (@SuppressWarnings("rawtypes")
+			Field f : this.fields)
+				f.setRecord(this);
 	}
 
 	public Person getPerson() {

@@ -1,7 +1,6 @@
 package net.suteren.medicomp.plugin;
 
 import java.util.Collection;
-import java.util.SortedSet;
 
 import net.suteren.medicomp.format.RecordFormatter;
 import net.suteren.medicomp.ui.widget.Widget;

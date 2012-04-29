@@ -145,6 +145,7 @@ public class ChartWidget extends AbstractWidget implements PluginWidget {
 		for (int i = 0; i < rs.size() && it.hasNext(); i++) {
 			Double t = null;
 			Record record = it.next();
+			@SuppressWarnings("rawtypes")
 			Iterator<Field> fit = record.getFields().iterator();
 			while (fit.hasNext()) {
 				Field<?> f = fit.next();

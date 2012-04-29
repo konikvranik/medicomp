@@ -26,7 +26,6 @@ import android.widget.TimePicker;
 public class TemperatureProfileAdapter extends RecordProfileAdapter {
 
 	private LayoutInflater layoutInflater;
-	private TemperatureProfileActivity recordProfileActivity;
 	private Record record;
 	@SuppressWarnings("rawtypes")
 	private ArrayList<Field> fields;
@@ -36,16 +35,13 @@ public class TemperatureProfileAdapter extends RecordProfileAdapter {
 	private Calendar ts = Calendar.getInstance(Locale.getDefault());
 
 	@SuppressWarnings("rawtypes")
-	public TemperatureProfileAdapter(TemperatureProfileActivity context, Person person,
-			Record record) {
+	public TemperatureProfileAdapter(TemperatureProfileActivity context,
+			Person person, Record record) {
 		super(context, person, record);
 		if (context == null)
 			throw new NullPointerException("Context == null");
 		if (record == null)
 			throw new NullPointerException("Record == null!");
-		// if (person == null)
-		// throw new NullPointerException("Person == null!");
-		this.recordProfileActivity = context;
 		layoutInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.record = record;
@@ -111,7 +107,6 @@ public class TemperatureProfileAdapter extends RecordProfileAdapter {
 						parent, false);
 
 				String fieldName = field.getName();
-				Object fieldValue = field.getValue();
 				final Type type = field.getType();
 
 				TextView v = (TextView) convertView.findViewById(R.id.name);
@@ -160,7 +155,8 @@ public class TemperatureProfileAdapter extends RecordProfileAdapter {
 	}
 
 	public void saveFields() throws SQLException, ParseException {
-		for (Field f : record.getFields()) {
+		for (@SuppressWarnings("rawtypes")
+		Field f : record.getFields()) {
 			f.persist();
 		}
 	}

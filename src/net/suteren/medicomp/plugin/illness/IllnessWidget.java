@@ -1,15 +1,9 @@
 package net.suteren.medicomp.plugin.illness;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
-import net.suteren.medicomp.FieldFormatter;
 import net.suteren.medicomp.R;
-import net.suteren.medicomp.dao.MediCompDatabaseFactory;
-import net.suteren.medicomp.domain.record.DoubleValue;
-import net.suteren.medicomp.domain.record.Field;
 import net.suteren.medicomp.domain.record.Record;
 import net.suteren.medicomp.enums.Category;
 import net.suteren.medicomp.enums.Type;
@@ -21,10 +15,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class IllnessWidget extends AbstractWidget implements PluginWidget {
@@ -52,8 +44,6 @@ public class IllnessWidget extends AbstractWidget implements PluginWidget {
 
 		temp = (TextView) convertView.findViewById(R.id.illness);
 		Collection<Record> rs = getPerson().getRecords();
-		Double val = null;
-
 		Iterator<Record> ri = rs.iterator();
 		Record r = null;
 		while (ri.hasNext()) {

@@ -9,7 +9,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -38,7 +37,6 @@ public class SmartInput implements PluginChangeObserver {
 	private Dao<Record, Integer> recordDao;
 	private HashMap<Type, Record> availableTypes;
 	private Entry<Type, Record>[] availableArray;
-	private Set<PluginChangeObserver> observers;
 	private Collection<RecordFormatter> formatters;
 
 	public SmartInput(MedicompActivity ma) throws SQLException {

@@ -3,7 +3,6 @@ package net.suteren.medicomp.ui.activity;
 import net.suteren.medicomp.R;
 import net.suteren.medicomp.ui.adapter.OrderableListAdapter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuInflater;

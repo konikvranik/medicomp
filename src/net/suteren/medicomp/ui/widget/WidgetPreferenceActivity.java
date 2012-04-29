@@ -3,7 +3,6 @@ package net.suteren.medicomp.ui.widget;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public abstract class WidgetPreferenceActivity extends PreferenceActivity {
 
