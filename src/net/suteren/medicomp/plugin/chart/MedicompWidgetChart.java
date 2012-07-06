@@ -43,7 +43,7 @@ public class MedicompWidgetChart extends CubicLineChart {
 		int l = list.size();
 		if (l > 0) {
 			boolean flag = mRenderer.isShowLabels();
-			boolean flag1 = mRenderer.isShowGrid();
+			boolean flag1 = mRenderer.isShowGridX()||mRenderer.isShowGridY();
 			DateFormat dateformat = getDateFormat(
 					((Double) list.get(0)).doubleValue(),
 					((Double) list.get(l - 1)).doubleValue());
