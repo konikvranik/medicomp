@@ -1,7 +1,9 @@
 package net.suteren.medicomp.plugin.temperature;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 import net.suteren.medicomp.FieldFormatter;
@@ -29,6 +31,7 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 	private TextView temp;
 	private Plugin plugin;
 	private TextView unit;
+	private TextView date;
 
 	public TemperatureWidget(Context context) {
 		super(context);
@@ -51,6 +54,7 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 
 		temp = (TextView) convertView.findViewById(R.id.value);
 		unit = (TextView) convertView.findViewById(R.id.unit);
+		date = (TextView) convertView.findViewById(R.id.date);
 		Collection<Record> rs = getPerson().getRecords();
 		Double val = null;
 
@@ -80,6 +84,7 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 					break;
 				}
 			}
+
 			if (fi instanceof CloseableIterator)
 				try {
 					((CloseableIterator) fi).close();
@@ -89,6 +94,12 @@ public class TemperatureWidget extends AbstractWidget implements PluginWidget {
 		}
 
 		if (val != null) {
+			DateFormat df = android.text.format.DateFormat
+					.getDateFormat(context);
+			DateFormat tf = android.text.format.DateFormat
+					.getTimeFormat(context);
+			date.setText(df.format(r.getTimestamp()) + " "
+					+ tf.format(r.getTimestamp()));
 			temp.setText(ff == null ? "--,-" : ff.getValue());
 			double min = getWidgetPreferences().getFloat(
 					"lowerTemperatureBound", 35);
